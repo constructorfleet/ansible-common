@@ -1,0 +1,8 @@
+---
+common_pkgs:
+  - screen
+  - vim
+  - ipmitool
+  - freeipmi-tools
+  - software-properties-common
+  - python3-software-properties

@@ -1,0 +1,8 @@
+---
+- name: Deploy all common server roles
+  hosts: all
+  become: True
+  remote_user: root
+  tasks:
+    - import_role:
+        name: common

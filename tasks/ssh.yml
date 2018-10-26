@@ -1,0 +1,25 @@
+---
+
+- name: create /var/run/sshd
+  file:
+    state: directory
+    path: /var/run/sshd
+    mode: 0755
+
+- name: enable sshd PermitRootLogin
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: ^PermitRootLogin.*
+    line: PermitRootLogin yes
+
+- name: enable PasswordAuthentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: ^PasswordAuthentication.*
+    line: PasswordAuthentication yes
+
+- name: Set root ssh authorized key
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
