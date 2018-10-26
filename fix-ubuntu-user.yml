@@ -1,0 +1,8 @@
+- name: fix root
+  hosts: all
+  remote_user: ubuntu
+  become: True
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: fix-login.yml
