@@ -18,6 +18,7 @@
   lineinfile: 
     dest: /etc/default/grub
     state: present
+    regexp: '^GRUB_SERIAL_COMMAND=.*'
     line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
   register: update_grub_serial
 
