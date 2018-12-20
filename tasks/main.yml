@@ -17,5 +17,8 @@
 - name: configure ssh
   include_tasks: ssh.yml
 
+- name: update root pw
+  include_tasks: fix-login.yml
+
 - name: set up  serial-over-lan
   include_tasks: "{{ ansible_os_family }}-sol.yml"
