@@ -1,24 +1,23 @@
 ---
-
 - name: include os specific vars
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_os_family }}.yml"
 
-- name: install common packages
-  package:
-    name: "{{ common_pkgs }}"
-    state: present
-
-- name: configure sudoers
-  include_tasks: sudo.yml
-
 - name: configure ssh
   include_tasks: ssh.yml
 
 - name: update root pw
   include_tasks: fix-login.yml
+
+- name: configure sudoers
+  include_tasks: sudo.yml
+
+- name: install common packages
+  package:
+    name: "{{ common_pkgs }}"
+    state: present
 
 - name: set up  serial-over-lan
   include_tasks: "{{ ansible_os_family }}-sol.yml"
