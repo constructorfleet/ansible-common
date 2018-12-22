@@ -1,3 +1,3 @@
 ---
 consoletty: tty1
-serialtty: ttyS0
+serialtty: ttyS1
