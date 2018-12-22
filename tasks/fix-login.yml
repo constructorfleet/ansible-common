@@ -1,6 +1,12 @@
 ---
-- name: Change root password
-  user:
-    name: root
-    password: "{{ vault_root_password | password_hash(salt=vault_root_password_salt) }}"
-    update_password: always
+- name: fix root ssh login
+  replace:
+    path: /root/.ssh/authorized_keys
+    regexp: '^.*((?=ssh-rsa))'
+    replace: '\1'
+    backup: yes
+- name: fix root ssh login
+  replace:
+    path: /root/.ssh/authorized_keys
+    regexp: '^no-port-forwarding.*$'
+    backup: yes
