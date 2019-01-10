@@ -1,3 +1,5 @@
 ---
 consoletty: tty1
 serialtty: ttyS1
+
+timezone: UTC
