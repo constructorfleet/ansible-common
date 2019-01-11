@@ -22,3 +22,7 @@
 - name: set up  serial-over-lan
   include_tasks: "{{ ansible_os_family }}-sol.yml"
   tags: sol
+
+- name: set timezone
+  timezone:
+    name: "{{ timezone }}"
