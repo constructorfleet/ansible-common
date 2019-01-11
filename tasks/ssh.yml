@@ -22,7 +22,8 @@
   authorized_key:
     user: root
     state: present
-    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    key: "{{ item.value.pubkey }}"
+  with_dict: "{{ ssh_users }}"
 
 - name: Change root password
   user:
