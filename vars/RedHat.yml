@@ -2,6 +2,7 @@ common_pkgs:
   - vim-enhanced
   - screen
   - ipmitool
+  - zsh
 
 # defaults file for ansible-role-hp-serial
 # serialunit is the same number as at the end of serialport
