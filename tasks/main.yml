@@ -19,6 +19,18 @@
     state: present
   tags: packages
 
+- name: uninstall python packages
+  package:
+    name: "{{ common_uninstall_pkgs }}"
+    state: absent
+  tags: packages
+
+- name: install python packages from pip
+  pip:
+    name: "{{ common_python_pkgs }}"
+    state: present
+  tags: packages
+  
 - name: set up  serial-over-lan
   include_tasks: "{{ ansible_os_family }}-sol.yml"
   tags: sol
