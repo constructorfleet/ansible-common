@@ -5,5 +5,13 @@ common_pkgs:
   - ipmitool
   - freeipmi-tools
   - software-properties-common
+  - python-pip
+  - python3-pip
   - python3-software-properties
   - zsh
+
+common_uninstall_pkgs:
+  - python-setuptools
+
+common_python_pkgs:
+  - setuptools
