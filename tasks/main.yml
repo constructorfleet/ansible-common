@@ -4,6 +4,11 @@
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_os_family }}.yml"
+  tags:
+    - packages
+    - ssh
+    - sol
+    - sudo
 
 - name: configure ssh
   include_tasks: ssh.yml
