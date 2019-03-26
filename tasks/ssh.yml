@@ -11,12 +11,14 @@
     path: /etc/ssh/sshd_config
     regexp: ^PermitRootLogin.*
     line: PermitRootLogin yes
+  notify: restart sshd
 
 - name: enable PasswordAuthentication
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: ^PasswordAuthentication.*
     line: PasswordAuthentication yes
+  notify: restart sshd
 
 - name: Set root ssh authorized key
   authorized_key:
