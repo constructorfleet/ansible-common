@@ -6,18 +6,13 @@
     path: /var/run/sshd
     mode: 0755
 
-- name: enable sshd PermitRootLogin
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: .*PermitRootLogin.*
-    line: PermitRootLogin yes
-  notify: restart sshd
-
-- name: enable sshd PasswordAuthentication
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: .*PasswordAuthentication.*
-    line: PasswordAuthentication yes
+- name: Copy sshd_config Template
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mod: 0644
   notify: restart sshd
 
 - name: Set root ssh authorized key
