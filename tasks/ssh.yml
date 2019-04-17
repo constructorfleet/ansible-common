@@ -12,7 +12,7 @@
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
-    mod: 0644
+    mode: 0644
   notify: restart sshd
 
 - name: Set root ssh authorized key
