@@ -27,7 +27,7 @@
     name: "{{ common_python_pkgs }}"
     state: present
   tags: packages
-  
+
 - name: configure ssh
   include_tasks: ssh.yml
   tags: ssh
