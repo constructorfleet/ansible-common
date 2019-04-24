@@ -6,6 +6,7 @@
     regexp: '^GRUB_CMDLINE_LINUX=.*'
     line: 'GRUB_CMDLINE_LINUX="crashkernel=auto console={{ serialtty }},115200n8,rhgb console={{ consoletty }}"'
   register: update_grub
+  notify: update grub
 
 - name: grub terminal
   lineinfile:
@@ -14,6 +15,7 @@
     regexp: '^GRUB_TERMINAL=.*'
     line: 'GRUB_TERMINAL="serial console"'
   register: update_grub
+  notify: update grub
 
 - name: grub serial command
   lineinfile:
@@ -22,7 +24,8 @@
     regexp: '^GRUB_SERIAL_COMMAND=.*'
     line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=2 --word=8 --parity=no --stop=1"'
   register: update_grub
+  notify: update grub
 
-- name: update grub
-  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
-  when: update_grub.changed
+#- name: update grub
+#  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+#  when: update_grub.changed

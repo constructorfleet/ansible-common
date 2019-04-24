@@ -10,14 +10,6 @@
     - sol
     - sudo
 
-- name: configure ssh
-  include_tasks: ssh.yml
-  tags: ssh
-
-- name: configure sudoers
-  include_tasks: sudo.yml
-  tags: sudo
-
 - name: install common packages
   package:
     name: "{{ common_pkgs }}"
@@ -36,6 +28,14 @@
     state: present
   tags: packages
   
+- name: configure ssh
+  include_tasks: ssh.yml
+  tags: ssh
+
+- name: configure sudoers
+  include_tasks: sudo.yml
+  tags: sudo
+
 - name: set up  serial-over-lan
   include_tasks: "{{ ansible_os_family }}-sol.yml"
   tags: sol

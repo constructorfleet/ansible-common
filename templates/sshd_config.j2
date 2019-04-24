@@ -1,5 +1,5 @@
 
-Port {{ sshd_listen_port | default('22')}}
+Port {{ sshd_listen_port | default('22') }}
 
 #AddressFamily any
 
@@ -37,7 +37,7 @@ ChallengeResponseAuthentication no
 #AuthorizedPrincipalsFile none
 
 
-{% if openldap_server_ip is defined and openldap_server_ip != ('') %}
+{% if openldap_server_ip is defined and openldap_server_ip != None %}
 AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper
 AuthorizedKeysCommandUser nobody
 {% else %}
@@ -112,11 +112,12 @@ AcceptEnv LANG LC_*
 # override default of no subsystems
 Subsystem sftp	/usr/lib/openssh/sftp-server
 
-
+{% if groups['kvm'] is defined %}
 {% if inventory_hostname in groups['kvm'] %}
 Match user virsh
     X11Forwarding no
     AllowTcpForwarding no
     PermitTTY no
     ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
+{% endif %}
 {% endif %}
