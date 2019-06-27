@@ -1,5 +1,5 @@
 ---
-- name: include os specific vars
+- name: "Common :: Load OS-Family specific variables"
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
@@ -10,36 +10,43 @@
     - sol
     - sudo
 
-- name: install common packages
+- name: "Common :: Install common system packages"
   package:
     name: "{{ common_pkgs }}"
     state: present
   tags: packages
 
-- name: uninstall python packages
+- name: "Common :: Uninstall any Python requirements currently installed via OS package manager"
   package:
     name: "{{ common_uninstall_pkgs }}"
     state: absent
   tags: packages
 
-- name: install python packages from pip
+- name: "Common :: Install all Python requirements via Pip"
   pip:
     name: "{{ common_python_pkgs }}"
     state: present
   tags: packages
 
-- name: configure ssh
+- name: "Common :: Configure SSHd and root user"
   include_tasks: ssh.yml
   tags: ssh
 
-- name: configure sudoers
+- name: "Common :: Configure Sudoers"
   include_tasks: sudo.yml
   tags: sudo
 
-- name: set up  serial-over-lan
-  include_tasks: "{{ ansible_os_family }}-sol.yml"
+- name: "Common :: Configure Serial-over-LAN [Debian]"
+  include_tasks: debian-sol.yml
+  when: ansible_os_family == "Debian" and ansible_lsb.id != "Raspbian"
   tags: sol
 
-- name: set timezone
+- name: "Common :: Configure Serial-over-LAN [RedHat]"
+  include_tasks: redhat-sol.yml
+  when: ansible_os_family == "RedHat"
+  tags: sol
+
+
+- name: "Common :: Configure Timezone Info"
   timezone:
     name: "{{ timezone }}"
