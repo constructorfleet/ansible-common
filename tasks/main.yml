@@ -36,14 +36,24 @@
   include_tasks: sudo.yml
   tags: sudo
 
+- name: "Check for Grub"
+  stat:
+    path: /boot/grub
+  register: has_grub
+
+- name: "Check for Grub2"
+  stat:
+    path: /boot/grub2
+  register: has_grub2
+
 - name: "Common :: Configure Serial-over-LAN [Debian]"
   include_tasks: debian-sol.yml
-  when: ansible_os_family == "Debian" and ansible_lsb.id != "Raspbian"
+  when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "Debian"
   tags: sol
 
 - name: "Common :: Configure Serial-over-LAN [RedHat]"
   include_tasks: redhat-sol.yml
-  when: ansible_os_family == "RedHat"
+  when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "RedHat"
   tags: sol
 
 
