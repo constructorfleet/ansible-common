@@ -1,29 +1,29 @@
-#- name: grub linux
-#  lineinfile:
-#    dest: /etc/default/grub
-#    state: present
-#    regexp: '^GRUB_CMDLINE_LINUX=.*'
-#    line: 'GRUB_CMDLINE_LINUX="console={{ serialtty }},115200 console={{ consoletty }} net.ifnames=0 biosdevname=0"'
-#  register: update_grub_linux
-#  notify: update grub
+- name: grub linux
+  lineinfile:
+    dest: /etc/default/grub
+    state: present
+    regexp: '^GRUB_CMDLINE_LINUX=.*'
+    line: 'GRUB_CMDLINE_LINUX="console={{ serialtty }},115200 console={{ consoletty }} net.ifnames=0 biosdevname=0"'
+  register: update_grub_linux
+  notify: update grub
 
-#- name: grub terminal
-#  lineinfile:
-#    dest: /etc/default/grub
-#    state: present
-#    regexp: '^GRUB_TERMINAL=.*'
-#    line: 'GRUB_TERMINAL="serial"'
-#  register: update_grub_terminal
-#  notify: update grub
+- name: grub terminal
+  lineinfile:
+    dest: /etc/default/grub
+    state: present
+    regexp: '^GRUB_TERMINAL=.*'
+    line: 'GRUB_TERMINAL="serial"'
+  register: update_grub_terminal
+  notify: update grub
 
-#- name: grub serial command
-#  lineinfile:
-#    dest: /etc/default/grub
-#    state: present
-#    regexp: '^GRUB_SERIAL_COMMAND=.*'
-#    line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
-#  register: update_grub_serial
-#  notify: update grub
+- name: grub serial command
+  lineinfile:
+    dest: /etc/default/grub
+    state: present
+    regexp: '^GRUB_SERIAL_COMMAND=.*'
+    line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
+  register: update_grub_serial
+  notify: update grub
 
 #- name: update grub
 #  command: grub-mkconfig -o /boot/grub/grub.cfg
