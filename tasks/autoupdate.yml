@@ -1,6 +1,7 @@
 ---
-name: "Common :: Disable Autoupdate Services"
+- name: "Common :: Disable Autoupdate Services"
   service:
-    name: "{{ autoupdate_services }}"
+    name: "{{ item }}"
     state: stopped
-    enable: no
+    enabled: no
+  loop: "{{ autoupdate_services }}"
