@@ -32,6 +32,9 @@
   include_tasks: ssh.yml
   tags: ssh
 
+- name: "Common :: Configure system autoupdate parameters"
+  include_tasks: autoupdate.yml
+
 - name: "Common :: Configure Sudoers"
   include_tasks: sudo.yml
   tags: sudo
