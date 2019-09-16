@@ -14,3 +14,5 @@ serial_bios_grub_cfg: "/boot/grub2/grub.cfg"
 serial_efi_path: "/sys/firmware/efi"
 serial_grub_defaults: "/etc/default/grub"
 serial_grub_terminal: "console serial"
+
+autoupdate_services:
