@@ -1,0 +1,6 @@
+---
+name: "Common :: Disable Autoupdate Services"
+  service:
+    name: "{{ autoupdate_services }}"
+    state: stopped
+    enable: no
