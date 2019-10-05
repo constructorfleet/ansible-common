@@ -14,7 +14,7 @@ ff02::3 ip6-allhosts
 {% endif %}
 {% if shared_storage is defined and shared_storage %}
 {% if storage_backend == "nfs" %}
-{% for host in groups['nfs'] %}
+{% for host in groups['nfsservers'] %}
 {{ hostvars[host]['ansible_default_ipv4']['address'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
 {% endif %}
