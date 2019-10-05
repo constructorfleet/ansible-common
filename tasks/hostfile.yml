@@ -1,0 +1,7 @@
+- name: Generate /etc/hosts template
+  template:
+    src: hostfile.j2
+    dest: /etc/hosts
+    mode: 0755
+    owner: root
+    group: root
