@@ -32,6 +32,10 @@
   include_tasks: ssh.yml
   tags: ssh
 
+- name: "Configure /etc/hosts"
+  include_tasks: hostfile.yml
+  tags: hostfile
+
 - name: "Common :: Configure system autoupdate parameters"
   include_tasks: autoupdate.yml
 
