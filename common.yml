@@ -1,8 +1,18 @@
 ---
-- name: Deploy all common server roles
+- name: Deploy common server configurations
   hosts: all
   become: True
   remote_user: root
   tasks:
-    - import_role:
+    - include_role:
         name: common
+      tags:
+        - common
+        - packages
+        - cloudinit
+        - ssh
+        - sol
+        - sudo
+        - autoupdate
+        - hostfile
+        - timezone
