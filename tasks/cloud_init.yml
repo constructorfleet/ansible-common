@@ -1,0 +1,12 @@
+---
+- name: Remove cloud-init config directory
+  file:
+    path: /etc/cloud
+    state: absent
+
+- name: Remove cloud-init package if present
+  apt:
+    name: cloud-init
+    state: absent
+    purge: yes
+    autoremove: yes
