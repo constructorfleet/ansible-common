@@ -1,0 +1,15 @@
+---
+- name: "Common :: Install common system packages"
+  package:
+    name: "{{ common_pkgs }}"
+    state: present
+
+- name: "Common :: Uninstall any Python requirements currently installed via OS package manager"
+  package:
+    name: "{{ common_uninstall_pkgs }}"
+    state: absent
+
+- name: "Common :: Install all Python requirements via Pip"
+  pip:
+    name: "{{ common_python_pkgs }}"
+    state: present
