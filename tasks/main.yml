@@ -18,42 +18,104 @@
     - packages
     - common
 
-- name: "Common :: Configure SSHd and root user"
-  include_tasks: ssh.yml
-  tags: ssh
+- name: "Configure SSHd and root user"
+  include_tasks:
+    file: ssh.yml
+    apply:
+      tags:
+        - common
+        - ssh
+  tags:
+    - common
+    - ssh
 
 - name: "Configure /etc/hosts"
-  include_tasks: hostfile.yml
-  tags: hostfile
+  include_tasks:
+    file: hostfile.yml
+    apply:
+      tags:
+        - common
+        - hostfile
+  tags:
+    - common
+    - hostfile
 
-- name: "Common :: Configure system autoupdate parameters"
-  include_tasks: autoupdate.yml
+- name: "Configure system autoupdate parameters"
+  include_tasks:
+    file: autoupdate.yml
+    apply:
+      tags:
+        - common
+        - autoupdate
+  tags:
+    - common
+    - autoupdate
 
-- name: "Common :: Configure Sudoers"
-  include_tasks: sudo.yml
-  tags: sudo
+- name: "Remove cloud-init packages and config files"
+  include_tasks:
+    file: cloud_init.yml
+    apply:
+      tags:
+        - common
+        - cloudinit
+  tags:
+    - cloudinit
+    - common
+
+- name: "Configure Sudoers"
+  include_tasks:
+    file: sudo.yml
+    apply:
+      tags:
+        - common
+        - sudo
+  tags:
+    - sudo
+    - common
 
 - name: "Check for Grub"
   stat:
     path: /boot/grub
   register: has_grub
+  tags:
+    - common
+    - sol
 
 - name: "Check for Grub2"
   stat:
     path: /boot/grub2
   register: has_grub2
+  tags:
+    - common
+    - sol
 
-- name: "Common :: Configure Serial-over-LAN [Debian]"
-  include_tasks: debian-sol.yml
+- name: "Configure Serial-over-LAN [Debian]"
+  include_tasks:
+    file: debian-sol.yml
+    apply:
+      tags:
+        - common
+        - sol
   when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "Debian"
-  tags: sol
+  tags:
+    - common
+    - sol
 
-- name: "Common :: Configure Serial-over-LAN [RedHat]"
-  include_tasks: redhat-sol.yml
+- name: "Configure Serial-over-LAN [RedHat]"
+  include_tasks:
+    file: redhat-sol.yml
+    apply:
+      tags:
+        - common
+        - sol
   when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "RedHat"
-  tags: sol
+  tags:
+    - common
+    - sol
 
-
-- name: "Common :: Configure Timezone Info"
+- name: "Configure Timezone Info"
   timezone:
     name: "{{ timezone }}"
+  tags:
+    - common
+    - timezone
