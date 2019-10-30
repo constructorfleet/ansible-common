@@ -1,17 +1,28 @@
-Ansible-Common
-=========
+# Ansible-Common
+
+<!-- MarkdownTOC -->
+
+- Requirements
+- Role Variables
+    - defaults/main.yml
+  - vars/Debian.yml
+  - vars/RedHat.yml
+- Dependencies
+- Example Playbook
+- License
+- Author Information
+
+<!-- /MarkdownTOC -->
 
 Deploy common configurations and packages to servers.
 
 
-Requirements
-------------
+## Requirements
 
 N/A
 
 
-Role Variables
---------------
+## Role Variables
 
 #### defaults/main.yml
 ```
@@ -68,14 +79,12 @@ serial_grub_terminal: "console serial"
 autoupdate_services:
 ```
 
-Dependencies
-------------
+## Dependencies
 
 N/A
 
 
-Example Playbook
-----------------
+## Example Playbook
 ```
 - name: Deploy common server configurations
   hosts: all
@@ -96,12 +105,10 @@ Example Playbook
         - timezone
 ```
 
-License
--------
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 Created by Alan Janis
