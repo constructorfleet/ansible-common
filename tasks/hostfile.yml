@@ -5,8 +5,8 @@
   with_items: "{{ groups['ceph'] }}"
   when:
     - ansible_lsb.id != "Raspbian"
-    - shared_storage
-    - storage_backend == "cephfs"
+    - shared_storage is defined and shared_storage
+    - storage_backend is defined and storage_backend == "cephfs"
 
 - name: "Gather facts for all NFS Servers"
   setup:
@@ -14,8 +14,8 @@
   delegate_facts: True
   with_items: "{{ groups['nfsservers'] }}"
   when:
-    - shared_storage
-    - storage_backend == "nfs"
+    - shared_storage is defined and shared_storage
+    - storage_backend is defined and storage_backend == "nfs"
 
 - name: Generate /etc/hosts template
   template:
