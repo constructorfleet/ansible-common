@@ -16,3 +16,4 @@
         - autoupdate
         - hostfile
         - timezone
+        - users

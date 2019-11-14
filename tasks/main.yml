@@ -62,6 +62,17 @@
     - cloudinit
     - common
 
+- name: "Configure Users and Groups"
+  include_tasks:
+    file: users.yml
+    apply:
+      tags:
+        - common
+        - users
+  tags:
+    - users
+    - common
+
 - name: "Configure Sudoers"
   include_tasks:
     file: sudo.yml
