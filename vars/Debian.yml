@@ -14,8 +14,12 @@ common_pkgs:
 
 common_uninstall_pkgs:
   - python-setuptools
+  - python3-setuptools
 
 common_python_pkgs:
+  - setuptools
+
+common_python3_pkgs:
   - setuptools
 
 autoupdate_services:
