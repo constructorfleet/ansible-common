@@ -4,7 +4,6 @@
     gid: "{{ item.value.gid }}"
     state: present
   loop: "{{ ssh_groups | dict2items }}"
-  when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: Create local user accounts
   user:
@@ -22,7 +21,6 @@
     uid: "{{ item.value.uid }}"
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) }}"
   loop: "{{ ssh_users | dict2items }}"
-  when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: Add user authorized keys
   authorized_key:

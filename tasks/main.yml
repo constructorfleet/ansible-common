@@ -62,7 +62,7 @@
     - cloudinit
     - common
 
-- name: "Configure Users and Groups"
+- name: "Configure Local Users and Groups"
   include_tasks:
     file: users.yml
     apply:
@@ -72,6 +72,7 @@
   tags:
     - users
     - common
+  when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: "Configure Sudoers"
   include_tasks:
