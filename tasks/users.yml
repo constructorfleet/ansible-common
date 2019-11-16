@@ -23,3 +23,10 @@
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) }}"
   loop: "{{ ssh_users | dict2items }}"
   when:  openldap_server_ip is not defined or openldap_server_ip == None
+
+- name: Add user authorized keys
+  authorized_key:
+    user: "{{ item.key }}"
+    state: present
+    key: "{{ item.value.pubkey }}"
+  loop: "{{ ssh_users | dict2items }}"
