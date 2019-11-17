@@ -24,5 +24,5 @@
   register: update_grub_serial
   notify: update grub
 - name: update grub
-  command: grub-mkconfig -o /boot/grub/grub.cfg
+  command: grub-mkconfig -o /boot/grub/grub.cfg # noqa 503
   when: update_grub_linux.changed or update_grub_terminal.changed or update_grub_serial.changed
