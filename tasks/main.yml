@@ -8,79 +8,44 @@
     - always
 
 - name: "Install common system packages and python dependencies"
-  include_tasks:
-    file: packages.yml
-    apply:
-      tags:
-        - common
-        - packages
+  import_tasks: packages.yml
   tags:
     - packages
     - common
 
 - name: "Configure SSHd and root user"
-  include_tasks:
-    file: ssh.yml
-    apply:
-      tags:
-        - common
-        - ssh
+  import_tasks: ssh.yml
   tags:
     - common
     - ssh
 
 - name: "Configure /etc/hosts"
-  include_tasks:
-    file: hostfile.yml
-    apply:
-      tags:
-        - common
-        - hostfile
+  import_tasks: hostfile.yml
   tags:
     - common
     - hostfile
 
 - name: "Configure system autoupdate parameters"
-  include_tasks:
-    file: autoupdate.yml
-    apply:
-      tags:
-        - common
-        - autoupdate
+  import_tasks: autoupdate.yml
   tags:
     - common
     - autoupdate
 
 - name: "Remove cloud-init packages and config files"
-  include_tasks:
-    file: cloud_init.yml
-    apply:
-      tags:
-        - common
-        - cloudinit
+  import_tasks: cloud_init.yml
   tags:
     - cloudinit
     - common
 
 - name: "Configure Local Users and Groups"
-  include_tasks:
-    file: users.yml
-    apply:
-      tags:
-        - common
-        - users
+  import_tasks: users.yml
   tags:
     - users
     - common
   when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: "Configure Sudoers"
-  include_tasks:
-    file: sudo.yml
-    apply:
-      tags:
-        - common
-        - sudo
+  import_tasks: sudo.yml
   tags:
     - sudo
     - common
@@ -102,24 +67,14 @@
     - sol
 
 - name: "Configure Serial-over-LAN [Debian]"
-  include_tasks:
-    file: debian-sol.yml
-    apply:
-      tags:
-        - common
-        - sol
+  import_tasks: debian-sol.yml
   when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "Debian"
   tags:
     - common
     - sol
 
 - name: "Configure Serial-over-LAN [RedHat]"
-  include_tasks:
-    file: redhat-sol.yml
-    apply:
-      tags:
-        - common
-        - sol
+  import_tasks: redhat-sol.yml
   when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "RedHat"
   tags:
     - common
