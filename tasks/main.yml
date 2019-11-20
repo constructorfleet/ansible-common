@@ -68,14 +68,20 @@
 
 - name: "Configure Serial-over-LAN [Debian]"
   import_tasks: debian-sol.yml
-  when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "Debian"
+  when:
+    - has_grub.stat.exists or has_grub2.stat.exists
+    - ansible_os_family == "Debian"
+    - ansible_virtualization_role != "guest"
   tags:
     - common
     - sol
 
 - name: "Configure Serial-over-LAN [RedHat]"
   import_tasks: redhat-sol.yml
-  when: (has_grub.stat.exists or has_grub2.stat.exists) and  ansible_os_family == "RedHat"
+  when:
+    - has_grub.stat.exists or has_grub2.stat.exists
+    - ansible_os_family == "RedHat"
+    - ansible_virtualization_role != "guest"
   tags:
     - common
     - sol
