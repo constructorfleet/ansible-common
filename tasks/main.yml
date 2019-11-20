@@ -8,44 +8,44 @@
     - always
 
 - name: "Install common system packages and python dependencies"
-  import_tasks: packages.yml
+  include_tasks: packages.yml
   tags:
     - packages
     - common
 
 - name: "Configure SSHd and root user"
-  import_tasks: ssh.yml
+  include_tasks: ssh.yml
   tags:
     - common
     - ssh
 
 - name: "Configure /etc/hosts"
-  import_tasks: hostfile.yml
+  include_tasks: hostfile.yml
   tags:
     - common
     - hostfile
 
 - name: "Configure system autoupdate parameters"
-  import_tasks: autoupdate.yml
+  include_tasks: autoupdate.yml
   tags:
     - common
     - autoupdate
 
 - name: "Remove cloud-init packages and config files"
-  import_tasks: cloud_init.yml
+  include_tasks: cloud_init.yml
   tags:
     - cloudinit
     - common
 
 - name: "Configure Local Users and Groups"
-  import_tasks: users.yml
+  include_tasks: users.yml
   tags:
     - users
     - common
   when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: "Configure Sudoers"
-  import_tasks: sudo.yml
+  include_tasks: sudo.yml
   tags:
     - sudo
     - common
@@ -67,7 +67,7 @@
     - sol
 
 - name: "Configure Serial-over-LAN [Debian]"
-  import_tasks: debian-sol.yml
+  include_tasks: debian-sol.yml
   when:
     - has_grub.stat.exists or has_grub2.stat.exists
     - ansible_os_family == "Debian"
@@ -77,7 +77,7 @@
     - sol
 
 - name: "Configure Serial-over-LAN [RedHat]"
-  import_tasks: redhat-sol.yml
+  include_tasks: redhat-sol.yml
   when:
     - has_grub.stat.exists or has_grub2.stat.exists
     - ansible_os_family == "RedHat"
