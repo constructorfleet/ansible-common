@@ -1,18 +1,11 @@
+---
 common_pkgs:
-  - vim-enhanced
-  - screen
   - ipmitool
   - zsh
+  - screen
+  - vim-enhanced
+  - python-pip
+  - python34-pip
 
-# defaults file for ansible-role-hp-serial
-# serialunit is the same number as at the end of serialport
-serialunit: 0
-serialport: ttyS0
-serialspeed: 115200
-serial_efi_grub_cfg: "/boot/efi/EFI/centos/grub.cfg"
-serial_bios_grub_cfg: "/boot/grub2/grub.cfg"
-serial_efi_path: "/sys/firmware/efi"
-serial_grub_defaults: "/etc/default/grub"
-serial_grub_terminal: "console serial"
-
-autoupdate_services:
+grub_config: /boot/grub2/grub.cfg
+grub_update_cmd: /usr/sbin/grub2-mkconfig

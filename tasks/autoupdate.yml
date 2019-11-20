@@ -5,3 +5,5 @@
     state: stopped
     enabled: no
   loop: "{{ autoupdate_services }}"
+  when:
+    - autoupdate_services is defined

@@ -3,20 +3,24 @@
   package:
     name: "{{ common_pkgs }}"
     state: present
+  when: common_pkgs is defined
 
 - name: "Uninstall any Python requirements currently installed via OS package manager"
   package:
     name: "{{ common_uninstall_pkgs }}"
     state: absent
+  when: common_uninstall_pkgs is defined
 
 - name: "Install all Python2 requirements via Pip"
   pip:
     name: "{{ common_python_pkgs }}"
     state: present
     executable: pip2
+  when: common_python_pkgs is defined
 
 - name: "Install all Python3 requirements via Pip"
   pip:
     name: "{{ common_python3_pkgs }}"
     state: present
     executable: pip3
+  when: common_python3_pkgs is defined

@@ -4,5 +4,5 @@
     name: sshd
     state: restarted
 
-- name: update grub
-  command: grub-mkconfig -o /boot/grub/grub.cfg
+- name: "update grub config"
+  command: "{{ grub_update_command }} -o {{ grub_config }}"

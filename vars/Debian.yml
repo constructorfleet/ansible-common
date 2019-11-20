@@ -26,3 +26,6 @@ autoupdate_services:
   - apt-daily-upgrade.timer
   - apt-daily.timer
   - unattended-upgrades.service
+
+grub_config: /boot/grub/grub.cfg
+grub_update_cmd: /usr/sbin/update-grub2
