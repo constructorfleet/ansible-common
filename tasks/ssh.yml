@@ -20,7 +20,7 @@
     user: root
     state: present
     key: "{{ item.value.pubkey }}"
-  with_dict: "{{ ssh_users }}"
+  loop: "{{ ssh_users | dict2items }}"
 
 - name: Change root password
   user:
