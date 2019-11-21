@@ -6,11 +6,6 @@
     path: /var/run/sshd
     mode: 0755
 
-- name: Start SSH
-  systemd:
-    name: ssh
-    enabled: yes
-
 - name: Copy sshd_config Template
   template:
     src: sshd_config.j2
@@ -18,16 +13,34 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart sshd
+  register: sshd_config_copy
 
-- meta: flush handlers
-
-
-- name: Restart sshd service if needed
+- name: Restart the sshd service
   systemd:
     name: ssh
-    state: restarted
-  when: restart_sshd
+    state: started
+    enabled: yes
+  register: ssh_started
+  when: sshd_config_copy is changed
+
+- name: Verify the sshd service is listening
+  wait_for:
+    host: localhost
+    port: 22
+    delay: 5
+  when: ssh_started is changed
+  ignore_errors: yes
+  register: ssh_start_attempt
+
+- name: Get ssh journald logs if service does not appear to be up
+  shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value ssh.service`
+  register: ssh_journal
+  when: ssh_start_attempt.failed is defined and ssh_start_attempt.failed == True
+
+- fail:
+    msg: "{{ ssh_journal.stdout_lines }}"
+  when: ssh_start_attempt.failed is defined and ssh_start_attempt.failed == True
+
 
 - name: Set root ssh authorized key
   authorized_key:
