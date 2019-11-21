@@ -4,6 +4,7 @@
     name: "{{ item }}"
     state: stopped
     enabled: no
+    daemon_reload: yes
   loop: "{{ autoupdate_services }}"
   when:
     - autoupdate_services is defined

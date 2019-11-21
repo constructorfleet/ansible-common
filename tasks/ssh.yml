@@ -7,7 +7,7 @@
     mode: 0755
 
 - name: Start SSH
-  service:
+  systemd:
     name: ssh
     enabled: yes
 
@@ -19,6 +19,8 @@
     group: root
     mode: 0644
   notify: restart sshd
+
+- meta: flush handlers
 
 - name: Set root ssh authorized key
   authorized_key:

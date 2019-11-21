@@ -1,8 +1,7 @@
 ---
 - name: restart sshd
-  service:
-    name: sshd
-    state: restarted
+  set_fact:
+    restart_sshd: True
 
 - name: "update grub config"
   command: "{{ grub_update_command }} -o {{ grub_config }}"
