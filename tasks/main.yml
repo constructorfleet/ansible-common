@@ -4,49 +4,52 @@
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_os_family }}.yml"
+  tags:
+    - packages
+    - ssh
+    - hostfile
+    - autoupdate
+    - cloudinit
+    - users
+    - sudo
+    - sol
+    - timezone
 
 - name: "Install common system packages and python dependencies"
   import_tasks: packages.yml
   tags:
     - packages
-    - common
 
 - name: "Configure SSHd and root user"
   import_tasks: ssh.yml
   tags:
-    - common
     - ssh
 
 - name: "Configure /etc/hosts"
   import_tasks: hostfile.yml
   tags:
-    - common
     - hostfile
 
 - name: "Configure system autoupdate parameters"
   import_tasks: autoupdate.yml
   tags:
-    - common
     - autoupdate
 
 - name: "Remove cloud-init packages and config files"
   import_tasks: cloud_init.yml
   tags:
     - cloudinit
-    - common
 
 - name: "Configure Local Users and Groups"
   import_tasks: users.yml
   tags:
     - users
-    - common
   when:  openldap_server_ip is not defined or openldap_server_ip == None
 
 - name: "Configure Sudoers"
   import_tasks: sudo.yml
   tags:
     - sudo
-    - common
 
 - name: "Configure Serial-over-LAN [Ubuntu]"
   import_tasks: ubuntu-sol.yml
@@ -54,12 +57,10 @@
     - ansible_os_family == "Debian"
     - ansible_virtualization_role != "guest"
   tags:
-    - common
     - sol
 
 - name: "Configure Timezone Info"
   timezone:
     name: "{{ timezone }}"
   tags:
-    - common
     - timezone
