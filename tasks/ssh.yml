@@ -6,6 +6,11 @@
     path: /var/run/sshd
     mode: 0755
 
+- name: Start SSH
+  service:
+    name: ssh
+    enabled: yes
+
 - name: Copy sshd_config Template
   template:
     src: sshd_config.j2
@@ -13,12 +18,7 @@
     owner: root
     group: root
     mode: 0644
-
-- name: restart sshd
-  systemd:
-    name: ssh
-    state: restarted
-    enabled: true
+  notify: restart sshd
 
 - name: Set root ssh authorized key
   authorized_key:
