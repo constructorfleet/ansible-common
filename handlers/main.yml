@@ -1,7 +1,7 @@
 ---
-- name: restart sshd
+- name: "restart_sshd"
   set_fact:
-    restart_sshd: True
+    sshd_require_restart: True
 
-- name: "update grub config"
+- name: "update_grub_config"
   command: "{{ grub_update_command }} -o {{ grub_config }}"
