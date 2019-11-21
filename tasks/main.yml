@@ -1,16 +1,21 @@
 ---
-#- name: Add the OS specific varibles
-#  include_vars: "{{ ansible_os_family }}.yml"
-#  tags:
-#    - packages
-#    - ssh
-#    - hostfile
-#    - autoupdate
-#    - cloudinit
-#    - users
-#    - sudo
-#    - sol
-#    - timezone
+- name: Add the OS specific varibles
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags:
+    - packages
+    - ssh
+    - hostfile
+    - autoupdate
+    - cloudinit
+    - users
+    - sudo
+    - sol
+    - timezone
+
+- name: Run setup
+  setup:
+
+- meta: flush_handlers
 
 - name: "Install common system packages and python dependencies"
   import_tasks: packages.yml
