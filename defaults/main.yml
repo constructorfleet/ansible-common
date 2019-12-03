@@ -3,3 +3,6 @@ consoletty: tty1
 serialtty: ttyS1
 
 timezone: UTC
+
+ssh_users: {}
+ssh_groups: {}

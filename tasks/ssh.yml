@@ -50,6 +50,9 @@
     state: present
     key: "{{ item.value.pubkey }}"
   loop: "{{ ssh_users | dict2items }}"
+  when:
+    - ssh_users is defined
+    - ssh_users != None
 
 - name: Change root password
   user:

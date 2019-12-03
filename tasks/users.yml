@@ -4,7 +4,9 @@
     gid: "{{ item.value.gid }}"
     state: present
   loop: "{{ ssh_groups | dict2items }}"
-
+  when:
+    - ssh_groups is defined
+    - ssh_groups != None
 - name: Create local user accounts
   user:
     name: "{{ item.key }}"
@@ -21,6 +23,9 @@
     uid: "{{ item.value.uid }}"
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) }}"
   loop: "{{ ssh_users | dict2items }}"
+  when:
+    - ssh_users is defined
+    - ssh_users != None
 
 - name: Add user authorized keys
   authorized_key:
@@ -28,3 +33,6 @@
     state: present
     key: "{{ item.value.pubkey }}"
   loop: "{{ ssh_users | dict2items }}"
+  when:
+    - ssh_users is defined
+    - ssh_users != None
