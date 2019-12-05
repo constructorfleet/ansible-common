@@ -6,19 +6,22 @@
   delegate_facts: True
   with_items: "{{ groups['ceph'] }}"
   when:
-    - hostvars[item]['ansible_default_ipv4'] is not defined
     - ansible_lsb.id != "Raspbian"
     - shared_storage is defined and shared_storage
     - storage_backend is defined and storage_backend == "cephfs"
+    - hostvars[item]['ansible_default_ipv4'] is not defined
 
-#- name: "Gather facts for all NFS Servers"
-#  setup:
-#  delegate_to: "{{ item }}"
-#  delegate_facts: True
-#  with_items: "{{ groups['nfsservers'] }}"
-#  when:
-#    - shared_storage is defined and shared_storage
-#    - storage_backend is defined and storage_backend == "nfs"
+- name: "Gather facts for all NFS Servers"
+  setup:
+    gather_subset:
+      - network
+  delegate_to: "{{ item }}"
+  delegate_facts: True
+  with_items: "{{ groups['nfsservers'] }}"
+  when:
+    - shared_storage is defined and shared_storage
+    - storage_backend is defined and storage_backend == "nfs"
+    - hostvars[item]['ansible_default_ipv4'] is not defined
 
 - name: Generate /etc/hosts template
   template:
