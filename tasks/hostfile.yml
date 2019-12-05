@@ -1,9 +1,12 @@
 - name: "Gather facts for all ceph nodes"
   setup:
+    gather_subset:
+      - network
   delegate_to: "{{ item }}"
   delegate_facts: True
   with_items: "{{ groups['ceph'] }}"
   when:
+    - hostvars[item]['ansible_default_ipv4'] is not defined
     - ansible_lsb.id != "Raspbian"
     - shared_storage is defined and shared_storage
     - storage_backend is defined and storage_backend == "cephfs"
@@ -14,6 +17,7 @@
   delegate_facts: True
   with_items: "{{ groups['nfsservers'] }}"
   when:
+    - hostvars[item]['ansible_default_ipv4'] is not defined
     - shared_storage is defined and shared_storage
     - storage_backend is defined and storage_backend == "nfs"
 
