@@ -11,15 +11,14 @@
     - shared_storage is defined and shared_storage
     - storage_backend is defined and storage_backend == "cephfs"
 
-- name: "Gather facts for all NFS Servers"
-  setup:
-  delegate_to: "{{ item }}"
-  delegate_facts: True
-  with_items: "{{ groups['nfsservers'] }}"
-  when:
-    - hostvars[item]['ansible_default_ipv4'] is not defined
-    - shared_storage is defined and shared_storage
-    - storage_backend is defined and storage_backend == "nfs"
+#- name: "Gather facts for all NFS Servers"
+#  setup:
+#  delegate_to: "{{ item }}"
+#  delegate_facts: True
+#  with_items: "{{ groups['nfsservers'] }}"
+#  when:
+#    - shared_storage is defined and shared_storage
+#    - storage_backend is defined and storage_backend == "nfs"
 
 - name: Generate /etc/hosts template
   template:
