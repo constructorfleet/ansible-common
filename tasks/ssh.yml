@@ -18,7 +18,7 @@
 
 - name: Restart ssh server
   systemd:
-    name: ssh
+    name: sshd
     state: restarted
     enabled: yes
     daemon_reload: yes
