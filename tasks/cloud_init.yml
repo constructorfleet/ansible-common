@@ -5,8 +5,6 @@
     state: absent
 
 - name: Remove cloud-init package if present
-  apt:
+  package:
     name: cloud-init
     state: absent
-    purge: yes
-    autoremove: yes
