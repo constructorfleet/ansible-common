@@ -22,14 +22,14 @@
 - name: "Install all Python2 requirements via Pip"
   pip:
     name: "{{ common_python_pkgs }}"
-    state: present
+    state: latest
     executable: pip2
   when: common_python_pkgs is defined
 
 - name: "Install all Python3 requirements via Pip"
   pip:
     name: "{{ common_python3_pkgs }}"
-    state: present
+    state: latest
     executable: pip3
   when: common_python3_pkgs is defined
 
