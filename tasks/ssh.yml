@@ -17,11 +17,10 @@
 - meta: flush_handlers
 
 - name: Restart ssh server
-  systemd:
-    name: sshd
+  service:
+    name: "{{ ssh_service }}"
     state: restarted
     enabled: yes
-    daemon_reload: yes
   register: ssh_started
   when: sshd_require_restart | default(false)
 
