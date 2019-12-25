@@ -6,10 +6,15 @@ common_pkgs:
   - screen
   - vim-enhanced
   - python-pip
+  - python3-pip
   - sudo
   - tzdata
 
 common_python_pkgs:
+  - setuptools
+  - pip
+
+common_python3_pkgs:
   - setuptools
   - pip
 
