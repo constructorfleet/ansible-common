@@ -18,9 +18,11 @@ common_uninstall_pkgs:
 
 common_python_pkgs:
   - setuptools
+  - pip
 
 common_python3_pkgs:
   - setuptools
+  - pip
 
 autoupdate_services:
   - apt-daily-upgrade.timer
@@ -29,3 +31,5 @@ autoupdate_services:
 
 grub_config: /boot/grub/grub.cfg
 grub_update_cmd: /usr/sbin/update-grub2
+
+ssh_service: ssh

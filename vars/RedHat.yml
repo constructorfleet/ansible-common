@@ -1,11 +1,19 @@
 ---
 common_pkgs:
   - ipmitool
+  - freeipmi
   - zsh
   - screen
   - vim-enhanced
   - python-pip
-  - python34-pip
+  - sudo
+  - tzdata
+
+common_python_pkgs:
+  - setuptools
+  - pip
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
+
+ssh_service: sshd
