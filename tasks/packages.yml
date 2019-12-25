@@ -33,9 +33,9 @@
     executable: pip3
   when: common_python3_pkgs is defined
 
-- name: "Set default python to python3"
-  alternatives:
-    name: python
-    path: /usr/bin/python3
-    link: /usr/bin/python
-    priority: -10
+#- name: "Set default python to python3"
+#  alternatives:
+#    name: python
+#    path: /usr/bin/python3
+#    link: /usr/bin/python
+#    priority: -10
