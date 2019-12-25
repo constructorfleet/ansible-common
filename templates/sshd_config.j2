@@ -38,7 +38,13 @@ ChallengeResponseAuthentication no
 
 
 {% if openldap_server_ip is defined and openldap_server_ip != None %}
+{% if ansible_os_family == 'Debian' %}
 AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper
+{% elif ansible_os_family == 'RedHat' %}
+AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
+{% else %}
+AuthorizedKeysCommand ssh-ldap-pubkey-wrapper
+{% endif %}
 AuthorizedKeysCommandUser nobody
 {% else %}
 #AuthorizedKeysCommand none
