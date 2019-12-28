@@ -1,16 +1,5 @@
 ---
-
-- name: passwordless sudo
-  lineinfile:
-    dest: /etc/sudoers
-    regexp: '^%wheel.*$'
-    line: '%wheel ALL=(ALL) NOPASSWD:ALL'
-    state: present
-    backup: yes
-    validate: 'visudo -cf %s'
-  when: ansible_os_family == "RedHat"
-
-- name: passwordless sudo
+- name: "Allow passwordless sudo for 'admin' group"
   lineinfile:
     path: /etc/sudoers
     regexp: '^%admin.*$'
@@ -18,5 +7,3 @@
     state: present
     backup: yes
     validate: 'visudo -cf %s'
-  when: ansible_os_family == "Debian"
-
