@@ -13,8 +13,8 @@ common_pkgs:
   - tzdata
 
 common_uninstall_pkgs:
-  - python-setuptools
-  - python3-setuptools
+#  - python-setuptools
+#  - python3-setuptools
 
 common_python_pkgs:
   - setuptools
