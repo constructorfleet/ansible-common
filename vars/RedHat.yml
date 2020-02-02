@@ -5,7 +5,7 @@ common_pkgs:
   - zsh
   - screen
   - vim-enhanced
-  - python2-pip
+  - python-pip
   - sudo
   - tzdata
 
