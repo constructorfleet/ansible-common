@@ -1,9 +1,8 @@
 {{ ansible_managed }}
 
 #AddressFamily any
-
-ListenAddress {{ sshd_listen_address | default('0.0.0.0') }}
 Port {{ sshd_listen_port | default('22') }}
+ListenAddress {{ sshd_listen_address | default('0.0.0.0') }}
 
 {% if enable_ssh_host_rsa_key | default(True) %}
 HostKey /etc/ssh/ssh_host_rsa_key
