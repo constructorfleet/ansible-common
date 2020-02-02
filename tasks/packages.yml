@@ -1,17 +1,22 @@
 ---
-- name: Install common packages for RedHat
-  yum:
-    name: "{{ common_pkgs }}"
-    state: latest
-    update_cache: yes
-  when: ansible_os_family == 'RedHat'
+#- name: Install common packages for RedHat
+#  yum:
+#    name: "{{ common_pkgs }}"
+#    state: latest
+#    update_cache: yes
+#  when: ansible_os_family == 'RedHat'
+#
+#- name: Install common packages for Ubuntu
+#  apt:
+#    name: "{{ common_pkgs }}"
+#    state: latest
+#    update_cache: yes
+#  when: ansible_os_family == 'Debian'
 
-- name: Install common packages for Ubuntu
-  apt:
+- name: Install common packages
+  package:
     name: "{{ common_pkgs }}"
     state: latest
-    update_cache: yes
-  when: ansible_os_family == 'Debian'
 
 - name: "Uninstall any Python requirements currently installed via OS package manager"
   package:
