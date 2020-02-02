@@ -29,14 +29,18 @@
     name: "{{ common_python_pkgs }}"
     state: latest
     executable: pip2
-  when: common_python_pkgs is defined
+  when:
+    - common_python_pkgs is defined
+    - common_python_pkgs != None
 
 - name: "Install all Python3 requirements via Pip"
   pip:
     name: "{{ common_python3_pkgs }}"
     state: latest
     executable: pip3
-  when: common_python3_pkgs is defined
+  when:
+    - common_python3_pkgs is defined
+    - common_python3_pkgs != None
 
 #- name: "Set default python to python3"
 #  alternatives:
