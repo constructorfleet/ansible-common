@@ -4,4 +4,5 @@
     sshd_require_restart: True
 
 - name: "update_grub_config"
-  command: "{{ grub_update_cmd }} -o {{ grub_config }}"
+  set_fact:
+    grub_require_rebuild: True
