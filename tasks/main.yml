@@ -30,6 +30,12 @@
     - ansible_os_family == "Debian"
     - ansible_virtualization_role != "guest"
 
+- name: "Configure Serial-over-LAN [RHEL/CentOS]"
+  import_tasks: redhat-sol.yml
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_virtualization_role != "guest"
+
 - name: "Configure Timezone Info"
   timezone:
     name: "{{ timezone }}"
