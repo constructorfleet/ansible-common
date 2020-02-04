@@ -39,3 +39,7 @@
 - name: "Configure Timezone Info"
   timezone:
     name: "{{ timezone }}"
+
+- name: "Reboot host if grub config was updated"
+  reboot:
+  when: grub_require_rebuild | default(false)
