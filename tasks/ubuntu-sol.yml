@@ -22,3 +22,7 @@
     regexp: '^GRUB_SERIAL_COMMAND=.*'
     line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
   notify: "update_grub_config"
+
+- name: Rebuild Grub Config
+  command: "{{ grub_update_cmd }} -o {{ grub_config }}"
+  when: grub_require_rebuild | default(false)
