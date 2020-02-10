@@ -3,8 +3,19 @@
   lineinfile:
     dest: /etc/default/grub
     state: present
-    regexp: '^GRUB_CMDLINE_LINUX=.*'
-    line: 'GRUB_CMDLINE_LINUX="console={{ serialtty }},115200 console={{ consoletty }}"'
+    regexp: '^GRUB_CMDLINE_LINUX="((?!.*(console={{ serialtty }},[0-9]+n8))(.*)?)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 console={{ serialtty }},115200n8"'
+    backrefs: yes
+  notify: "update_grub_config"
+
+
+- name: Update GRUB_CMDLINE_LINUX
+  lineinfile:
+    dest: /etc/default/grub
+    state: present
+    regexp: '^GRUB_CMDLINE_LINUX="((?!.*(console={{ consoletty }}))(.*)?)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 console={{ consoletty }}"'
+    backrefs: yes
   notify: "update_grub_config"
 
 - name: Update GRUB_TERMINAL
