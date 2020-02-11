@@ -1,28 +1,20 @@
 ---
-#- name: Install common packages for RedHat
-#  yum:
-#    name: "{{ common_pkgs }}"
-#    state: latest
-#    update_cache: yes
-#  when: ansible_os_family == 'RedHat'
-#
-#- name: Install common packages for Ubuntu
-#  apt:
-#    name: "{{ common_pkgs }}"
-#    state: latest
-#    update_cache: yes
-#  when: ansible_os_family == 'Debian'
 
 - name: Install common packages
   package:
     name: "{{ common_pkgs }}"
     state: latest
+  when:
+    - common_pkgs is defined
+    - common_pkgs != None
 
 - name: "Uninstall any Python requirements currently installed via OS package manager"
   package:
     name: "{{ common_uninstall_pkgs }}"
     state: absent
-  when: common_uninstall_pkgs is defined
+  when:
+    - common_uninstall_pkgs is defined
+    - common_uninstall_pkgs != None
 
 - name: "Install all Python2 requirements via Pip"
   pip:
@@ -41,10 +33,3 @@
   when:
     - common_python3_pkgs is defined
     - common_python3_pkgs != None
-
-#- name: "Set default python to python3"
-#  alternatives:
-#    name: python
-#    path: /usr/bin/python3
-#    link: /usr/bin/python
-#    priority: -10
