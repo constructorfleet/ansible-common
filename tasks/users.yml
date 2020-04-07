@@ -4,6 +4,8 @@
     gid: "{{ item.value.gid }}"
     state: present
   loop: "{{ ssh_groups | dict2items }}"
+  loop_control:
+    label: "group: {{ item.key }} gid: {{ item.value.gid }}"
   when:
     - ssh_groups is defined
     - ssh_groups != None
@@ -23,6 +25,8 @@
     uid: "{{ item.value.uid }}"
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) }}"
   loop: "{{ ssh_users | dict2items }}"
+  loop_control:
+    label: "user: {{ item.key }} uid: {{ item.value.uid }} gid: {{ item.value.gid }}"
   when:
     - ssh_users is defined
     - ssh_users != None
@@ -33,6 +37,8 @@
     state: present
     key: "{{ item.value.pubkey }}"
   loop: "{{ ssh_users | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when:
     - ssh_users is defined
     - ssh_users != None

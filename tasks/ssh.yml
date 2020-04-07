@@ -51,6 +51,8 @@
     state: present
     key: "{{ item.value.pubkey }}"
   loop: "{{ ssh_users | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when:
     - ssh_users is defined
     - ssh_users != None
