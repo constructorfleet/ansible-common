@@ -1,6 +1,6 @@
 ---
-consoletty: tty1
-serialtty: ttyS1
+consoletty:
+serialtty:
 
 timezone: UTC
 

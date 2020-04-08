@@ -48,6 +48,8 @@
   when:
     - ansible_os_family == "Debian"
     - ansible_virtualization_role != "guest"
+    - serialtty != None
+    - consoletty != None
   tags:
     - common-sol
 
@@ -56,6 +58,8 @@
   when:
     - ansible_os_family == "RedHat"
     - ansible_virtualization_role != "guest"
+    - serialtty != None
+    - consoletty != None
   tags:
     - common-sol
 
