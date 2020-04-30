@@ -1,19 +1,19 @@
 - name: Create local user groups
   group:
     name: "{{ item.key }}"
-    gid: "{{ item.value.gid }}"
+    gid: "{{ item.value.gid | default(omit) }}"
     state: present
   loop: "{{ ssh_groups | dict2items }}"
   loop_control:
-    label: "group: {{ item.key }} gid: {{ item.value.gid }}"
+    label: "group: {{ item.key }}"
   when:
     - ssh_groups is defined
     - ssh_groups != None
 - name: Create local user accounts
   user:
     name: "{{ item.key }}"
-    shell: "{{ item.value.shell }}"
-    group: "{{ item.value.gid }}"
+    shell: "{{ item.value.shell | default(omit) }}"
+    group: "{{ item.value.gid | default(omit) }}"
     groups: |
       {% set grouplist = [] %}
       {% for group in ssh_groups | dict2items %}
@@ -22,11 +22,11 @@
       {% endif %}
       {% endfor %}
       {{ grouplist|join(',') }}
-    uid: "{{ item.value.uid }}"
-    password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) }}"
+    uid: "{{ item.value.uid | default(omit) }}"
+    password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) | default(omit) }}"
   loop: "{{ ssh_users | dict2items }}"
   loop_control:
-    label: "user: {{ item.key }} uid: {{ item.value.uid }} gid: {{ item.value.gid }}"
+    label: "user: {{ item.key }}"
   when:
     - ssh_users is defined
     - ssh_users != None
@@ -42,3 +42,4 @@
   when:
     - ssh_users is defined
     - ssh_users != None
+    - item.value.pubkey is defined
