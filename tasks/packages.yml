@@ -3,7 +3,7 @@
 - name: Install common packages
   package:
     name: "{{ common_pkgs }}"
-    state: latest
+    state: present
   when:
     - common_pkgs is defined
     - common_pkgs != None
@@ -19,7 +19,7 @@
 - name: "Install all Python2 requirements via Pip"
   pip:
     name: "{{ common_python_pkgs }}"
-    state: latest
+    state: present
     executable: pip2
   when:
     - common_python_pkgs is defined
@@ -28,7 +28,7 @@
 - name: "Install all Python3 requirements via Pip"
   pip:
     name: "{{ common_python3_pkgs }}"
-    state: latest
+    state: present
     executable: pip3
   when:
     - common_python3_pkgs is defined
