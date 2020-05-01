@@ -34,7 +34,7 @@
 
 - name: "Configure Local Users and Groups"
   import_tasks: users.yml
-  when:  openldap_server_ip is not defined or openldap_server_ip == None
+  when:  not openldap_client_enable|default(false)
   tags:
     - common-users
 
