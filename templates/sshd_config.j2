@@ -54,7 +54,11 @@ AuthorizedKeysFile	{{ authorized_keys_file | default('.ssh/authorized_keys') }}
 
 
 {% if openldap_server_enable_sshkeys|default(false) %}
-AuthorizedKeysCommand ssh-ldap-pubkey-wrapper
+{% if (ansible_os_family == 'Debian') or (ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8') %}
+AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper
+{% else %}
+AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
+{% endif %}
 AuthorizedKeysCommandUser nobody
 {% else %}
 #AuthorizedKeysCommand none
