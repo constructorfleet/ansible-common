@@ -1,0 +1,32 @@
+---
+common_pkgs:
+  - screen
+  - vim
+  - ipmitool
+  - freeipmi-tools
+  - software-properties-common
+  - python3-pip
+  - python3-software-properties
+  - zsh
+  - sudo
+  - tzdata
+
+common_uninstall_pkgs:
+#  - python-setuptools
+#  - python3-setuptools
+
+common_python_pkgs:
+  - setuptools
+
+common_python3_pkgs:
+  - setuptools
+
+autoupdate_services:
+  - apt-daily-upgrade.timer
+  - apt-daily.timer
+  - unattended-upgrades.service
+
+grub_config: /boot/grub/grub.cfg
+grub_update_cmd: /usr/sbin/update-grub2
+
+ssh_service: ssh
