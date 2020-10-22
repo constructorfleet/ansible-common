@@ -69,6 +69,11 @@
   tags:
     - common-timezone
 
+- name: "Install Cockpit"
+  import_tasks: cockpit.yml
+  tags:
+    - common-cockpit
+
 - name: "Reboot host if grub config was updated"
   reboot:
   when: grub_require_rebuild | default(false)

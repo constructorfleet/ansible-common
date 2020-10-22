@@ -16,3 +16,22 @@ grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
 
 ssh_service: sshd
+
+
+common_cockpit_pkgs:
+  - cockpit
+  - cockpit-composer
+  - cockpit-doc
+  - cockpit-session-recording
+  - cockpit-bridge
+  - cockpit-dashboard
+  - cockpit-packagekit
+  - cockpit-podman
+  - cockpit-machines
+  - cockpit-storaged
+  - cockpit-system
+  - subscription-manager-cockpit
+common_cockpit_service: cockpit.socket
+common_selinux_state: disabled
+common_cockpit_allowed_ports:
+  - cockpit
