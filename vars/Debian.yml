@@ -29,3 +29,20 @@ grub_config: /boot/grub/grub.cfg
 grub_update_cmd: /usr/sbin/update-grub2
 
 ssh_service: ssh
+
+common_cockpit_pkgs:
+  - cockpit
+  - cockpit-389-ds
+  - cockpit-bridge
+  - cockpit-doc
+  - cockpit-machines
+  - cockpit-networkmanager
+  - cockpit-packagekit
+  - cockpit-storaged
+  - cockpit-ws
+  - cockpit-bridge
+  - cockpit-dashboard
+  - cockpit-system
+common_cockpit_service: cockpit.socket
+common_cockpit_allowed_ports:
+  - cockpit
