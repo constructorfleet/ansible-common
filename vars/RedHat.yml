@@ -31,6 +31,7 @@ common_cockpit_pkgs:
   - cockpit-storaged
   - cockpit-system
   - subscription-manager-cockpit
+  - cockpit-pcp
 common_cockpit_service: cockpit.socket
 common_selinux_state: disabled
 common_cockpit_allowed_ports:
