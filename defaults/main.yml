@@ -7,3 +7,12 @@ timezone: UTC
 ssh_users: {}
 ssh_groups: {}
 
+os_var_files:
+  Debian:
+    '0': Debian
+  Ubuntu:
+    '0': Ubuntu
+    '20.04': Ubuntu20
+  RedHat:
+    '0': RedHat
+
