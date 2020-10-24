@@ -42,7 +42,6 @@ common_cockpit_pkgs:
   - cockpit-bridge
   - cockpit-dashboard
   - cockpit-system
-  - cockpit-pcp
 common_cockpit_service: cockpit.socket
 common_cockpit_allowed_ports:
   - cockpit
