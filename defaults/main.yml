@@ -15,4 +15,3 @@ os_var_files:
     '20.04': Ubuntu20
   RedHat:
     '0': RedHat
-
