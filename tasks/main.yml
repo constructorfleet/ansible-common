@@ -1,10 +1,15 @@
 ---
 - name: include os specific vars
   include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+  with_first_found: >
+    {%- set os_dist_map=os_var_files[ansible_distribution] | default(os_var_files[ansible_os_family] | default({})) -%}
+    {%- set ns = namespace(files=[]) -%}
+    {%- for version, file in os_dist_map.items() | reverse -%}
+        {%- if distribution_version is version(version, '>=') -%}
+          {%- set ns.files = ns.files + [file + ".yml"] -%}
+        {%- endif -%}
+    {%- endfor -%}
+    {{ ns.files }}
   tags:
     - always
 
