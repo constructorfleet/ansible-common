@@ -5,7 +5,7 @@
     {%- set os_dist_map=os_var_files[ansible_distribution] | default(os_var_files[ansible_os_family] | default({})) -%}
     {%- set ns = namespace(files=[]) -%}
     {%- for version, file in os_dist_map.items() | reverse -%}
-        {%- if distribution_version is version(version, '>=') -%}
+        {%- if ansible_facts['distribution_version' is version(version, '>=') -%}
           {%- set ns.files = ns.files + [file + ".yml"] -%}
         {%- endif -%}
     {%- endfor -%}
