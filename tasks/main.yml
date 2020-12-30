@@ -70,10 +70,10 @@
   tags:
     - common-timezone
 
-- name: "Install Cockpit"
-  import_tasks: cockpit.yml
-  tags:
-    - common-cockpit
+#- name: "Install Cockpit"
+#  import_tasks: cockpit.yml
+#  tags:
+#    - common-cockpit
 
 - name: "Reboot host if grub config was updated"
   reboot:
