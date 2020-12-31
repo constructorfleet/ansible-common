@@ -6,3 +6,6 @@ timezone: UTC
 
 ssh_users: {}
 ssh_groups: {}
+
+common_enable_cockpit: False
+
