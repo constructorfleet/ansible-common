@@ -31,7 +31,6 @@ ssh_service: ssh
 
 common_cockpit_pkgs:
   - cockpit
-  - cockpit-389-ds
   - cockpit-bridge
   - cockpit-doc
   - cockpit-machines
