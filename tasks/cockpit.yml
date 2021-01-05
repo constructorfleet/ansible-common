@@ -18,7 +18,6 @@
   package:
     name: "{{ common_cockpit_pkgs }}"
     state: present
-    update_cache: yes
 
 - name: Enable and start cockpit service
   service:
