@@ -1,8 +1,6 @@
----
-
 - name: Install common packages
   package:
-    name: "{{ common_pkgs }}"
+    name: '{{ common_pkgs }}'
     state: present
   when:
     - common_pkgs is defined
@@ -10,7 +8,7 @@
 
 - name: "Uninstall any unwanted packages managed via OS package-manager"
   package:
-    name: "{{ common_uninstall_pkgs }}"
+    name: '{{ common_uninstall_pkgs }}'
     state: absent
   when:
     - common_uninstall_pkgs is defined
