@@ -9,3 +9,4 @@ ssh_groups: {}
 
 common_enable_cockpit: False
 
+common_pkgs: []
