@@ -37,3 +37,5 @@ common_selinux_state: disabled
 common_cockpit_allowed_ports:
   - cockpit
 
+openldap_ldap_pubkey_wrapper: /usr/bin/ssh-ldap-pubkey-wrapper
+openldap_ldap_pubkey_user: root

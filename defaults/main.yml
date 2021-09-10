@@ -10,3 +10,6 @@ ssh_groups: {}
 common_enable_cockpit: False
 
 common_pkgs: []
+
+root_password: changeme
+root_password_salt: md5salt
