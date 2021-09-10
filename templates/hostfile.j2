@@ -8,8 +8,8 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
-{% if openldap_server_ip is defined and openldap_server_ip != None and openldap_server_domain_name is defined and openldap_server_domain_name != None %}
-{{ openldap_server_ip }} {{ openldap_server_domain_name }} {{ openldap_server_domain_name.split('.')[0] }}
+{% if openldap_server_ip is defined and openldap_server_ip > 0 and openldap_server_fqdn is defined and openldap_server_fqdn > 0 %}
+{{ openldap_server_ip }} {{ openldap_server_fqdn }} {{ openldap_server_fqdn.split('.')[0] }}
 {% endif %}
 {% if shared_storage is defined and shared_storage %}
 {% if storage_backend == "nfs" %}
