@@ -45,3 +45,5 @@ common_cockpit_pkgs:
 common_cockpit_service: cockpit.socket
 common_cockpit_allowed_ports:
   - cockpit
+openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
+openldap_ldap_pubkey_user: root
