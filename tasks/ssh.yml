@@ -70,5 +70,5 @@
     password: "{{ root_password | password_hash(salt=root_password_salt) }}"
     update_password: always
   when:
-    - root_password is defined and (root_password|list|length) >= 8
-    - root_password_salt is defined and (root_password_salt|list|length) > 0
+    - root_password is defined and (root_password|length) >= 8
+    - root_password_salt is defined and (root_password_salt|length) > 0

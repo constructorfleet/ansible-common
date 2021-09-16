@@ -8,7 +8,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
-{% if openldap_server_ip is defined and openldap_server_ip > 0 and openldap_server_fqdn is defined and openldap_server_fqdn > 0 %}
+{% if openldap_server_ip is defined and ( openldap_server_ip|length ) > 0 and openldap_server_fqdn is defined and ( openldap_server_fqdn|length ) > 0 %}
 {{ openldap_server_ip }} {{ openldap_server_fqdn }} {{ openldap_server_fqdn.split('.')[0] }}
 {% endif %}
 {% if shared_storage is defined and shared_storage %}
