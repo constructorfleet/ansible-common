@@ -57,10 +57,12 @@ AuthorizedKeysFile	{{ authorized_keys_file | default('.ssh/authorized_keys') }}
 AuthorizedKeysCommand /usr/local/bin/ssh-ldap-pubkey-wrapper
 {% else %}
 AuthorizedKeysCommand /usr/bin/ssh-ldap-pubkey-wrapper
+{% endif %}
+{% endif %}
 {% if openldap_ldap_pubkey_user is defined and ( openldap_ldap_pubkey_user|length ) > 0  %}
 AuthorizedKeysCommandUser {{ openldap_ldap_pubkey_user }}
 {% endif %}
-{% endif %}
+
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
 #HostbasedAuthentication no
 # Change to yes if you don't trust ~/.ssh/known_hosts for
