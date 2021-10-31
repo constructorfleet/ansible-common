@@ -94,6 +94,7 @@ AuthorizedKeysCommandUser {{ openldap_ldap_pubkey_user }}
 # and ChallengeResponseAuthentication to 'no'.
 
 {% if ansible_system == 'OpenBSD' %}
+UsePAM no
 {% else %}
 UsePAM yes
 {% endif %}
