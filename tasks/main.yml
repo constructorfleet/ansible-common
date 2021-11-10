@@ -45,8 +45,8 @@
 
 - name: "Configure MDNS reflection / Avahi"
   import_tasks: mdns_reflection.yml
-   when:
-     - enable_mdns_reflection | default(False)
+  when:
+    - enable_mdns_reflection | default(False)
   tags:
     - common-mdns
 
