@@ -43,6 +43,11 @@
   tags:
     - common-sudoers
 
+- name: "Configure /etc/hosts"
+  import_tasks: mdns_reflection.yml
+  tags:
+    - common-mdns
+
 - name: "Configure Serial-over-LAN [Ubuntu]"
   import_tasks: ubuntu-sol.yml
   when:
