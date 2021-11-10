@@ -43,7 +43,7 @@
   tags:
     - common-sudoers
 
-- name: "Configure /etc/hosts"
+- name: "Configure MDNS reflection / Avahi"
   import_tasks: mdns_reflection.yml
   tags:
     - common-mdns
