@@ -1,0 +1,28 @@
+---
+
+- name: Install Avahi-Daemon package
+  package:
+    name: avahi-daemon
+    state: present
+  when:
+    - enable_mdns_reflection | default(False)
+
+- name: Template Avahi-Daemon configuration
+  template:
+    dest: /etc/avahi/avahi-daemon.conf
+    src: avahi-daemon.conf.j2
+    owner: root
+    group: root
+    mode: '0644'
+  register: avahi_config
+  when:
+    - enable_mdns_reflection | default(False)
+
+- name: Reload Avahi-Daemon configuration on change
+  systemd:
+    name: avahi-daemon.service
+    state: restarted
+  when:
+    - enable_mdns_reflection | default(False)
+    - avahi_config is defined
+    - avahi_config is changed
