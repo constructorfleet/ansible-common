@@ -2,7 +2,7 @@
 
 - name: Install Avahi-Daemon package
   package:
-    name: avahi-daemon
+    name: "{{ common_mdns_pkgs }}"
     state: present
   when:
     - enable_mdns_reflection | default(False)
