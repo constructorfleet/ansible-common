@@ -37,3 +37,5 @@ common_selinux_state: disabled
 common_cockpit_allowed_ports:
   - cockpit
 
+common_mdns_pkgs:
+  - avahi
