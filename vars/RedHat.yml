@@ -38,4 +38,4 @@ common_cockpit_allowed_ports:
   - cockpit
 
 common_mdns_pkgs:
-  - avahi-daemon
+  - avahi

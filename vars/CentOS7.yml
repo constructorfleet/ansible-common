@@ -41,4 +41,4 @@ openldap_ldap_pubkey_wrapper: /usr/bin/ssh-ldap-pubkey-wrapper
 openldap_ldap_pubkey_user: root
 
 common_mdns_pkgs:
-  - avahi-daemon
+  - avahi
