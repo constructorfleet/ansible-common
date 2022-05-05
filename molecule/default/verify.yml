@@ -1,0 +1,23 @@
+---
+# This is a playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  strategy: free
+  tasks:
+    - name: Get Systemd status of avahi-service
+      ansible.builtin.service_facts:
+      register: service_facts
+
+    - name: Assert service is running
+      ansible.builtin.assert:
+        that:
+          - "{{ (service_facts.ansible_facts.services[service].state | default('error')) in ['running', 'started'] | default(False) }}"
+        success_msg: "Service {{ service }} is running"
+        fail_msg: "Service {{ service }} is not running: {{ service_facts | to_nice_yaml }}"
+      loop:
+        - avahi-daemon.service
+      loop_control:
+        loop_var: service
+        label: "{{ service }}"
+
