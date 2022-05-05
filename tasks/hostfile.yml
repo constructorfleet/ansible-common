@@ -1,5 +1,5 @@
 - name: "Gather facts for all ceph nodes"
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - network
   delegate_to: "{{ item }}"
@@ -13,7 +13,7 @@
     - hostvars[item]['ansible_default_ipv4'] is not defined
 
 - name: "Gather facts for all NFS Servers"
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - network
   delegate_to: "{{ item }}"
@@ -26,7 +26,7 @@
     - hostvars[item]['ansible_default_ipv4'] is not defined
 
 - name: Generate /etc/hosts template
-  template:
+  ansible.builtin.template:
     src: hostfile.j2
     dest: /etc/hosts
     mode: 0755

@@ -1,12 +1,13 @@
 ---
 - name: fix root ssh login
-  replace:
+  ansible.builtin.replace:
     path: /root/.ssh/authorized_keys
     regexp: '^.*((?=ssh-rsa))'
     replace: '\1'
     backup: yes
+
 - name: fix root ssh login
-  replace:
+  ansible.builtin.replace:
     path: /root/.ssh/authorized_keys
     regexp: '^no-port-forwarding.*$'
     backup: yes

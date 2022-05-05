@@ -1,5 +1,7 @@
+---
+
 - name: Install common packages
-  package:
+  ansible.builtin.package:
     name: '{{ common_pkgs }}'
     state: present
   when:
@@ -7,7 +9,7 @@
     - common_pkgs != None
 
 - name: "Uninstall any unwanted packages managed via OS package-manager"
-  package:
+  ansible.builtin.package:
     name: '{{ common_uninstall_pkgs }}'
     state: absent
   when:
@@ -15,7 +17,7 @@
     - common_uninstall_pkgs != None
 
 - name: "Install python requirements via Pip"
-  pip:
+  ansible.builtin.pip:
     name: "{{ common_python_pkgs }}"
     state: present
   when:

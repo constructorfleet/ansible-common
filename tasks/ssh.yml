@@ -1,6 +1,6 @@
 ---
 - name: create /var/run/sshd
-  file:
+  ansible.builtin.file:
     state: directory
     path: /var/run/sshd
     mode: 0755
@@ -8,7 +8,7 @@
     - ansible_os_family == "Debian"
 
 - name: Copy sshd_config Template
-  template:
+  ansible.builtin.template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
     owner: root
@@ -19,7 +19,7 @@
 - meta: flush_handlers
 
 - name: Restart ssh server
-  service:
+  ansible.builtin.service:
     name: "{{ ssh_service }}"
     state: restarted
     enabled: yes
@@ -27,7 +27,7 @@
   when: sshd_require_restart | default(false)
 
 - name: Verify the sshd service is listening
-  wait_for:
+  ansible.builtin.wait_for:
     host: localhost
     port: 22
     delay: 5
@@ -36,16 +36,16 @@
   register: ssh_start_attempt
 
 - name: Get ssh journald logs if service does not appear to be up
-  shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value {{ ssh_service }}.service`
+  ansible.builtin.shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value {{ ssh_service }}.service`
   register: ssh_journal
   when: ssh_start_attempt.failed | default(false)
 
-- fail:
+- ansible.builtin.fail:
     msg: "{{ ssh_journal.stdout_lines }}"
   when: ssh_start_attempt.failed | default(false)
 
 - name: Ensure root .ssh directory exists
-  file:
+  ansible.builtin.file:
     path: /root/.ssh
     state: directory
     owner: root
@@ -53,7 +53,7 @@
     mode: 0700
 
 - name: Generate root authorized_keys file
-  template:
+  ansible.builtin.template:
     src: root_authorized_keys.j2
     dest: /root/.ssh/authorized_keys
     owner: root
@@ -65,7 +65,7 @@
     - ssh_users|length > 0
 
 - name: Change root password
-  user:
+  ansible.builtin.user:
     name: root
     password: "{{ root_password | password_hash(salt=root_password_salt) }}"
     update_password: always

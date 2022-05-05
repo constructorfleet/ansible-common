@@ -2,10 +2,10 @@
 - name: "Configure Selinux and firewall rules for Cockpit [RedHat/CentOS]"
   block:
     - name: Disable SELinux
-      selinux:
+      ansible.posix.selinux:
         state: "{{ common_selinux_state }}"
     - name: Configure Firewalld allowed ports
-      firewalld:
+      ansible.posix.firewalld:
         service: "{{ item }}"
         permanent: yes
         immediate: yes
@@ -15,12 +15,12 @@
 
 
 - name: Install cockpit packages
-  package:
+  ansible.builtin.package:
     name: "{{ common_cockpit_pkgs }}"
     state: present
 
 - name: Enable and start cockpit service
-  service:
+  ansible.builtin.service:
     name: "{{ common_cockpit_service }}"
     state: started
     enabled: True

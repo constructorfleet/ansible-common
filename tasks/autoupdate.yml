@@ -1,6 +1,6 @@
 ---
 - name: "Common :: Disable Autoupdate Services"
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
     enabled: no
