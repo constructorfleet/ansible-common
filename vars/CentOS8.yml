@@ -1,7 +1,7 @@
 ---
 
 common_pkgs:
-  - libselinux-python
+  - https://centos.pkgs.org/8-stream/centos-baseos-aarch64/python3-libselinux-2.9-5.el8.aarch64.rpm.html
   - ipmitool
   - freeipmi
   - zsh
