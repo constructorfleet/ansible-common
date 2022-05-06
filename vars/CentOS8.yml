@@ -18,7 +18,6 @@ common_pkgs:
   - ipset
   - iptables
   - polkit
-  - python3-capng
   - python3-dbus
   - python3-gobject
   - python3-nftables

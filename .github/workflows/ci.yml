@@ -55,10 +55,10 @@ jobs:
           python-version: '3.8'
 
       - name: Install test dependencies.
-        run: pip install ansible "molecule[docker]" docker
+        run: python -m pip install ansible "molecule[docker]" docker
 
       - name: Run Molecule tests.
-        run: python3 -m molecule test
+        run: python -m molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
