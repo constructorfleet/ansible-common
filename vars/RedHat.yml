@@ -8,7 +8,6 @@ common_pkgs:
   - zsh
   - screen
   - vim-enhanced
-  - python-pip
   - python3-pip
   - sudo
   - tzdata
