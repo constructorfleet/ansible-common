@@ -18,6 +18,7 @@ grub_update_cmd: /usr/sbin/grub2-mkconfig
 ssh_service: sshd
 
 common_cockpit_pkgs:
+  - libselinux-python
   - cockpit
   - cockpit-composer
   - cockpit-doc
