@@ -4,6 +4,7 @@
   vars:
     configure_ssh: false
     storage_backend: NONE
+    host_is_container: true
 
   pre_tasks:
     - name: Update apt cache.
