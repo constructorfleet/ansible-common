@@ -1,27 +1,17 @@
 ---
 
-common_repos:
-
 common_pkgs:
-  - https://vault.centos.org/centos/8/BaseOS/aarch64/os/Packages/python3-policycoreutils-2.9-16.el8.noarch.rpm
-  - https://vault.centos.org/centos/8/BaseOS/aarch64/os/Packages/selinux-policy-3.14.3-80.el8_5.2.noarch.rpm
-  - "{{ ( (ansible_facts.distribution_major_version | int) < 8) | ternary('libselinux-python','python3-libselinux') }}"
   - ipmitool
   - freeipmi
   - zsh
+  - firewalld
   - screen
   - vim-enhanced
-  - firewalld
   - python3-pip
   - sudo
   - tzdata
-  - ebtables
-  - ipset
-  - iptables
-  - polkit
-  - python3-dbus
-  - python3-gobject
-  - python3-nftables
+
+common_python_pkgs: []
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
