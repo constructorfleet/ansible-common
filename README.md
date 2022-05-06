@@ -16,11 +16,9 @@
 
 Deploy common configurations and packages to servers.
 
-
 ## Requirements
 
 N/A
-
 
 ## Role Variables
 

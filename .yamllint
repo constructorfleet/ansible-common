@@ -5,7 +5,6 @@ ignore: |
   .github/
   venv/
 
-
 rules:
   braces:
     max-spaces-inside: 1
