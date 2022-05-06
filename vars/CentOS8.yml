@@ -15,7 +15,8 @@ common_pkgs:
   - sudo
   - tzdata
 
-common_python_pkgs: []
+common_python_pkgs:
+  - firewalld==0.2.11
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
