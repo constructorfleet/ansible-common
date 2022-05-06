@@ -49,3 +49,6 @@ verifier:
   name: ansible
   options:
     vvv: True
+  inventory:
+    all:
+      ceph: []
