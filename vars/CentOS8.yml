@@ -1,5 +1,6 @@
 ---
 common_pkgs:
+  - openssh-server
   - ipmitool
   - freeipmi
   - zsh

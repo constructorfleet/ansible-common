@@ -1,4 +1,5 @@
 common_pkgs:
+  - openssh-server
   - screen
   - vim
   - ipmitool
