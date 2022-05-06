@@ -50,3 +50,5 @@ provisioner:
 #  ansible-lint .
 verifier:
   name: ansible
+  options:
+    vvv: True
