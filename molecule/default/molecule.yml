@@ -2,16 +2,19 @@
 dependency:
   name: galaxy
 driver:
-  name: vagrant
+  name: docker
 platforms:
-  - name: ubuntu-20.04
-    box: ubuntu/focal64
-    config_options:
-      ssh.keep_alive: yes
-      ssh.remote_user: 'vagrant'
-      synced_folder: true
+  - name: instance
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
 provisioner:
   name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   options:
     vvv: True
 #lint: |
