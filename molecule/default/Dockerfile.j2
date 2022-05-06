@@ -8,11 +8,11 @@ FROM {{ item.image }}
 
 RUN mkdir -p /run/sshd && \
     ssh-keygen -A && \
-    if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python sudo bash ca-certificates openssh-server && apt-get clean; \
-    elif [ $(command -v dnf) ]; then dnf makecache && dnf --assumeyes install python sudo python-devel python*-dnf bash openssh-server && dnf clean all; \
-    elif [ $(command -v yum) ]; then yum makecache fast && yum install -y python sudo yum-plugin-ovl bash openssh-server && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf && yum clean all; \
-    elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml openssh-server && zypper clean -a; \
-    elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates openssh-server; \
-    elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server && xbps-remove -O; fi
+    if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y python sudo bash ca-certificates openssh-server && apt-get clean && /usr/sbin/sshd -D &; \
+    elif [ $(command -v dnf) ]; then dnf makecache && dnf --assumeyes install python sudo python-devel python*-dnf bash openssh-server && dnf clean all && /usr/sbin/sshd -D &; \
+    elif [ $(command -v yum) ]; then yum makecache fast && yum install -y python sudo yum-plugin-ovl bash openssh-server && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf && yum clean all && /usr/sbin/sshd -D &; \
+    elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml openssh-server && zypper clean -a && /usr/sbin/sshd -D &; \
+    elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates openssh-server && /usr/sbin/sshd -D &; \
+    elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server && xbps-remove -O && /usr/sbin/sshd -D &; fi
 
 CMD [ "/usr/sbin/sshd", "-D", "&&", "/lib/systemd/systemd"]
