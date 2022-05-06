@@ -3,6 +3,6 @@
   hosts: all
   strategy: free
   tasks:
-    - name: Run avahi daemon role
+    - name: Run common role
       ansible.builtin.include_role:
-        name: ansible-avahi-daemon
+        name: ansible-common
