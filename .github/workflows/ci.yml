@@ -31,7 +31,7 @@ jobs:
 
       - name: Lint code.
         run: |
-          yamllint .
+          yamllint -c .yamllint .
 
   molecule:
     name: Molecule
