@@ -16,6 +16,8 @@
   ansible.builtin.import_tasks: ssh.yml
   tags:
     - common-sshd
+  when:
+    - configure_ssh | default(True)
 
 - name: "Configure /etc/hosts"
   ansible.builtin.import_tasks: hostfile.yml

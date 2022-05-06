@@ -2,6 +2,8 @@
 - name: Converge
   hosts: all
   strategy: free
+  vars:
+    configure_ssh: false
   tasks:
 
     - name: Run common role
