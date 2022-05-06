@@ -1,7 +1,6 @@
 ---
 - name: Converge
   hosts: all
-  strategy: free
   vars:
     configure_ssh: false
     storage_backend: NONE

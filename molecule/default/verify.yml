@@ -2,7 +2,6 @@
 
 - name: Verify
   hosts: all
-  strategy: free
   tasks:
     - name: Create list of services to verify
       ansible.builtin.set_fact:
