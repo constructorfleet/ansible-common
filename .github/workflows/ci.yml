@@ -31,7 +31,7 @@ jobs:
 
       - name: Lint code.
         run: |
-          yamllint -f parsable -c .yamllint .
+          yamllint -f github -c .yamllint .
 
   molecule:
     name: Molecule
