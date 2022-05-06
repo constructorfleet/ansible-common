@@ -5,18 +5,32 @@
   hosts: all
   strategy: free
   tasks:
-    - name: Get Systemd status of avahi-service
+    - name: Create list of services to verify
+      ansible.builtin.set_fact:
+        services_to_verify: |
+          {%- set ns = namespace(services=[]) -%}
+          {%- if autoupdate_services is defined and autoupdate_services is sequence -%}
+            {%- set ns.services = ns.services + ([autoupdate_services] | flatten) -%}
+          {%- endif -%}
+          {%- if common_enable_cockpit is defined and common_enable_cockpit is true -%}
+            {%- set ns.services = ns.services + ([common_cockpit_service] | flatten) -%}
+          {%- endif -%}
+          {%- if enable_mdns_reflection | default(False) -%}
+            {%- set ns.services = ns.services + ['avahi-daemon.service'] -%}
+          {%- endif -%}
+          {{ ns.services }}
+
+    - name: Get Systemd status
       ansible.builtin.service_facts:
       register: service_facts
 
-    - name: Assert service is running
+    - name: Assert services are running
       ansible.builtin.assert:
         that:
           - "{{ (service_facts.ansible_facts.services[service].state | default('error')) in ['running', 'started'] | default(False) }}"
         success_msg: "Service {{ service }} is running"
         fail_msg: "Service {{ service }} is not running: {{ service_facts | to_nice_yaml }}"
-      loop:
-        - avahi-daemon.service
+      loop: '{{ services_to_verify }}'
       loop_control:
         loop_var: service
         label: "{{ service }}"
