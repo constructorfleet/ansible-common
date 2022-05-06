@@ -1,4 +1,5 @@
 ---
+
 - name: Deploy common server configurations
   hosts: all
   remote_user: root

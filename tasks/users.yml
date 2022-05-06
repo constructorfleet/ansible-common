@@ -11,6 +11,7 @@
   when:
     - ssh_groups is defined
     - ssh_groups != None
+
 - name: Create local user accounts
   ansible.builtin.user:
     name: "{{ item.key }}"
