@@ -24,4 +24,4 @@
   ansible.builtin.service:
     name: "{{ common_cockpit_service }}"
     state: started
-    enabled: True
+    enabled: true

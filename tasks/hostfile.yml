@@ -5,7 +5,7 @@
     gather_subset:
       - network
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   loop: "{{ groups['ceph'] | default([]) }}"
   run_once: true
   when:
@@ -19,7 +19,7 @@
     gather_subset:
       - network
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   run_once: true
   loop: "{{ groups['nfsservers'] | default([]) }}"
   when:

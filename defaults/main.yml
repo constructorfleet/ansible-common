@@ -8,7 +8,7 @@ timezone: UTC
 ssh_users: {}
 ssh_groups: {}
 
-common_enable_cockpit: False
+common_enable_cockpit: false
 
 common_pkgs: []
 

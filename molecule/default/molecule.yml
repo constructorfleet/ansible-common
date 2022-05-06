@@ -16,7 +16,7 @@ provisioner:
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   options:
-    vvv: True
+    vvv: true
 #lint: |
 #  set -e
 #  yamllint .
@@ -24,7 +24,7 @@ provisioner:
 verifier:
   name: ansible
   options:
-    vvv: True
+    vvv: true
   inventory:
     all:
       ceph: []

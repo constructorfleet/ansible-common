@@ -1,7 +1,7 @@
 - name: fix root
   hosts: all
   remote_user: centos
-  become: True
+  become: true
   tasks:
     - import_role:
         name: common
