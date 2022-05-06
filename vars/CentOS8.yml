@@ -1,7 +1,7 @@
 ---
 
 common_pkgs:
-  - https://centos.pkgs.org/8-stream/centos-baseos-aarch64/python3-libselinux-2.9-5.el8.aarch64.rpm.html
+  - "{{ ( (ansible_facts.distribution_major_version | int) < 8) | ternary('libselinux-python','python3-libselinux') }}"
   - ipmitool
   - freeipmi
   - zsh
