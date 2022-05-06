@@ -1,6 +1,8 @@
 ---
 
 common_pkgs:
+  - policycoreutils
+  - policycoreutils-python
   - "{{ ( (ansible_facts.distribution_major_version | int) < 8) | ternary('libselinux-python','python3-libselinux') }}"
   - ipmitool
   - freeipmi
