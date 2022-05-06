@@ -23,4 +23,4 @@ jobs:
       - name: Molecule
         uses: robertdebock/molecule-action@4.0.7
         with:
-          command: "--debug converge"
+          command: "--debug converge -- --skip-tags='common-sshd'"
