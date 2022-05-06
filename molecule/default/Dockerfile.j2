@@ -12,6 +12,6 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml openssh-server && zypper clean -a; \
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates openssh-server; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server && xbps-remove -O; fi
-COPY entrypoint.sh entrypoint.sh
+COPY entrypoint /usr/sbin/entrypoint
 
-CMD ["./entrypoint.sh"]
+CMD ["./entrypoint"]
