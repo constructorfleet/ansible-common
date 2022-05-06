@@ -27,4 +27,4 @@
 
     - name: Run common role
       ansible.builtin.include_role:
-        name: constructorfleet.ansible-common
+        name: constructorfleet.common
