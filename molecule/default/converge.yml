@@ -28,6 +28,20 @@
       ansible.posix.selinux:
         state: disabled
 
+    - name: Install firewalld
+      ansible.builtin.package:
+        name: firewalld
+        state: present
+      when:
+        - ansible_os_family == 'RedHat'
+
+    - name: Start the firewall daemon
+      ansible.builtin.service:
+        name: firewalld.service
+        state: started
+      when:
+        - ansible_os_family == 'RedHat'
+
   tasks:
     - name: Run common role
       ansible.builtin.include_role:
