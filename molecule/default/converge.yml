@@ -3,6 +3,16 @@
   hosts: all
   strategy: free
   tasks:
+    - name: Enable ssh daemon
+      ansible.builtin.service:
+        name: sshd
+        enabled: true
+        state: restarted
+
+    - name: Start agent
+      ansible.builtin.shell:
+        cmd: 'eval $(ssh-agent -s)'}
+
     - name: Run common role
       ansible.builtin.include_role:
         name: ansible-common
