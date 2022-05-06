@@ -36,6 +36,6 @@
     - name: Verify cloud-init is removed
       ansible.builtin.assert:
         that:
-          - "{{ '/etc/cloud' is not exists }}"
+          - "{{ not ('/etc/cloud' is exists) }}"
         success_msg: 'Cloud init is removed'
         fail_msg: 'Cloud init is not removed.'
