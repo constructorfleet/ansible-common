@@ -14,7 +14,6 @@
       loop: "{{ common_cockpit_allowed_ports }}"
   when: ansible_os_family == "RedHat"
 
-
 - name: Install cockpit packages
   ansible.builtin.package:
     name: "{{ common_cockpit_pkgs }}"

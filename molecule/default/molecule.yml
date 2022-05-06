@@ -17,10 +17,6 @@ provisioner:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   options:
     vvv: true
-#lint: |
-#  set -e
-#  yamllint .
-#  ansible-lint .
 verifier:
   name: ansible
   options:
