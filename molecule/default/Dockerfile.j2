@@ -14,5 +14,6 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y vim 
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server openssh-client && xbps-remove -O; fi
 RUN mkdir -p /run/sshd
 RUN ssh-keygen -A
+COPY entrypoint /usr/sbin/entrypoint
 
 CMD ["/bin/bash", "/usr/sbin/entrypoint"]
