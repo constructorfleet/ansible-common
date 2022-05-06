@@ -11,7 +11,7 @@
 
     - name: Start agent
       ansible.builtin.shell:
-        cmd: 'eval $(ssh-agent -s)'}
+        cmd: 'eval $(ssh-agent -s)'
 
     - name: Run common role
       ansible.builtin.include_role:
