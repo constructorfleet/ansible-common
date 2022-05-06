@@ -6,7 +6,7 @@
     storage_backend: NONE
     host_is_container: true
     enable_mdns_reflection: true
-
+    common_enable_cockpit: true
   pre_tasks:
     - name: Update apt cache.
       ansible.builtin.apt: update_cache=yes cache_valid_time=600
