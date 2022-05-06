@@ -7,7 +7,7 @@ platforms:
   - name: ubuntu-20.04
     image: joepublic/molecule-ubuntu:20.04
     privileged: true
-    command: /usr/sbin/entrypoint
+    command: /usr/sbin/init
     capabilities:
       - SYS_ADMIN
     tmpfs:
@@ -19,7 +19,7 @@ platforms:
   - name: ubuntu-18.04
     image: joepublic/molecule-ubuntu:18.04
     privileged: true
-    command: /usr/sbin/entrypoint
+    command: /usr/sbin/init
     capabilities:
       - SYS_ADMIN
     tmpfs:
@@ -31,7 +31,7 @@ platforms:
   - name: centos-7
     image: joepublic/molecule-centos:7
     privileged: true
-    command: /usr/sbin/entrypoint
+    command: /usr/sbin/init
     capabilities:
       - SYS_ADMIN
     tmpfs:
