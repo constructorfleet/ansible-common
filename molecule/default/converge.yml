@@ -4,6 +4,7 @@
   strategy: free
   vars:
     configure_ssh: false
+    storage_backend: NONE
 
   pre_tasks:
     - name: Update apt cache.
