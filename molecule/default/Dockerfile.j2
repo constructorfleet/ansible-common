@@ -17,4 +17,4 @@ RUN ssh-keygen -A
 COPY {{ molecule_scenario_directory }}/entrypoint /usr/sbin/entrypoint
 RUN chmod +x /usr/sbin/entrypoint
 
-CMD [ "/bin/bash", "/usr/sbin/entrypoint" ]
+CMD [ "/usr/sbin/entrypoint" ]
