@@ -14,4 +14,4 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server && xbps-remove -O; fi
 COPY entrypoint /usr/sbin/entrypoint
 
-CMD ["./entrypoint"]
+CMD ["/usr/sbin/entrypoint"]
