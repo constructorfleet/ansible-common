@@ -32,3 +32,10 @@
       loop_control:
         loop_var: service
         label: "{{ service }}"
+
+    - name: Verify cloud-init is removed
+      ansible.builtin.assert:
+        that:
+          - "{{ '/etc/cloud' is not exists }}"
+        success_msg: 'Cloud init is removed'
+        fail_msg: 'Cloud init is not removed.'
