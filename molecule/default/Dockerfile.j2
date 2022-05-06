@@ -14,5 +14,3 @@ RUN mkdir -p /run/sshd && \
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml openssh-server && zypper clean -a && /usr/sbin/sshd -D &; \
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates openssh-server && /usr/sbin/sshd -D &; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server && xbps-remove -O && /usr/sbin/sshd -D &; fi
-
-CMD [ "/usr/sbin/sshd", "-D", "&&", "/lib/systemd/systemd"]
