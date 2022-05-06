@@ -12,8 +12,15 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y vim 
     elif [ $(command -v zypper) ]; then zypper refresh && zypper install -y python sudo bash python-xml openssh-server openssh-client && zypper clean -a; \
     elif [ $(command -v apk) ]; then apk update && apk add --no-cache python sudo bash ca-certificates openssh; \
     elif [ $(command -v xbps-install) ]; then xbps-install -Syu && xbps-install -y python sudo bash ca-certificates openssh-server openssh-client && xbps-remove -O; fi
-RUN mkdir -p /run/sshd
-RUN ssh-keygen -A
-RUN systemctl enable ssh && systemctl start ssh
+RUN rm -rf /etc/ssh/ssh_host*
+
+COPY ssh-host-key.service /etc/systemd/system/
+RUN chmod 664 /etc/systemd/system/ssh-host-key.service
+RUN systemctl enable ssh-host-key.service
+
+RUN mkdir /root/.ssh && \
+  touch /root/.ssh/authorized_keys && \
+  chmod 700 /root/.ssh && \
+  chmod 600 /root/.ssh/authorized_keys
 
 CMD [ "/usr/sbin/init" ]
