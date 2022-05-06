@@ -32,4 +32,3 @@ rules:
   trailing-spaces: enable
   truthy:
     check-keys: false
-å
