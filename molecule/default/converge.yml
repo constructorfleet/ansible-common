@@ -5,6 +5,7 @@
     configure_ssh: false
     storage_backend: NONE
     host_is_container: true
+    enable_mdns_reflection: true
 
   pre_tasks:
     - name: Update apt cache.
