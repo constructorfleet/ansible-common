@@ -11,6 +11,7 @@ common_pkgs:
   - zsh
   - screen
   - vim-enhanced
+  - firewalld
   - python3-pip
   - sudo
   - tzdata
@@ -21,8 +22,6 @@ common_pkgs:
   - python3-dbus
   - python3-gobject
   - python3-nftables
-common_python_pkgs:
-  - firewalld==0.2.11
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
