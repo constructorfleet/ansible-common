@@ -1,5 +1,7 @@
 ---
+
 common_pkgs:
+  - epel-release
   - openssh-server
   - ipmitool
   - freeipmi
