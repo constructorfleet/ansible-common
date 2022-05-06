@@ -26,7 +26,7 @@
 
     - name: Disable SELinux
       ansible.posix.selinux:
-        state: "{{ common_selinux_state }}"
+        state: disabled
 
   tasks:
     - name: Run common role
