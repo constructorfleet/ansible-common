@@ -80,7 +80,7 @@
   ansible.builtin.import_tasks: cockpit.yml
   tags:
     - common-cockpit
-  when: common_enable_cockpit|default(False)
+  when: common_enable_cockpit | default(False)
 
 - name: "Reboot host if grub config was updated"
   ansible.builtin.reboot:
