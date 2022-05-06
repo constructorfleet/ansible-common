@@ -6,7 +6,7 @@
     state: present
     regexp: '^GRUB_CMDLINE_LINUX="((?!.*(console={{ serialtty }},[0-9]+n8))(.*)?)"$'
     line: 'GRUB_CMDLINE_LINUX="\1 console={{ serialtty }},115200n8"'
-    backrefs: yes
+    backrefs: true
   notify: "update_grub_config"
 
 - name: Update GRUB_CMDLINE_LINUX
@@ -15,7 +15,7 @@
     state: present
     regexp: '^GRUB_CMDLINE_LINUX="((?!.*(console={{ consoletty }}))(.*)?)"$'
     line: 'GRUB_CMDLINE_LINUX="\1 console={{ consoletty }}"'
-    backrefs: yes
+    backrefs: true
   notify: "update_grub_config"
 
 - name: Update GRUB_TERMINAL

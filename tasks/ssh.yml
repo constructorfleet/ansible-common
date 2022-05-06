@@ -1,4 +1,5 @@
 ---
+
 - name: create /var/run/sshd
   ansible.builtin.file:
     state: directory
@@ -22,7 +23,7 @@
   ansible.builtin.service:
     name: "{{ ssh_service }}"
     state: restarted
-    enabled: yes
+    enabled: true
   register: ssh_started
   when: sshd_require_restart | default(false)
 
@@ -32,7 +33,7 @@
     port: 22
     delay: 5
   when: ssh_started is changed
-  ignore_errors: yes
+  ignore_errors: true
   register: ssh_start_attempt
 
 - name: Get ssh journald logs if service does not appear to be up
@@ -59,7 +60,7 @@
     owner: root
     group: root
     mode: 0600
-    backup: yes
+    backup: true
   when:
     - ssh_users is defined
     - ssh_users|length > 0

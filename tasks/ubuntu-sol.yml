@@ -1,4 +1,5 @@
 ---
+
 - name: Update GRUB_CMDLINE_LINUX
   ansible.builtin.lineinfile:
     dest: /etc/default/grub

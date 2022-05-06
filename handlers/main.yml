@@ -1,4 +1,5 @@
 ---
+
 - name: "restart_sshd"
   set_fact:
     sshd_require_restart: True

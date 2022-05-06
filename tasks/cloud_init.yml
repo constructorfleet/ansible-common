@@ -1,4 +1,5 @@
 ---
+
 - name: Remove cloud-init config directory
   ansible.builtin.file:
     path: /etc/cloud

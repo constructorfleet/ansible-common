@@ -1,3 +1,5 @@
+---
+
 - name: "Gather facts for all ceph nodes"
   ansible.builtin.setup:
     gather_subset:
