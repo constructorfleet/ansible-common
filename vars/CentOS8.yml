@@ -1,8 +1,8 @@
 ---
 
 common_pkgs:
-  - policycoreutils
-  - policycoreutils-python
+  - https://centos.pkgs.org/8-stream/centos-baseos-x86_64/policycoreutils-2.9-19.el8.x86_64.rpm.html
+  - https://amazonlinux.pkgs.org/2/amazonlinux-core-x86_64/policycoreutils-python-2.5-22.amzn2.x86_64.rpm.html
   - "{{ ( (ansible_facts.distribution_major_version | int) < 8) | ternary('libselinux-python','python3-libselinux') }}"
   - ipmitool
   - freeipmi
