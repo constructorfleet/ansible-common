@@ -1,7 +1,7 @@
 ---
 
 common_pkgs:
-  - https://centos.pkgs.org/8/centos-baseos-aarch64/policycoreutils-python-utils-2.9-16.el8.noarch.rpm.html
+  - https://vault.centos.org/centos/8/BaseOS/aarch64/os/Packages/python3-policycoreutils-2.9-16.el8.noarch.rpm
   - "{{ ( (ansible_facts.distribution_major_version | int) < 8) | ternary('libselinux-python','python3-libselinux') }}"
   - ipmitool
   - freeipmi
