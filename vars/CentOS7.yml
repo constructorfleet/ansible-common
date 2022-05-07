@@ -5,6 +5,7 @@ common_pkgs:
   - freeipmi
   - zsh
   - screen
+  - firewalld
   - vim-enhanced
   - python3-pip
   - sudo
