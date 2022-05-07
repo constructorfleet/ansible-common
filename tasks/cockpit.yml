@@ -14,9 +14,6 @@
         state: restarted
         enabled: true
         daemon_reload: true
-      when:
-        - not kickstarting | bool
-      listen: "restart firewalld"
 
     - name: Configure Firewalld allowed ports
       ansible.posix.firewalld:
