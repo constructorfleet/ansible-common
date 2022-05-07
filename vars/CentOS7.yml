@@ -22,7 +22,6 @@ common_cockpit_pkgs:
   - cockpit
   - cockpit-composer
   - cockpit-doc
-  - cockpit-session-recording
   - cockpit-bridge
   - cockpit-dashboard
   - cockpit-packagekit
