@@ -8,6 +8,16 @@
       when:
         - "'/etc/selinux/config' is exists"
 
+    - name: 'Restarting firewalld'
+      systemd:
+        name: firewalld
+        state: restarted
+        enabled: true
+        daemon_reload: true
+      when:
+        - not kickstarting | bool
+      listen: "restart firewalld"
+
     - name: Configure Firewalld allowed ports
       ansible.posix.firewalld:
         service: "{{ item }}"
