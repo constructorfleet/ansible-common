@@ -1,10 +1,12 @@
+---
+
 - name: "Gather facts for all ceph nodes"
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - network
   delegate_to: "{{ item }}"
-  delegate_facts: True
-  loop: "{{ groups['ceph'] }}"
+  delegate_facts: true
+  loop: "{{ groups['ceph'] | default([]) }}"
   run_once: true
   when:
     - ansible_lsb.id != "Raspbian"
@@ -13,22 +15,24 @@
     - hostvars[item]['ansible_default_ipv4'] is not defined
 
 - name: "Gather facts for all NFS Servers"
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - network
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   run_once: true
-  loop: "{{ groups['nfsservers'] }}"
+  loop: "{{ groups['nfsservers'] | default([]) }}"
   when:
     - shared_storage is defined and shared_storage
     - storage_backend is defined and storage_backend == "nfs"
     - hostvars[item]['ansible_default_ipv4'] is not defined
 
 - name: Generate /etc/hosts template
-  template:
+  ansible.builtin.template:
     src: hostfile.j2
     dest: /etc/hosts
     mode: 0755
     owner: root
     group: root
+  when:
+    - host_is_container | default(False) is false

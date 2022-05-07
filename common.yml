@@ -1,8 +1,9 @@
 ---
+
 - name: Deploy common server configurations
   hosts: all
   remote_user: root
-  gather_facts: yes
+  gather_facts: true
 
   tasks:
     - import_role:

@@ -1,9 +1,11 @@
 ---
+
 - name: "Common :: Disable Autoupdate Services"
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   loop: "{{ autoupdate_services }}"
+  ignore_errors: true
   when:
     - autoupdate_services is defined

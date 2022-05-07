@@ -1,4 +1,5 @@
 ---
+
 common_pkgs:
   - screen
   - vim
@@ -13,9 +14,7 @@ common_pkgs:
   - sudo
   - tzdata
 
-common_uninstall_pkgs:
-#  - python-setuptools
-#  - python3-setuptools
+common_uninstall_pkgs: []
 
 common_python_pkgs:
   - setuptools

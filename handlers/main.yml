@@ -1,8 +1,9 @@
 ---
+
 - name: "restart_sshd"
   set_fact:
-    sshd_require_restart: True
+    sshd_require_restart: true
 
 - name: "update_grub_config"
   set_fact:
-    grub_require_rebuild: True
+    grub_require_rebuild: true

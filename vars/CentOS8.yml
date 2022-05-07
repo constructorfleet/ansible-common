@@ -1,22 +1,22 @@
 ---
+
 common_pkgs:
   - ipmitool
   - freeipmi
   - zsh
+  - firewalld
   - screen
   - vim-enhanced
-  - python2-pip
   - python3-pip
   - sudo
   - tzdata
 
-common_python_pkgs:
+common_python_pkgs: []
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
 
 ssh_service: sshd
-
 
 common_cockpit_pkgs:
   - cockpit
@@ -24,7 +24,6 @@ common_cockpit_pkgs:
   - cockpit-doc
   - cockpit-session-recording
   - cockpit-bridge
-  - cockpit-dashboard
   - cockpit-packagekit
   - cockpit-podman
   - cockpit-machines

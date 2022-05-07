@@ -1,5 +1,7 @@
+---
+
 - name: include os specific vars
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}.yml"
@@ -8,50 +10,52 @@
     - always
 
 - name: "Install common system packages and python dependencies"
-  import_tasks: packages.yml
+  ansible.builtin.import_tasks: packages.yml
   tags:
     - common-packages
 
 - name: "Configure SSHd and root user"
-  import_tasks: ssh.yml
+  ansible.builtin.import_tasks: ssh.yml
   tags:
     - common-sshd
+  when:
+    - configure_ssh | default(True)
 
 - name: "Configure /etc/hosts"
-  import_tasks: hostfile.yml
+  ansible.builtin.import_tasks: hostfile.yml
   tags:
     - common-hostfile
 
 - name: "Configure system autoupdate parameters"
-  import_tasks: autoupdate.yml
+  ansible.builtin.import_tasks: autoupdate.yml
   tags:
     - common-autoupdate
 
 - name: "Remove cloud-init packages and config files"
-  import_tasks: cloud_init.yml
+  ansible.builtin.import_tasks: cloud_init.yml
   tags:
     - common-cloudinit
 
 - name: "Configure Local Users and Groups"
-  import_tasks: users.yml
+  ansible.builtin.import_tasks: users.yml
   when:  not openldap_client_enable|default(false)
   tags:
     - common-users
 
 - name: "Configure Sudoers"
-  import_tasks: sudo.yml
+  ansible.builtin.import_tasks: sudo.yml
   tags:
     - common-sudoers
 
 - name: "Configure MDNS reflection / Avahi"
-  import_tasks: mdns_reflection.yml
+  ansible.builtin.import_tasks: mdns_reflection.yml
   when:
     - enable_mdns_reflection | default(False)
   tags:
     - common-mdns
 
 - name: "Configure Serial-over-LAN [Ubuntu]"
-  import_tasks: ubuntu-sol.yml
+  ansible.builtin.import_tasks: ubuntu-sol.yml
   when:
     - ansible_os_family == "Debian"
     - ansible_virtualization_role != "guest"
@@ -61,7 +65,7 @@
     - common-sol
 
 - name: "Configure Serial-over-LAN [RHEL/CentOS]"
-  import_tasks: redhat-sol.yml
+  ansible.builtin.import_tasks: redhat-sol.yml
   when:
     - ansible_os_family == "RedHat"
     - ansible_virtualization_role != "guest"
@@ -71,19 +75,19 @@
     - common-sol
 
 - name: "Configure Timezone Info"
-  timezone:
+  community.general.timezone:
     name: "{{ timezone }}"
   tags:
     - common-timezone
 
 - name: "Install Cockpit"
-  import_tasks: cockpit.yml
+  ansible.builtin.import_tasks: cockpit.yml
   tags:
     - common-cockpit
-  when: common_enable_cockpit|default(False)
+  when: common_enable_cockpit | default(False)
 
 - name: "Reboot host if grub config was updated"
-  reboot:
+  ansible.builtin.reboot:
   when: grub_require_rebuild | default(false)
   tags:
     - common-sol

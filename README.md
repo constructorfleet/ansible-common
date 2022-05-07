@@ -16,11 +16,9 @@
 
 Deploy common configurations and packages to servers.
 
-
 ## Requirements
 
 N/A
-
 
 ## Role Variables
 
@@ -88,7 +86,7 @@ N/A
 ```
 - name: Deploy common server configurations
   hosts: all
-  become: True
+  become: true
   remote_user: root
   tasks:
     - include_role:

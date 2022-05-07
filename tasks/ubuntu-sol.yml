@@ -1,6 +1,7 @@
 ---
+
 - name: Update GRUB_CMDLINE_LINUX
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/default/grub
     state: present
     regexp: '^GRUB_CMDLINE_LINUX=.*'
@@ -8,7 +9,7 @@
   notify: "update_grub_config"
 
 - name: Update GRUB_TERMINAL
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/default/grub
     state: present
     regexp: '^GRUB_TERMINAL=.*'
@@ -16,7 +17,7 @@
   notify: "update_grub_config"
 
 - name: Update GRUB_SERIAL_COMMAND
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/default/grub
     state: present
     regexp: '^GRUB_SERIAL_COMMAND=.*'
@@ -26,5 +27,5 @@
 - meta: flush_handlers
 
 - name: Rebuild Grub Config
-  command: "{{ grub_update_cmd }} -o {{ grub_config }}"
+  ansible.builtin.command: "{{ grub_update_cmd }} -o {{ grub_config }}"
   when: grub_require_rebuild | default(false)
