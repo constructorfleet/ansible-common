@@ -28,4 +28,4 @@
   tasks:
     - name: Run common role
       ansible.builtin.include_role:
-        name: constructorfleet.role
+        name: constructorfleet.common
