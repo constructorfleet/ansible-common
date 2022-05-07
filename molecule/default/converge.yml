@@ -32,6 +32,14 @@
       changed_when: false
       failed_when: systemctl_status.rc > 1
 
+    - name: 'Restarting firewalld'
+      ansible.builtin.systemd:
+         name: firewalld
+         state: restarted
+         enabled: true
+         daemon_reload: true
+      when: ansible_os_family == 'RedHat'
+
   tasks:
     - name: Run common role
       ansible.builtin.include_role:
