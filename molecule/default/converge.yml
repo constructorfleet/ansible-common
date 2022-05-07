@@ -7,7 +7,6 @@
     host_is_container: true
     enable_mdns_reflection: true
     common_enable_cockpit: true
-    ansible_python_interpreter:  /opt/hostedtoolcache/Python/3.8.12/x64/bin/python
   pre_tasks:
     - name: Update apt cache.
       ansible.builtin.apt: update_cache=yes cache_valid_time=600
