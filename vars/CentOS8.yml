@@ -4,7 +4,6 @@ common_pkgs:
   - ipmitool
   - freeipmi
   - zsh
-  - libselinux-ptyhon3
   - firewalld
   - screen
   - vim-enhanced
