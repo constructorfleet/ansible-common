@@ -5,6 +5,9 @@
     - name: Disable SELinux
       ansible.posix.selinux:
         state: "{{ common_selinux_state }}"
+      when:
+        - "'/etc/selinux/config' is exists"
+
     - name: Configure Firewalld allowed ports
       ansible.posix.firewalld:
         service: "{{ item }}"
