@@ -1,7 +1,7 @@
 galaxy_info:
   author: Alan Janis
   description: Deploy Common server configurations and packages
-  role_name: common
+  role_name: role
   namespace: constructorfleet
   issue_tracker_url: https://github.com/constructorfleet/ansible-common/issue/tracker
 
