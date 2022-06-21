@@ -1,6 +1,8 @@
 {{ foreman_ssh_public_key }}
 {% for user in ( ssh_users | dict2items ) %}
 {% if user.value.gid == 1042 %}
-{{ user.value.pubkey }}
+{% for key in user.value.pubkey %}
+{{ key }}
+{% endfor %}
 {% endif %}
 {% endfor %}
