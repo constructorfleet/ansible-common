@@ -1,16 +1,11 @@
-- name: "Gather facts for all ceph nodes"
+- name: gather facts from ceph servers
   setup:
-    gather_subset:
-      - network
   delegate_to: "{{ item }}"
   delegate_facts: True
-  loop: "{{ groups['ceph'] }}"
-  run_once: true
-  when:
-    - ansible_lsb.id != "Raspbian"
-    - shared_storage is defined and shared_storage
-    - storage_backend is defined and storage_backend == "cephfs"
-    - hostvars[item]['ansible_default_ipv4'] is not defined
+  loop: "{{ groups['mons'] }}"
+  run_once: True
+  tags:
+    - always
 
 - name: "Gather facts for all NFS Servers"
   setup:
@@ -32,3 +27,4 @@
     mode: 0755
     owner: root
     group: root
+
