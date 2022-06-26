@@ -14,12 +14,12 @@ ff02::3 ip6-allhosts
 {% if shared_storage is defined and shared_storage %}
 {% if storage_backend == "nfs" %}
 {% for host in groups['nfsservers'] %}
-{{ hostvars[host]['ansible_default_ipv4']['address'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
+{{ hostvars[host]['ansible_ssh_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
 {% endif %}
 {% if storage_backend == "cephfs" and ansible_lsb.id != "Raspbian" %}
 {% for host in groups['mons'] %}
-{{ hostvars[host]['ansible_default_ipv4']['address'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
+{{ hostvars[host]['ansible_ssh_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
 {% endif %}
 {% endif %}
