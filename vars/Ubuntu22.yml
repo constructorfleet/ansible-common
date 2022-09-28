@@ -1,0 +1,49 @@
+common_pkgs:
+  - screen
+  - vim
+  - ipmitool
+  - freeipmi-tools
+  - software-properties-common
+  - zsh
+  - sudo
+  - htop
+  - tzdata
+  - apt-utils
+
+common_uninstall_pkgs:
+#  - python-setuptools
+#  - python3-setuptools
+
+common_python_pkgs:
+  - setuptools
+
+autoupdate_services:
+  - apt-daily-upgrade.timer
+  - apt-daily.timer
+  - unattended-upgrades.service
+
+grub_config: /boot/grub/grub.cfg
+grub_update_cmd: /usr/sbin/update-grub2
+
+ssh_service: ssh
+
+common_cockpit_pkgs:
+  - cockpit
+  - cockpit-bridge
+  - cockpit-doc
+  - cockpit-machines
+  - cockpit-networkmanager
+  - cockpit-packagekit
+  - cockpit-storaged
+  - cockpit-ws
+  - cockpit-bridge
+  - cockpit-dashboard
+  - cockpit-system
+common_cockpit_service: cockpit.socket
+common_cockpit_allowed_ports:
+  - cockpit
+openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
+openldap_ldap_pubkey_user: root
+
+common_mdns_pkgs:
+  - avahi-daemon
