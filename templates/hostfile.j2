@@ -17,7 +17,7 @@ ff02::3 ip6-allhosts
 {{ hostvars[host]['ansible_ssh_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
 {% endif %}
-{% if storage_backend == "cephfs" and ansible_lsb.id != "Raspbian" %}
+{% if storage_backend == "cephfs" %}
 {% for host in groups['mons'] %}
 {{ hostvars[host]['ansible_ssh_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
