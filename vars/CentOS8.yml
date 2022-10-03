@@ -1,4 +1,6 @@
 ---
+common_prereq_pkgs:
+  - epel-release
 common_pkgs:
   - ipmitool
   - freeipmi
