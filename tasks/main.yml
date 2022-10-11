@@ -27,10 +27,13 @@
   tags:
     - common-autoupdate
 
-# - name: "Remove cloud-init packages and config files"
-#   import_tasks: cloud_init.yml
-#   tags:
-#     - common-cloudinit
+- name: "Install qemu-guest-agent on KVM hosts"
+  import_tasks: qemu_guest_agent.yml
+  when:
+    - ansible_virtualization_role == "guest"
+    - '"kvm" in ansible_virtualization_tech_guest'
+  tags:
+    - qemu-guest-agent
 
 - name: "Configure Local Users and Groups"
   import_tasks: users.yml
