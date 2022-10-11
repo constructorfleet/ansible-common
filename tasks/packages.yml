@@ -5,6 +5,7 @@
   when:
     - common_prereq_pkgs is defined
     - common_prereq_pkgs != None
+
 - name: Install common packages
   package:
     name: '{{ common_pkgs }}'
