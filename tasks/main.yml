@@ -27,10 +27,10 @@
   tags:
     - common-autoupdate
 
-- name: "Remove cloud-init packages and config files"
-  import_tasks: cloud_init.yml
-  tags:
-    - common-cloudinit
+# - name: "Remove cloud-init packages and config files"
+#   import_tasks: cloud_init.yml
+#   tags:
+#     - common-cloudinit
 
 - name: "Configure Local Users and Groups"
   import_tasks: users.yml
