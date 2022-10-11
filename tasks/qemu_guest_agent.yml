@@ -1,0 +1,34 @@
+---
+- name: Install qemu-guest-agent if host is a kvm/qemu virtual machine
+  block:
+
+    - name: Install qemu-guest-agent
+      package:
+        name: qemu-guest-agent
+        state: present
+
+    - name: start qemu-guest-agent service
+      systemd:
+        name: qemu-guest-agent
+        state: started
+        enabled:  True
+        daemon_reload: True
+      register: qemu_guest_agent_startup
+      ignore_errors: True
+
+    - name: Assert that qemu-guest-agent is running
+      assert:
+        that: not qemu_guest_agent_startup.failed
+        fail_msg: "Fail: qemu-guest-agent failed to start"
+        success_msg: "Success: qemu-guest-agent started successfully"
+      ignore_errors: True
+
+    - name: Get qemu-guest-agent logs if service failed to start
+      shell: systemctl status qemu-guest-agent
+      register: qemu_guest_agent_status
+      when: qemu_guest_agent_startup.failed | default(false)
+    
+    - name: Print logs for debugging
+      debug:
+        msg: "{{ qemu_guest_agent_status.stdout_lines }}"
+      when: qemu_guest_agent_startup.failed | default(false)
