@@ -9,6 +9,7 @@ common_pkgs:
   - htop
   - tzdata
   - apt-utils
+  - python3-pip
 
 common_uninstall_pkgs:
 #  - python-setuptools
