@@ -1,4 +1,4 @@
-127.0.0.1 {{ ansible_fqdn }} {{ ansible_hostname }} localhost
+127.0.0.1 localhost.localdomain localhost
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 ip6-localhost ip6-loopback
@@ -23,3 +23,4 @@ ff02::3 ip6-allhosts
 {% endfor %}
 {% endif %}
 {% endif %}
+{{ hostvars[inventory_hostname].ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}
