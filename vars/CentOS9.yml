@@ -1,0 +1,46 @@
+---
+common_prereq_pkgs:
+  - epel-release
+common_pkgs:
+  - ipmitool
+  - freeipmi
+  - zsh
+  - screen
+  - vim-enhanced
+  # - python2-pip
+  - python3-pip
+  - sudo
+  - tzdata
+
+common_python_pkgs:
+
+grub_config: /boot/grub2/grub.cfg
+grub_update_cmd: /usr/sbin/grub2-mkconfig
+
+ssh_service: sshd
+
+
+common_cockpit_pkgs:
+  - cockpit
+  - cockpit-composer
+  - cockpit-doc
+  - cockpit-session-recording
+  - cockpit-bridge
+  - cockpit-dashboard
+  - cockpit-packagekit
+  - cockpit-podman
+  - cockpit-machines
+  - cockpit-storaged
+  - cockpit-system
+  - subscription-manager-cockpit
+  - cockpit-pcp
+common_cockpit_service: cockpit.socket
+common_selinux_state: disabled
+common_cockpit_allowed_ports:
+  - cockpit
+
+openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
+openldap_ldap_pubkey_user: root
+
+common_mdns_pkgs:
+  - avahi
