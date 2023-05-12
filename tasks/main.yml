@@ -7,6 +7,12 @@
   tags:
     - always
 
+- name: Set SELinux State (RHEL)
+  selinux:
+    state: "{{ common_selinux_state }}"
+  when:
+    - ansible_os_family == "RedHat"
+
 - name: "Install common system packages and python dependencies"
   import_tasks: packages.yml
   tags:
