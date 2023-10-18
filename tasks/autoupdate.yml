@@ -1,9 +1,10 @@
 ---
-- name: "Common :: Disable Autoupdate Services"
+- name: "Common :: enable/disable Autoupdate Services"
   service:
     name: "{{ item }}"
-    state: stopped
-    enabled: no
+    state: started
+    enabled: yes
   loop: "{{ autoupdate_services }}"
   when:
     - autoupdate_services is defined
+    - enable_autoupdate|default(false)

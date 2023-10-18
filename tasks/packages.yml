@@ -1,3 +1,8 @@
+- name: Update all system packages
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+
 - name: Install prereq packages
   package:
     name: "{{ common_prereq_pkgs }}"

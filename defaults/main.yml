@@ -13,3 +13,5 @@ common_pkgs: []
 
 root_password: changeme
 root_password_salt: md5salt
+
+enable_autoupdate: false
