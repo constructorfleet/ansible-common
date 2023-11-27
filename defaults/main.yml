@@ -15,3 +15,6 @@ root_password: changeme
 root_password_salt: md5salt
 
 enable_autoupdate: false
+
+epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+epel_repofile_path: "/etc/yum.repos.d/epel.repo"
