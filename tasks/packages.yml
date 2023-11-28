@@ -1,55 +1,91 @@
-
-
-
-- name: Check if EPEL repo is already configured
-  ansible.builtin.stat:
-    path: "{{ epel_repofile_path }}"
-  register: epel_repofile_result
+- name: Update all installed packages (RHEL)
   when:
     - ansible_os_family == "RedHat"
+  block:
 
-- name: Import EPEL GPG key
-  ansible.builtin.rpm_key:
-    key: “{{ epel_repo_gpg_key_url }}”
-    state: present
-  when: 
-    - ansible_os_family == "RedHat"
-    - not epel_repofile_result.stat.exists
+    - name: Install EPEL Repo from upstream URL
+      ansible.builtin.yum:
+        name:
+          - "{{ epel_repo_rpm_url }}"
+        disable_gpg_check: true
+        update_cache: true
+        state: present
 
+    - name: Update caches and installed packages (RHEL) # noqa package-latest
+      ansible.builtin.yum:
+        name: "*"
+        update_cache: true
+        state: latest
+        skip_broken: true
+      register: yum_update
+      until: yum_update is not failed
 
-- name: Update all system packages
-  ansible.builtin.package:
-    name: "*"
-    state: latest
+    - name: Print yum status
+      ansible.builtin.debug:
+        msg: "{{ yum_update }}"
+        verbosity: 1
 
-- name: Install prereq packages
-  package:
-    name: "{{ common_prereq_pkgs }}"
-    state: present
+    - name: Remove unnecessary packages and clean up package database (RHEL) # noqa package-latest
+      ansible.builtin.yum:
+        autoremove: true
+      register: yum_clean
+      until: yum_clean is not failed
+
+    - name: Print yum status
+      ansible.builtin.debug:
+        msg: "{{ yum_clean }}"
+        verbosity: 1
+
+- name: Update all installed packages (Debian)
   when:
-    - common_prereq_pkgs is defined
-    - common_prereq_pkgs != None
+    - ansible_os_family == "Debian"
+  block:
 
-- name: Install common packages
-  package:
-    name: '{{ common_pkgs }}'
-    state: present
-  when:
-    - common_pkgs is defined
-    - common_pkgs != None
+    - name: Update caches and installed packages, clean up package database (Debian) # noqa package-latest
+      ansible.builtin.apt:
+        autoclean: true
+        autoremove: true
+        update_cache: true
+        upgrade: dist
+        state: latest
+      register: apt_update
+      until: apt_update is not failed
 
-- name: "Uninstall any unwanted packages managed via OS package-manager"
-  package:
-    name: '{{ common_uninstall_pkgs }}'
-    state: absent
-  when:
-    - common_uninstall_pkgs is defined
-    - common_uninstall_pkgs != None
+    - name: Print apt upgrade status
+      ansible.builtin.debug:
+        msg: "{{ apt_update }}"
+        verbosity: 1
 
-- name: "Install python requirements via Pip"
-  pip:
-    name: "{{ common_python_pkgs }}"
-    state: present
-  when:
-    - common_python_pkgs is defined
-    - common_python_pkgs != None
+- name: Install pre-req and common packages, install common python requirements (All Distributions)
+  block:
+    - name: Install prereq packages
+      ansible.builtin.package:
+        name: "{{ common_prereq_pkgs }}"
+        state: present
+      when:
+        - common_prereq_pkgs is defined
+        - common_prereq_pkgs != None
+
+    - name: Install common packages
+      ansible.builtin.package:
+        name: '{{ common_pkgs }}'
+        state: present
+      when:
+        - common_pkgs is defined
+        - common_pkgs != None
+
+    - name: "Uninstall any unwanted packages managed via OS package-manager"
+      ansible.builtin.package:
+        name: '{{ common_uninstall_pkgs }}'
+        state: absent
+      when:
+        - common_uninstall_pkgs is defined
+        - common_uninstall_pkgs != None
+
+    - name: "Install python requirements via Pip"
+      ansible.builtin.pip:
+        name: "{{ common_python_pkgs }}"
+        state: present
+      when:
+        - common_python_pkgs is defined
+        - common_python_pkgs != None
