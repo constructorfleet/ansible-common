@@ -58,13 +58,17 @@
   when:
     - ansible_os_family == "Debian"
   block:
+    - name: Stop Unattended Upgrades
+      ansible.builtin.service:
+        name: unattended-upgrades
+        state: stopped
 
     - name: Update caches and installed packages, clean up package database (Debian) # noqa package-latest
       ansible.builtin.apt:
+        name: "*"
         autoclean: true
         autoremove: true
         update_cache: true
-        upgrade: dist
         state: latest
         lock_timeout: 300
       register: apt_update
