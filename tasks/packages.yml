@@ -28,8 +28,10 @@
         name: '*'
         update_cache: true
         state: latest
+        skip_broken: true
         nobest: true
         allowerasing: true
+        allow_downgrade: true
         lock_timeout: 300
       register: dnf_update
       until: dnf_update is not failed
@@ -46,8 +48,10 @@
         autoremove: true
         state: absent
         update_cache: true
+        skip_broken: true
         nobest: true
         allowerasing: true
+        allow_downgrade: true
         lock_timeout: 300
       register: yum_clean
       timeout: 330
