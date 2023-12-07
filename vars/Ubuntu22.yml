@@ -2,6 +2,7 @@ common_pkgs:
   - screen
   - vim
   - ipmitool
+  - net-tools
   - freeipmi-tools
   - software-properties-common
   - zsh
@@ -44,7 +45,7 @@ common_cockpit_service: cockpit.socket
 common_cockpit_allowed_ports:
   - cockpit
 openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
-openldap_ldap_pubkey_user: root
+openldap_ldap_pubkey_user: nobody
 
 common_mdns_pkgs:
   - avahi-daemon

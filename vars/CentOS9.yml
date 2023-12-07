@@ -5,13 +5,17 @@ common_pkgs:
   - ipmitool
   - freeipmi
   - zsh
+  - net-tools
+  - gcc
+  - open-ssl-devel
+  - bzip2-devel
+  - libffi-devel
+  - python3-jinja2
   - screen
   - vim-enhanced
-  # - python2-pip
   - python3-pip
   - sudo
   - tzdata
-
 common_python_pkgs:
 
 grub_config: /boot/grub2/grub.cfg
@@ -40,7 +44,7 @@ common_cockpit_allowed_ports:
   - cockpit
 
 openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
-openldap_ldap_pubkey_user: root
+openldap_ldap_pubkey_user: nobody
 
 common_mdns_pkgs:
   - avahi

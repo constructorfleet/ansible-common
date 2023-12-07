@@ -8,6 +8,7 @@ common_pkgs:
   - python3-software-properties
   - zsh
   - sudo
+  - net-tools
   - htop
   - tzdata
   - python3-apt
@@ -46,7 +47,7 @@ common_cockpit_service: cockpit.socket
 common_cockpit_allowed_ports:
   - cockpit
 openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
-openldap_ldap_pubkey_user: root
+openldap_ldap_pubkey_user: nobody
 
 common_mdns_pkgs:
   - avahi-daemon
