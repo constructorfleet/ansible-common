@@ -24,25 +24,30 @@
       until: epel_gpgkey is not failed
 
     - name: Update caches and installed packages (RHEL) # noqa package-latest
-      ansible.builtin.yum:
-        name: "*"
+      ansible.builtin.dnf:
+        name: '*'
         update_cache: true
         state: latest
-        skip_broken: true
+        nobest: true
+        allowerasing: true
         lock_timeout: 300
-      register: yum_update
-      until: yum_update is not failed
+      register: dnf_update
+      until: dnf_update is not failed
       timeout: 330
       retries: 0
 
-    - name: Print yum install debug
+    - name: Print dnf install debug
       ansible.builtin.debug:
-        msg: "{{ yum_update }}"
+        msg: "{{ dnf_update }}"
         verbosity: 1
 
     - name: Remove unnecessary packages and clean up package database (RHEL) # noqa package-latest
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         autoremove: true
+        state: absent
+        update_cache: true
+        nobest: true
+        allowerasing: true
         lock_timeout: 300
       register: yum_clean
       timeout: 330

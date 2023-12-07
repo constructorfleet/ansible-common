@@ -59,8 +59,8 @@
     dest: /root/.ssh/authorized_keys
     owner: root
     group: root
-    mode: 0600
-    backup: yes
+    mode: "0600"
+    backup: false
   when:
     - ssh_users is defined
     - ssh_users|length > 0
