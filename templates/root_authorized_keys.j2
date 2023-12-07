@@ -1,9 +1,8 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
-{{ foreman_ssh_public_key }}
 {% for user in ( ssh_users | dict2items ) %}
     {% if user.value.gid|default() == 1042 %}
         {% if (user.value.pubkey | default([])) | length >= 1 %}
-            {% for key in user.value.pubkey %}
+            {% for key in user.value.pubkey | unique %}
 {{ key }}
             {% endfor %}
         {% endif %}
