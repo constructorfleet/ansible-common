@@ -1,10 +1,8 @@
 #jinja2: trim_blocks: True, lstrip_blocks: True
 {% for user in ( ssh_users | dict2items ) %}
-    {% if user.value.gid|default() == 1042 %}
-        {% if (user.value.pubkey | default([])) | length >= 1 %}
-            {% for key in user.value.pubkey | unique %}
+    {% if (user.value.gid|default() == 1042) and ((user.value.pubkey | default([])) | length >= 1) and (user.value.state|default('absent') == 'present') %}
+        {% for key in user.value.pubkey | unique %}
 {{ key }}
-            {% endfor %}
-        {% endif %}
+        {% endfor %}
     {% endif %}
 {% endfor %}
