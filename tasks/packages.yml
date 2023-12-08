@@ -2,7 +2,6 @@
   when:
     - ansible_os_family == "RedHat"
   block:
-
     - name: Install EPEL Repo from upstream URL
       ansible.builtin.yum:
         name: "{{ epel_repo_rpm_url }}"
@@ -25,7 +24,7 @@
 
     - name: Update caches and installed packages (RHEL) # noqa package-latest
       ansible.builtin.dnf:
-        name: '*'
+        update_only: true
         update_cache: true
         state: latest
         skip_broken: true
@@ -102,7 +101,7 @@
 
     - name: Install common packages
       ansible.builtin.package:
-        name: '{{ common_pkgs }}'
+        name: "{{ common_pkgs }}"
         state: present
       when:
         - common_pkgs is defined
@@ -110,7 +109,7 @@
 
     - name: Uninstall any unwanted packages managed via OS package-manager (All Distributions)
       ansible.builtin.package:
-        name: '{{ common_uninstall_pkgs }}'
+        name: "{{ common_uninstall_pkgs }}"
         state: absent
       when:
         - common_uninstall_pkgs is defined
