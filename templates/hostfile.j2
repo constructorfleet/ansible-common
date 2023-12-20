@@ -8,19 +8,19 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
-{% if openldap_server_ip is defined and (openldap_server_ip|length) > 0 and openldap_server_domain_name is defined and ( openldap_server_domain_name|length ) >= 0 %}
-{{ openldap_server_ip }} {{ openldap_server_domain_name }} {{ openldap_server_domain_name.split('.')[0] }}
-{% endif %}
-{% if shared_storage is defined and shared_storage %}
-{% if storage_backend == "nfs" %}
-{% for host in groups['nfsservers'] %}
-{{ hostvars[host]['ansible_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
+
+{% for host in groups['ldap'] | default([]) | unique %}
+{{ hostvars[host].ansible_default_ipv4.address }} {{ openldap_server_domain_name }} {{ openldap_server_domain_name.split('.')[0] }}
 {% endfor %}
-{% endif %}
-{% if storage_backend == "cephfs" %}
-{% for host in groups['mons'] %}
-{{ hostvars[host]['ansible_host'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
+
+{% for host in groups['nfsservers'] | default([]) | unique %}
+{{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_fqdn }} {{ hostvars[host].ansible_hostname}}
 {% endfor %}
+
+{% for host in groups['mons'] | default([]) | unique %}
+{{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_fqdn }} {{ hostvars[host].ansible_hostname}}
+{% endfor %}
+
+{% if inventory_hostname not in ([ (groups['mons'] | default([])), (groups['ldap'] | default([])), (groups['nfsservers'] | default([])) ] | flatten)  %}
+{{ hostvars[inventory_hostname].ansible_default_ipv4.address }} {{ hostvars[inventory_hostname].ansible_fqdn }} {{ hostvars[inventory_hostname].ansible_hostname}}
 {% endif %}
-{% endif %}
-{{ hostvars[inventory_hostname].ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}

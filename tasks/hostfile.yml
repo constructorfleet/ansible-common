@@ -2,11 +2,18 @@
   setup:
   delegate_to: "{{ item }}"
   delegate_facts: True
-  loop: "{{ groups['mons'] }}"
+  loop: "{{ groups['mons'] | default([])}}"
   run_once: True
   tags:
     - always
-
+- name: gather facts from ldap servers
+  setup:
+  delegate_to: "{{ item }}"
+  delegate_facts: True
+  loop: "{{ groups['ldap'] | default([]) }}"
+  run_once: True
+  tags:
+    - always
 - name: "Gather facts for all NFS Servers"
   setup:
     gather_subset:
@@ -14,11 +21,7 @@
   delegate_to: "{{ item }}"
   delegate_facts: True
   run_once: true
-  loop: "{{ groups['nfsservers'] }}"
-  when:
-    - shared_storage is defined and shared_storage
-    - storage_backend is defined and storage_backend == "nfs"
-    - hostvars[item]['ansible_default_ipv4'] is not defined
+  loop: "{{ groups['nfsservers'] | default([])}}"
 
 - name: Generate /etc/hosts template
   template:
