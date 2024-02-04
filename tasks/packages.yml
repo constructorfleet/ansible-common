@@ -24,18 +24,11 @@
 
     - name: Update caches and installed packages (RHEL) # noqa package-latest
       ansible.builtin.dnf:
-        update_only: true
         update_cache: true
-        state: latest
-        skip_broken: true
-        nobest: true
-        allowerasing: true
-        allow_downgrade: true
-        lock_timeout: 300
+        autoremove: true
+
       register: dnf_update
       until: dnf_update is not failed
-      timeout: 330
-      retries: 0
 
     - name: Print dnf install debug
       ansible.builtin.debug:
@@ -45,16 +38,7 @@
     - name: Remove unnecessary packages and clean up package database (RHEL) # noqa package-latest
       ansible.builtin.dnf:
         autoremove: true
-        state: absent
-        update_cache: true
-        skip_broken: true
-        nobest: true
-        allowerasing: true
-        allow_downgrade: true
-        lock_timeout: 300
       register: yum_clean
-      timeout: 330
-      retries: 0
       until: yum_clean is not failed
 
     - name: Print yum clean debug
@@ -66,28 +50,14 @@
   when:
     - ansible_os_family == "Debian"
   block:
-    - name: Stop Unattended Upgrades
-      ansible.builtin.service:
-        name: unattended-upgrades
-        state: stopped
 
     - name: Update caches and installed packages, clean up package database (Debian) # noqa package-latest
       ansible.builtin.apt:
-        name: "*"
+        update_cache: true
         autoclean: true
         autoremove: true
-        update_cache: true
-        state: latest
-        lock_timeout: 300
-      register: apt_update
-      until: apt_update is not failed
-      timeout: 330
-      retries: 0
-
-    - name: Print apt upgrade debug
-      ansible.builtin.debug:
-        msg: "{{ apt_update }}"
-        verbosity: 1
+      register: apt_cache_update
+      until: apt_cache_update is not failed
 
 - name: Install pre-req and common packages, install common python requirements (All Distributions)
   block:

@@ -1,10 +1,18 @@
 ---
-- name: "Common :: enable/disable Autoupdate Services"
-  service:
+- name: Populate service facts
+  ansible.builtin.service_facts: {}
+  register: services_discovered
+
+- name: List services
+  ansible.builtin.debug:
+    var: services_discovered
+
+- name: Enable/Disable autoupdate services
+  ansible.builtin.service:
     name: "{{ item }}"
-    state: started
-    enabled: yes
+    state: "{{ 'started' if enable_autoupdate else 'stopped' }}"
+    enabled: "{{ true if enable_autoupdate else false }}"
   loop: "{{ autoupdate_services }}"
   when:
     - autoupdate_services is defined
-    - enable_autoupdate|default(false)
+    - item in services_discovered|flatten|list
