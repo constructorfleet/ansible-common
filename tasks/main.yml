@@ -14,6 +14,11 @@
   when:
     - ansible_os_family == "RedHat"
 
+- name: "Configure system autoupdate parameters"
+  import_tasks: autoupdate.yml
+  tags:
+    - common-autoupdate
+
 - name: "Install common system packages and python dependencies"
   import_tasks: packages.yml
   tags:
@@ -28,11 +33,6 @@
   import_tasks: hostfile.yml
   tags:
     - common-hostfile
-
-- name: "Configure system autoupdate parameters"
-  import_tasks: autoupdate.yml
-  tags:
-    - common-autoupdate
 
 - name: "Install qemu-guest-agent on KVM hosts"
   import_tasks: qemu_guest_agent.yml
