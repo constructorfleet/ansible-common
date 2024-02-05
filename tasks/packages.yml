@@ -8,9 +8,10 @@
         disable_gpg_check: true
         update_cache: true
         state: present
-        lock_timeout: 300
-      timeout: 330
-      retries: 0
+        lock_timeout: 1200
+      timeout: 1200
+      retries: 5
+      delay: 60
       register: epel_setup
       until: epel_setup is not failed
 
@@ -21,13 +22,18 @@
         validate_certs: true
       register: epel_gpgkey
       until: epel_gpgkey is not failed
+      retries: 5
+      timeout: 1200
+      delay: 60
 
     - name: Update caches and installed packages (RHEL) # noqa package-latest
       ansible.builtin.dnf:
         update_cache: true
         autoremove: true
-
       register: dnf_update
+      retries: 5
+      timeout: 1200
+      delay: 60
       until: dnf_update is not failed
 
     - name: Print dnf install debug
@@ -40,6 +46,9 @@
         autoremove: true
       register: yum_clean
       until: yum_clean is not failed
+      retries: 5
+      timeout: 1200
+      delay: 60
 
     - name: Print yum clean debug
       ansible.builtin.debug:
@@ -58,6 +67,9 @@
         autoremove: true
       register: apt_cache_update
       until: apt_cache_update is not failed
+      retries: 5
+      timeout: 1200
+      delay: 60
 
 - name: Install pre-req and common packages, install common python requirements (All Distributions)
   block:
@@ -67,7 +79,9 @@
         state: present
       register: prereq_pkg_install
       until: prereq_pkg_install is not failed
+      retries: 5
       timeout: 1200
+      delay: 60
       when:
         - common_prereq_pkgs is defined
         - common_prereq_pkgs != None
@@ -78,7 +92,9 @@
         state: present
       register: common_pkg_install
       until: common_pkg_install is not failed
+      retries: 5
       timeout: 1200
+      delay: 60
       when:
         - common_pkgs is defined
         - common_pkgs != None
@@ -89,7 +105,9 @@
         state: absent
       register: common_pkg_uninstall
       until: common_pkg_uninstall is not failed
+      retries: 5
       timeout: 1200
+      delay: 60
       when:
         - common_uninstall_pkgs is defined
         - common_uninstall_pkgs != None
@@ -100,7 +118,9 @@
         state: present
       register: common_py_pkgs
       until: common_py_pkgs is not failed
+      retries: 5
       timeout: 1200
+      delay: 60
       when:
         - common_python_pkgs is defined
         - common_python_pkgs != None
