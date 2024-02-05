@@ -12,8 +12,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     state: present
-    regexp: "^{{ item.option }} "
-    insertafter: "^#{{ item.option }} "
+    regexp: "^(?:.+)?{{ item.option }}.*$"
     line: "{{ item.option }} {{ item.value }}"
   loop:
     - option: UsePAM
@@ -44,38 +43,38 @@
       value: "LANG LC_*"
   notify: "restart_sshd"
 
-- name: Add block configs to sshd_config
-  ansible.builtin.blockinfile:
-    path: /etc/ssh/sshd_config
-    block: |
-      {% if enable_ssh_host_rsa_key | default(True) %}
-      HostKey /etc/ssh/ssh_host_rsa_key
-      {% else %}
-      #HostKey /etc/ssh/ssh_host_rsa_key
-      {% endif %}
-      {% if enable_ssh_host_dsa_key | default(False) %}
-      HostKey /etc/ssh/ssh_host_dsa_key
-      {% else %}
-      #HostKey /etc/ssh/ssh_host_dsa_key
-      {% endif %}
-      {% if enable_ssh_host_ecdsa_key | default(True) %}
-      HostKey /etc/ssh/ssh_host_ecdsa_key
-      {% else %}
-      #HostKey /etc/ssh/ssh_host_ecdsa_key
-      {% endif %}
-      {% if enable_ssh_host_ed25519_key | default(True) %}
-      HostKey /etc/ssh/ssh_host_ed25519_key
-      {% else %}
-      #HostKey /etc/ssh/ssh_host_ed25519_key
-      {% endif %}
-      {% if groups['kvm'] is defined and inventory_hostname in groups['kvm'] %}
-      Match user virsh
-          X11Forwarding no
-          AllowTcpForwarding no
-          PermitTTY no
-          ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
-      {% endif %}
-  notify: "restart_sshd"
+# - name: Add block configs to sshd_config
+#   ansible.builtin.blockinfile:
+#     path: /etc/ssh/sshd_config
+#     block: |
+#       {% if enable_ssh_host_rsa_key | default(True) %}
+#       HostKey /etc/ssh/ssh_host_rsa_key
+#       {% else %}
+#       #HostKey /etc/ssh/ssh_host_rsa_key
+#       {% endif %}
+#       {% if enable_ssh_host_dsa_key | default(False) %}
+#       HostKey /etc/ssh/ssh_host_dsa_key
+#       {% else %}
+#       #HostKey /etc/ssh/ssh_host_dsa_key
+#       {% endif %}
+#       {% if enable_ssh_host_ecdsa_key | default(True) %}
+#       HostKey /etc/ssh/ssh_host_ecdsa_key
+#       {% else %}
+#       #HostKey /etc/ssh/ssh_host_ecdsa_key
+#       {% endif %}
+#       {% if enable_ssh_host_ed25519_key | default(True) %}
+#       HostKey /etc/ssh/ssh_host_ed25519_key
+#       {% else %}
+#       #HostKey /etc/ssh/ssh_host_ed25519_key
+#       {% endif %}
+#       {% if groups['kvm'] is defined and inventory_hostname in groups['kvm'] %}
+#       Match user virsh
+#           X11Forwarding no
+#           AllowTcpForwarding no
+#           PermitTTY no
+#           ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
+#       {% endif %}
+#   notify: "restart_sshd"
 
 
 # - name: Copy sshd_config Template
