@@ -72,6 +72,7 @@
     - name: Install common packages
       ansible.builtin.package:
         name: "{{ common_pkgs }}"
+
         state: present
       when:
         - common_pkgs is defined
