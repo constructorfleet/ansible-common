@@ -15,6 +15,8 @@
     regexp: "^(?:.+)?{{ item.option }}.*$"
     line: "{{ item.option }} {{ item.value }}"
   loop:
+    - option: Subsystem sftp
+      value: "{{ '/usr/libexec/openssh/sftp-server' if ansible_os_family == 'RedHat' else '/usr/libexec/openssh/sftp-server' if ansible_os_family == 'Debian' }}"
     - option: UsePAM
       value: "{{ 'yes' if ansible_system == 'OpenBSD' else 'no' }}"
     - option: Port
