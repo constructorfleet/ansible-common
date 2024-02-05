@@ -65,6 +65,9 @@
       ansible.builtin.package:
         name: "{{ common_prereq_pkgs }}"
         state: present
+      register: prereq_pkg_install
+      until: prereq_pkg_install is not failed
+      timeout: 1200
       when:
         - common_prereq_pkgs is defined
         - common_prereq_pkgs != None
@@ -72,8 +75,10 @@
     - name: Install common packages
       ansible.builtin.package:
         name: "{{ common_pkgs }}"
-
         state: present
+      register: common_pkg_install
+      until: common_pkg_install is not failed
+      timeout: 1200
       when:
         - common_pkgs is defined
         - common_pkgs != None
@@ -82,6 +87,9 @@
       ansible.builtin.package:
         name: "{{ common_uninstall_pkgs }}"
         state: absent
+      register: common_pkg_uninstall
+      until: common_pkg_uninstall is not failed
+      timeout: 1200
       when:
         - common_uninstall_pkgs is defined
         - common_uninstall_pkgs != None
@@ -90,6 +98,9 @@
       ansible.builtin.pip:
         name: "{{ common_python_pkgs }}"
         state: present
+      register: common_py_pkgs
+      until: common_py_pkgs is not failed
+      timeout: 1200
       when:
         - common_python_pkgs is defined
         - common_python_pkgs != None
