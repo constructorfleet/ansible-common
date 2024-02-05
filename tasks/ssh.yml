@@ -18,7 +18,7 @@
     - option: Subsystem
       value: "{{ 'sftp /usr/libexec/openssh/sftp-server' if ansible_os_family == 'RedHat' else 'sftp /usr/lib/openssh/sftp-server' }}"
     - option: UsePAM
-      value: "{{ 'yes' if ansible_system == 'OpenBSD' else 'no' }}"
+      value: "{{ 'no' if ansible_os_family == 'OpenBSD' else 'yes' }}"
     - option: Port
       value: "{{ sshd_listen_port | default('22') }}"
     - option: ListenAddress
