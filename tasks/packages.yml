@@ -3,15 +3,15 @@
     - ansible_os_family == "RedHat"
   block:
     - name: Install EPEL Repo from upstream URL
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         name: "{{ epel_repo_rpm_url }}"
         disable_gpg_check: true
         update_cache: true
         state: present
-        lock_timeout: 1200
-      timeout: 1200
-      retries: 5
-      delay: 60
+        lock_timeout: 300
+      timeout: 0
+      delay: 120
+      retries: 10
       register: epel_setup
       until: epel_setup is not failed
 
@@ -22,37 +22,43 @@
         validate_certs: true
       register: epel_gpgkey
       until: epel_gpgkey is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
+      retries: 10
+      timeout: 0
+      delay: 120
 
     - name: Update caches and installed packages (RHEL) # noqa package-latest
       ansible.builtin.dnf:
         update_cache: true
-        autoremove: true
-      register: dnf_update
-      retries: 5
-      timeout: 1200
-      delay: 60
-      until: dnf_update is not failed
+        allow_downgrade: true
+        name: "{{ common_prereq_pkgs + common_pkgs }}"
+        state: present
+        lock_timeout: 300
+      register: dnf_common
+      retries: 10
+      timeout: 0
+      delay: 120
+      until: dnf_common is not failed
 
     - name: Print dnf install debug
       ansible.builtin.debug:
-        msg: "{{ dnf_update }}"
+        msg: "{{ dnf_common }}"
         verbosity: 1
 
-    - name: Remove unnecessary packages and clean up package database (RHEL) # noqa package-latest
+    - name: Remove unwanted packages and clean up package database (RHEL) # noqa package-latest
       ansible.builtin.dnf:
+        name: "{{ common_uninstall_pkgs }}"
+        state: absent
         autoremove: true
-      register: yum_clean
-      until: yum_clean is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
+        lock_timeout: 300
+      register: dnf_cleanup
+      until: dnf_cleanup is not failed
+      retries: 10
+      timeout: 0
+      delay: 120
 
-    - name: Print yum clean debug
+    - name: Print dnf_cleanup debug
       ansible.builtin.debug:
-        msg: "{{ yum_clean }}"
+        msg: "{{ dnf_cleanup }}"
         verbosity: 1
 
 - name: Update all installed packages (Debian)
@@ -63,64 +69,95 @@
     - name: Update caches and installed packages, clean up package database (Debian) # noqa package-latest
       ansible.builtin.apt:
         update_cache: true
+        allow_downgrade: true
+        autoclean: true
+        name: "{{ common_prereq_pkgs + common_pkgs }}"
+        state: present
+        update_cache_retries: 10
+        update_cache_retry_max_delay: 60
+        lock_timeout: 300
+      register: apt_common
+      until: apt_common is not failed
+      retries: 10
+      timeout: 0
+      delay: 120
+
+    - name: Print apt_common debug
+      ansible.builtin.debug:
+        msg: "{{ apt_common }}"
+        verbosity: 1
+
+    - name: Remove unwanted packages and clean up the package database (Debian) # noqa package-latest
+      ansible.builtin.apt:
+        update_cache: true
         autoclean: true
         autoremove: true
-      register: apt_cache_update
-      until: apt_cache_update is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
-
-- name: Install pre-req and common packages, install common python requirements (All Distributions)
-  block:
-    - name: Install prereq packages
-      ansible.builtin.package:
-        name: "{{ common_prereq_pkgs }}"
-        state: present
-      register: prereq_pkg_install
-      until: prereq_pkg_install is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
-      when:
-        - common_prereq_pkgs is defined
-        - common_prereq_pkgs != None
-
-    - name: Install common packages
-      ansible.builtin.package:
-        name: "{{ common_pkgs }}"
-        state: present
-      register: common_pkg_install
-      until: common_pkg_install is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
-      when:
-        - common_pkgs is defined
-        - common_pkgs != None
-
-    - name: Uninstall any unwanted packages managed via OS package-manager (All Distributions)
-      ansible.builtin.package:
         name: "{{ common_uninstall_pkgs }}"
         state: absent
-      register: common_pkg_uninstall
-      until: common_pkg_uninstall is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
-      when:
-        - common_uninstall_pkgs is defined
-        - common_uninstall_pkgs != None
+        update_cache_retries: 10
+        update_cache_retry_max_delay: 60
+        lock_timeout: 300
+      register: apt_cleanup
+      until: apt_cleanup is not failed
+      retries: 10
+      timeout: 0
+      delay: 120
 
-    - name: Install python requirements via Pip (All Distributions)
-      ansible.builtin.pip:
-        name: "{{ common_python_pkgs }}"
-        state: present
-      register: common_py_pkgs
-      until: common_py_pkgs is not failed
-      retries: 5
-      timeout: 1200
-      delay: 60
-      when:
-        - common_python_pkgs is defined
-        - common_python_pkgs != None
+    - name: Print apt_cleanup debug
+      ansible.builtin.debug:
+        msg: "{{ apt_cleanup }}"
+        verbosity: 1
+
+# - name: Install pre-req and common packages, install common python requirements (All Distributions)
+#   block:
+#     - name: Install prereq packages
+#       ansible.builtin.package:
+#         name: "{{ common_prereq_pkgs }}"
+#         state: present
+#       register: prereq_pkg_install
+#       until: prereq_pkg_install is not failed
+#       retries: 5
+#       timeout: 1200
+#       delay: 60
+#       when:
+#         - common_prereq_pkgs is defined
+#         - common_prereq_pkgs != None
+
+#     - name: Install common packages
+#       ansible.builtin.package:
+#         name: "{{ common_pkgs }}"
+#         state: present
+#       register: common_pkg_install
+#       until: common_pkg_install is not failed
+#       retries: 5
+#       timeout: 1200
+#       delay: 60
+#       when:
+#         - common_pkgs is defined
+#         - common_pkgs != None
+
+#     - name: Uninstall any unwanted packages managed via OS package-manager (All Distributions)
+#       ansible.builtin.package:
+#         name: "{{ common_uninstall_pkgs }}"
+#         state: absent
+#       register: common_pkg_uninstall
+#       until: common_pkg_uninstall is not failed
+#       retries: 5
+#       timeout: 1200
+#       delay: 60
+#       when:
+#         - common_uninstall_pkgs is defined
+#         - common_uninstall_pkgs != None
+
+- name: Install python requirements via Pip (All Distributions)
+  ansible.builtin.pip:
+    name: "{{ common_python_pkgs }}"
+    state: present
+  register: common_py_pkgs
+  until: common_py_pkgs is not failed
+  retries: 5
+  timeout: 1200
+  delay: 60
+  when:
+    - common_python_pkgs is defined
+    - common_python_pkgs != None
