@@ -13,6 +13,7 @@
     state: "{{ common_selinux_state }}"
   when:
     - ansible_os_family == "RedHat"
+  failed_when: false
 
 - name: "Configure SSHd and root user"
   ansible.builtin.import_tasks: ssh.yml
