@@ -6,7 +6,7 @@
     regexp: ^GRUB_CMDLINE_LINUX="((?!.*(console={{ serialtty }},[0-9]+n8))(.*)?)"$
     line: GRUB_CMDLINE_LINUX="\1 console={{ serialtty }},115200n8"
     backrefs: true
-  notify: Update_grub_config
+  notify: update_grub_config
 
 - name: Update GRUB_CMDLINE_LINUX
   ansible.builtin.lineinfile:
@@ -15,7 +15,7 @@
     regexp: ^GRUB_CMDLINE_LINUX="((?!.*(console={{ consoletty }}))(.*)?)"$
     line: GRUB_CMDLINE_LINUX="\1 console={{ consoletty }}"
     backrefs: true
-  notify: Update_grub_config
+  notify: update_grub_config
 
 - name: Update GRUB_TERMINAL
   ansible.builtin.lineinfile:
@@ -23,7 +23,7 @@
     state: present
     regexp: ^GRUB_TERMINAL=.*
     line: GRUB_TERMINAL="serial"
-  notify: Update_grub_config
+  notify: update_grub_config
 
 - name: Update GRUB_SERIAL_COMMAND
   ansible.builtin.lineinfile:
@@ -31,7 +31,7 @@
     state: present
     regexp: ^GRUB_SERIAL_COMMAND=.*
     line: GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
-  notify: Update_grub_config
+  notify: update_grub_config
 
 - ansible.builtin.meta: flush_handlers
 - name: Rebuild Grub Config

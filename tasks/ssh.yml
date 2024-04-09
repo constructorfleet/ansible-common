@@ -42,7 +42,7 @@
       value: "yes"
     - option: AcceptEnv
       value: LANG LC_*
-  notify: Restart_sshd
+  notify: restart_sshd
 
 - name: Add block configs to sshd_config
   ansible.builtin.blockinfile:
@@ -75,7 +75,7 @@
           PermitTTY no
           ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
       {% endif %}
-  notify: Restart_sshd
+  notify: restart_sshd
 
 # - name: Copy sshd_config Template
 #   template:
@@ -84,7 +84,7 @@
 #     owner: root
 #     group: root
 #     mode: 0644
-#   notify: "Restart_sshd"
+#   notify: "restart_sshd"
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
