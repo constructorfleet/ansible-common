@@ -20,7 +20,3 @@ ff02::3 ip6-allhosts
 {% for host in groups['mons'] | default([]) | unique %}
 {{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_fqdn }} {{ hostvars[host].ansible_hostname}}
 {% endfor %}
-
-{% if inventory_hostname not in ([ (groups['mons'] | default([])), (groups['ldap'] | default([])), (groups['nfsservers'] | default([])) ] | flatten)  %}
-{{ hostvars[inventory_hostname].ansible_default_ipv4.address }} {{ hostvars[inventory_hostname].ansible_fqdn }} {{ hostvars[inventory_hostname].ansible_hostname}}
-{% endif %}
