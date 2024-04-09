@@ -1,8 +1,8 @@
 ---
-- name: "restart_sshd"
-  set_fact:
-    sshd_require_restart: True
+- name: Restart_sshd
+  ansible.builtin.set_fact:
+    sshd_require_restart: true
 
-- name: "update_grub_config"
-  set_fact:
-    grub_require_rebuild: True
+- name: Update_grub_config
+  ansible.builtin.set_fact:
+    grub_require_rebuild: true
