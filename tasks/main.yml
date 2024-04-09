@@ -17,23 +17,31 @@
   failed_when: false
 
 - name: Configure SSHd and root user
-  ansible.builtin.import_tasks: ssh.yml
+  ansible.builtin.include_tasks:
+    file: ssh.yml
+
   tags:
     - common-sshd
 
 - name: Configure Local Users and Groups
-  ansible.builtin.import_tasks: users.yml
+  ansible.builtin.include_tasks:
+    file: users.yml
+
   when: not openldap_client_enable | default(false)
   tags:
     - common-users
 
 - name: Configure Sudoers
-  ansible.builtin.import_tasks: sudo.yml
+  ansible.builtin.include_tasks:
+    file: sudo.yml
+
   tags:
     - common-sudoers
 
 - name: Configure /etc/hosts
-  ansible.builtin.import_tasks: hostfile.yml
+  ansible.builtin.include_tasks:
+    file: hostfile.yml
+
   tags:
     - common-hostfile
 
@@ -44,17 +52,23 @@
     - common-timezone
 
 - name: Configure system autoupdate parameters
-  ansible.builtin.import_tasks: autoupdate.yml
+  ansible.builtin.include_tasks:
+    file: autoupdate.yml
+
   tags:
     - common-autoupdate
 
 - name: Install common system packages and python dependencies
-  ansible.builtin.import_tasks: packages.yml
+  ansible.builtin.include_tasks:
+    file: packages.yml
+
   tags:
     - common-packages
 
 - name: Install qemu-guest-agent on KVM hosts
-  ansible.builtin.import_tasks: qemu_guest_agent.yml
+  ansible.builtin.include_tasks:
+    file: qemu_guest_agent.yml
+
   when:
     - ansible_virtualization_role == "guest"
     - '"kvm" in ansible_virtualization_tech_guest'
@@ -62,7 +76,9 @@
     - qemu-guest-agent
 
 - name: Configure Serial-over-LAN [Ubuntu]
-  ansible.builtin.import_tasks: ubuntu-sol.yml
+  ansible.builtin.include_tasks:
+    file: ubuntu-sol.yml
+
   when:
     - ansible_os_family == "Debian"
     - ansible_virtualization_role != "guest"
@@ -72,7 +88,9 @@
     - common-sol
 
 - name: Configure Serial-over-LAN [RHEL/CentOS]
-  ansible.builtin.import_tasks: redhat-sol.yml
+  ansible.builtin.include_tasks:
+    file: redhat-sol.yml
+
   when:
     - ansible_os_family == "RedHat"
     - ansible_virtualization_role != "guest"
@@ -82,14 +100,18 @@
     - common-sol
 
 - name: Configure MDNS reflection / Avahi
-  ansible.builtin.import_tasks: mdns_reflection.yml
+  ansible.builtin.include_tasks:
+    file: mdns_reflection.yml
+
   when:
     - enable_mdns_reflection | default(False)
   tags:
     - common-mdns
 
 - name: Install Cockpit
-  ansible.builtin.import_tasks: cockpit.yml
+  ansible.builtin.include_tasks:
+    file: cockpit.yml
+
   tags:
     - common-cockpit
   when: common_enable_cockpit|default(False)
