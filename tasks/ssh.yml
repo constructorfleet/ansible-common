@@ -1,5 +1,4 @@
 ---
-
 - name: Create /var/run/sshd
   ansible.builtin.file:
     state: directory
@@ -12,7 +11,7 @@
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     state: present
-    regexp: "^(?:.+)?{{ item.option }}.*$"
+    regexp: ^(?:.+)?{{ item.option }}.*$
     line: "{{ item.option }} {{ item.value }}"
   loop:
     - option: Subsystem
@@ -42,8 +41,8 @@
     - option: PrintMotd
       value: "yes"
     - option: AcceptEnv
-      value: "LANG LC_*"
-  notify: "restart_sshd"
+      value: LANG LC_*
+  notify: restart_sshd
 
 - name: Add block configs to sshd_config
   ansible.builtin.blockinfile:
@@ -76,8 +75,7 @@
           PermitTTY no
           ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
       {% endif %}
-  notify: "restart_sshd"
-
+  notify: restart_sshd
 
 # - name: Copy sshd_config Template
 #   template:

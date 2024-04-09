@@ -1,5 +1,6 @@
+---
 - name: Create local user groups
-  group:
+  ansible.builtin.group:
     name: "{{ item.key }}"
     gid: "{{ item.value.gid | default(omit) }}"
     state: present
@@ -10,7 +11,7 @@
     - ssh_groups is defined
     - ssh_groups != None
 - name: Create local user accounts
-  user:
+  ansible.builtin.user:
     name: "{{ item.key }}"
     shell: "{{ item.value.shell | default(omit) }}"
     group: "{{ item.value.gid | default(omit) }}"
@@ -21,7 +22,7 @@
       {{ grouplist.append(group.key) }}
       {% endif %}
       {% endfor %}
-      {{ grouplist|join(',') }}
+      {{ grouplist | join(',') }}
     uid: "{{ item.value.uid | default(omit) }}"
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) | default(omit) }}"
   loop: "{{ ssh_users | dict2items }}"
@@ -32,7 +33,7 @@
     - ssh_users != None
 
 - name: Add user authorized keys
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ item.key }}"
     state: present
     key: "{{ item.value.pubkey }}"

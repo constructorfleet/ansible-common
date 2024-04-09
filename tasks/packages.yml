@@ -1,3 +1,4 @@
+---
 - name: Update all installed packages (RHEL)
   when:
     - ansible_os_family == "RedHat"
@@ -65,7 +66,6 @@
   when:
     - ansible_os_family == "Debian"
   block:
-
     - name: Update caches and installed packages, clean up package database (Debian) # noqa package-latest
       ansible.builtin.apt:
         update_cache: true
@@ -107,7 +107,6 @@
       ansible.builtin.debug:
         msg: "{{ apt_cleanup }}"
         verbosity: 1
-
 
 - name: Install python requirements via Pip (All Distributions)
   ansible.builtin.pip:

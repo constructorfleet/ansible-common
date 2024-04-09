@@ -1,33 +1,33 @@
-- name: gather facts from ceph servers
-  setup:
+---
+- name: Gather facts from ceph servers
+  ansible.builtin.setup:
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   loop: "{{ groups['mons'] | default([])}}"
-  run_once: True
+  run_once: true
   tags:
     - always
-- name: gather facts from ldap servers
-  setup:
+- name: Gather facts from ldap servers
+  ansible.builtin.setup:
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   loop: "{{ groups['ldap'] | default([]) }}"
-  run_once: True
+  run_once: true
   tags:
     - always
-- name: "Gather facts for all NFS Servers"
-  setup:
+- name: Gather facts for all NFS Servers
+  ansible.builtin.setup:
     gather_subset:
       - network
   delegate_to: "{{ item }}"
-  delegate_facts: True
+  delegate_facts: true
   run_once: true
   loop: "{{ groups['nfsservers'] | default([])}}"
 
 - name: Generate /etc/hosts template
-  template:
+  ansible.builtin.template:
     src: hostfile.j2
     dest: /etc/hosts
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
-
