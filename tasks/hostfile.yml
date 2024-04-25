@@ -3,7 +3,7 @@
   ansible.builtin.setup:
   delegate_to: "{{ item }}"
   delegate_facts: true
-  loop: "{{ groups['mons'] | default([])}}"
+  loop: "{{ groups['mons'] | default([]) }}"
   run_once: true
   tags:
     - always
@@ -22,7 +22,7 @@
   delegate_to: "{{ item }}"
   delegate_facts: true
   run_once: true
-  loop: "{{ groups['nfsservers'] | default([])}}"
+  loop: "{{ groups['nfsservers'] | default([]) }}"
 
 - name: Generate /etc/hosts template
   ansible.builtin.template:

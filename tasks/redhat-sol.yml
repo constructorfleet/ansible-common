@@ -33,7 +33,12 @@
     line: GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
   notify: update_grub_config
 
-- ansible.builtin.meta: flush_handlers
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
 - name: Rebuild Grub Config
   ansible.builtin.command: "{{ grub_update_cmd }} -o {{ grub_config }}"
+  register: grub_rebuild
   when: grub_require_rebuild | default(false)
+  changed_when:
+    - grub_rebuild is defined

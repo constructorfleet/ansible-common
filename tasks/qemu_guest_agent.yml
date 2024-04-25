@@ -18,16 +18,10 @@
     - name: Assert that qemu-guest-agent is running
       ansible.builtin.assert:
         that: not qemu_guest_agent_startup.failed
-        fail_msg: "Fail: qemu-guest-agent failed to start"
-        success_msg: "Success: qemu-guest-agent started successfully"
-      ignore_errors: true
-
-    - name: Get qemu-guest-agent logs if service failed to start
-      ansible.builtin.shell: systemctl status qemu-guest-agent
-      register: qemu_guest_agent_status
-      when: qemu_guest_agent_startup.failed | default(false)
-
-    - name: Print logs for debugging
-      ansible.builtin.debug:
-        msg: "{{ qemu_guest_agent_status.stdout_lines }}"
-      when: qemu_guest_agent_startup.failed | default(false)
+        fail_msg: |
+          Fail: qemu-guest-agent failed to start
+          {{ qemu_guest_agent_startup.stdout }}
+        success_msg: |
+          Success: qemu-guest-agent started successfully
+          {{ qemu_guest_agent_startup.stdout }}
+      failed_when: qemu_guest_agent_startup.failed
