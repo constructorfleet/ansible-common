@@ -5,7 +5,7 @@
     - always
 - name: Set os fact
   ansible.builtin.set_fact:
-    ansible_os_family: "{{ hostvars[ansible_host]['ansible_os_family'] }}"
+    ansible_os_family: "{{ hostvars[inventory_hostname]['ansible_os_family'] }}"
   tags:
     - always
 - name: Include os specific vars
