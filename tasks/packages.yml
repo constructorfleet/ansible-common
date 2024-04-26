@@ -1,5 +1,7 @@
 ---
 - name: Update all installed packages (RHEL)
+  tags:
+    - rhel-packages
   when:
     - ansible_os_family == "RedHat"
   block:
@@ -63,6 +65,8 @@
         verbosity: 1
 
 - name: Update all installed packages (Debian)
+  tags:
+    - debian-packages
   when:
     - ansible_os_family == "Debian"
   block:
@@ -120,3 +124,6 @@
   when:
     - common_python_pkgs is defined
     - common_python_pkgs != None
+  tags:
+    - rhel-packages
+    - debian-packages

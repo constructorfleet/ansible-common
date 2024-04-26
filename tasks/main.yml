@@ -29,50 +29,50 @@
   ansible.builtin.include_tasks:
     file: ssh.yml
 
-# tags:
-#   - common-sshd
+  tags:
+    - common-sshd
 
 - name: Configure Local Users and Groups
   ansible.builtin.include_tasks:
     file: users.yml
 
   when: not openldap_client_enable | default(false)
-  # tags:
-  #   - common-users
+  tags:
+    - common-users
 
 - name: Configure Sudoers
   ansible.builtin.include_tasks:
     file: sudo.yml
 
-# tags:
-#   - common-sudoers
+  tags:
+    - common-sudoers
 
 - name: Configure /etc/hosts
   ansible.builtin.include_tasks:
     file: hostfile.yml
 
-# tags:
-#   - common-hostfile
+  tags:
+    - common-hostfile
 
 - name: Configure Timezone Info
   community.general.timezone:
     name: "{{ timezone }}"
-# tags:
-#   - common-timezone
+  tags:
+    - common-timezone
 
 - name: Configure system autoupdate parameters
   ansible.builtin.include_tasks:
     file: autoupdate.yml
 
-# tags:
-#   - common-autoupdate
+  tags:
+    - common-autoupdate
 
 - name: Install common system packages and python dependencies
   ansible.builtin.include_tasks:
     file: packages.yml
 
-# tags:
-#   - common-packages
+  tags:
+    - common-packages
 
 - name: Install qemu-guest-agent on KVM hosts
   ansible.builtin.include_tasks:
@@ -81,8 +81,8 @@
   when:
     - ansible_virtualization_role == "guest"
     - '"kvm" in ansible_virtualization_tech_guest'
-# tags:
-#   - qemu-guest-agent
+  tags:
+    - qemu-guest-agent
 
 - name: Configure Serial-over-LAN [Ubuntu]
   ansible.builtin.include_tasks:
@@ -93,8 +93,8 @@
     - ansible_virtualization_role != "guest"
     - serialtty != None
     - consoletty != None
-# tags:
-#   - common-sol
+  tags:
+    - debian-sol
 
 - name: Configure Serial-over-LAN [RHEL/CentOS]
   ansible.builtin.include_tasks:
@@ -105,8 +105,8 @@
     - ansible_virtualization_role != "guest"
     - serialtty != None
     - consoletty != None
-# tags:
-#   - common-sol
+  tags:
+    - rhel-sol
 
 - name: Configure MDNS reflection / Avahi
   ansible.builtin.include_tasks:
@@ -114,8 +114,8 @@
 
   when:
     - enable_mdns_reflection | default(False)
-# tags:
-#   - common-mdns
+  tags:
+    - common-mdns
 
 - name: Install Cockpit
   ansible.builtin.include_tasks:
@@ -128,5 +128,6 @@
 - name: Reboot host if grub config was updated
   ansible.builtin.reboot:
   when: grub_require_rebuild | default(false)
-  # tags:
-  #   - common-sol
+  tags:
+    - debian-sol
+    - rhel-sol
