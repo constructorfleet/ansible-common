@@ -20,8 +20,8 @@
         that: not qemu_guest_agent_startup.failed
         fail_msg: |
           Fail: qemu-guest-agent failed to start
-          {{ qemu_guest_agent_startup.stdout }}
+          {{ qemu_guest_agent_startup }}
         success_msg: |
           Success: qemu-guest-agent started successfully
-          {{ qemu_guest_agent_startup.stdout }}
+          {{ qemu_guest_agent_startup }}
       failed_when: qemu_guest_agent_startup.failed
