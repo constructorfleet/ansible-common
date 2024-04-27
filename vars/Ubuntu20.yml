@@ -20,8 +20,6 @@ common_uninstall_pkgs:
 #  - python3-setuptools
 
 common_python_pkgs:
-  - setuptools
-
 autoupdate_services:
   - apt-daily-upgrade.timer
   - apt-daily.timer
