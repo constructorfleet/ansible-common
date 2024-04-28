@@ -1,20 +1,10 @@
 ---
-- name: Run setup on host
-  ansible.builtin.setup:
-  tags:
-    - always
-- name: Set os fact
-  ansible.builtin.set_fact:
-    ansible_os_family: "{{ hostvars[inventory_hostname]['ansible_os_family'] }}"
-  tags:
-    - always
 - name: Include os specific vars
   ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_os_family }}.yml"
     - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
   tags:
     - always
 
