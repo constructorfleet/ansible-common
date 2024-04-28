@@ -5,11 +5,19 @@ common_pkgs:
   - zsh
   - screen
   - vim-enhanced
-  - python2-pip
-  - python3-pip
   - sudo
   - tzdata
-
+  - python3-jinja2
+  - python3-pip
+  - python3-software-properties
+  - python3-json5
+  - python3-debian
+  - python3-iniparse
+  - python3-pkginfo
+  - python3-webcolors
+  - python3-rpm
+  - python3-distutils-extra
+  - python3-distro
 common_python_pkgs:
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig

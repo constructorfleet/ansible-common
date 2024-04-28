@@ -3,17 +3,25 @@ common_pkgs:
   - screen
   - vim
   - ipmitool
+  - net-tools
   - freeipmi-tools
   - software-properties-common
-  - python3-pip
-  - python3-software-properties
   - zsh
+  - gcc
   - sudo
-  - net-tools
   - htop
   - tzdata
-  - python3-apt
   - apt-utils
+  - python3-pip
+  - python3-software-properties
+  - python3-json5
+  - python3-debian
+  - python3-jinja2
+  - python3-pkginfo
+  - python3-webcolors
+  - python3-distutils-extra
+  - python3-distro
+  - python3-apt
 
 common_uninstall_pkgs:
 #  - python-setuptools

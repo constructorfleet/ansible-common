@@ -7,11 +7,21 @@ common_pkgs:
   - freeipmi-tools
   - software-properties-common
   - zsh
+  - gcc
   - sudo
   - htop
   - tzdata
   - apt-utils
   - python3-pip
+  - python3-software-properties
+  - python3-json5
+  - python3-debian
+  - python3-jinja2
+  - python3-pkginfo
+  - python3-webcolors
+  - python3-distutils-extra
+  - python3-distro
+  - python3-apt
 
 common_uninstall_pkgs:
 #  - python-setuptools
