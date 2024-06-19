@@ -14,7 +14,6 @@ common_pkgs:
   - tzdata
   - python3-jinja2
   - python3-pip
-  - python3-software-properties
   - python3-json5
   - python3-iniparse
   - python3-pkginfo

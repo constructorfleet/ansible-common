@@ -1,16 +1,17 @@
 ---
-- name: Update all installed packages (RHEL)
+- name: Update all installed packages (RHEL7)
   tags:
     - rhel-packages
   when:
     - ansible_os_family == "RedHat"
+    - ansible_facts ['distribution_major_version'] <= '7'
+
   block:
-    - name: Install EPEL Repo from upstream URL
+    - name: Install EPEL Repo from upstream URL # noqa package-latest
       ansible.builtin.dnf:
-        name: "{{ epel_repo_rpm_url }}"
-        disable_gpg_check: true
+        name: epel-release
         update_cache: true
-        state: present
+        state: latest
         lock_timeout: 300
       timeout: 0
       delay: 120
@@ -18,18 +19,62 @@
       register: epel_setup
       until: epel_setup is not failed
 
-    - name: Add EPEL GPG Key
-      ansible.builtin.rpm_key:
-        key: "{{ epel_gpgkey_path }}"
+    - name: Update caches and installed packages (RHEL)
+      ansible.builtin.dnf:
+        update_cache: true
+        allow_downgrade: true
+        name: "{{ (common_prereq_pkgs | default([])) + (common_pkgs | default([])) }}"
         state: present
-        validate_certs: true
-      register: epel_gpgkey
-      until: epel_gpgkey is not failed
+        lock_timeout: 300
+      register: yum_common
+      retries: 10
+      timeout: 0
+      delay: 120
+      until: yum_common is not failed
+
+    - name: Print yum install debug
+      ansible.builtin.debug:
+        msg: "{{ yum_common }}"
+        verbosity: 1
+
+    - name: Remove unwanted packages and clean up package database (RHEL) # noqa package-latest
+      ansible.builtin.dnf:
+        name: "{{ common_uninstall_pkgs | default([]) }}"
+        state: absent
+        autoremove: true
+        lock_timeout: 300
+      register: yum_cleanup
+      until: yum_cleanup is not failed
       retries: 10
       timeout: 0
       delay: 120
 
-    - name: Update caches and installed packages (RHEL) # noqa package-latest
+    - name: Print yum_cleanup debug
+      ansible.builtin.debug:
+        msg: "{{ yum_cleanup }}"
+        verbosity: 1
+
+- name: Update all installed packages (RHEL8+)
+  tags:
+    - rhel-packages
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_facts ['distribution_major_version'] >= '8'
+
+  block:
+    - name: Install EPEL Repo from upstream URL # noqa package-latest
+      ansible.builtin.dnf:
+        name: epel-release
+        update_cache: true
+        state: latest
+        lock_timeout: 300
+      timeout: 0
+      delay: 120
+      retries: 10
+      register: epel_setup
+      until: epel_setup is not failed
+
+    - name: Update caches and installed packages (RHEL)
       ansible.builtin.dnf:
         update_cache: true
         allow_downgrade: true
