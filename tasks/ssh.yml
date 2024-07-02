@@ -124,6 +124,23 @@
     group: root
     mode: "0700"
 
+- name: Check for existing /root/.ssh/authorized_keys
+  ansible.builtin.stat:
+    path: /root/.ssh/authorized_keys
+  register: root_authorized_keys_check
+
+- name: Slurp authorized_keys content
+  ansible.builtin.slurp:
+    src: /root/.ssh/authorized_keys
+  register: root_authorized_keys
+  when:
+    - root_authorized_keys_check.stat.exists
+
+- name: Generate complete list of authorized_keys from existing file and keys found in ssh_users
+  ansible.builtin.set_fact:
+    combined_keys: "{{ (((root_authorized_keys.content|default('') | b64decode) | split('\n')) + (ssh_users | dict2items | map(attribute='value.pubkey'))) | flatten
+      | reject('equalto', '') | map('regex_replace', '^(ssh-[a-z0-9]+)\\s(.+)\\s.*$', '\\1 \\2') | unique  }}"
+
 - name: Generate root authorized_keys file
   ansible.builtin.template:
     src: root_authorized_keys.j2
@@ -132,9 +149,6 @@
     group: root
     mode: "0600"
     backup: false
-  when:
-    - ssh_users is defined
-    - ssh_users|length > 0
 
 - name: Change root password
   ansible.builtin.user:
