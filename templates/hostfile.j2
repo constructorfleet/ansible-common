@@ -1,4 +1,4 @@
-127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost.localdomain localhost {{ hostvars[ansible_host]['ansible_fqdn'] }} {{ hostvars[ansible_host]['ansible_hostname'] }}
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 ip6-localhost ip6-loopback
@@ -8,15 +8,6 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
-
-{% for host in groups['ldap'] | default([]) | unique %}
-{{ hostvars[host].ansible_default_ipv4.address }} {{ openldap_server_domain_name }} {{ openldap_server_domain_name.split('.')[0] }}
-{% endfor %}
-
-{% for host in groups['nfsservers'] | default([]) | unique %}
-{{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_fqdn }} {{ hostvars[host].ansible_hostname}}
-{% endfor %}
-
-{% for host in groups['mons'] | default([]) | unique %}
-{{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_fqdn }} {{ hostvars[host].ansible_hostname}}
+{% for host in (groups[common_hostfile_groups] | default([])) | unique %}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }} {{ hostvars[host]['ansible_fqdn'] }} {{ hostvars[host]['ansible_hostname'] }}
 {% endfor %}
