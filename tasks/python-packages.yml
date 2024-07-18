@@ -1,0 +1,15 @@
+---
+- name: Install python requirements via Pip (All Distributions)
+  ansible.builtin.pip:
+    name: "{{ common_python_pkgs }}"
+    state: present
+  register: common_py_pkgs
+  until: common_py_pkgs is not failed
+  retries: 5
+  timeout: 1200
+  delay: 60
+  when:
+    - common_python_pkgs is defined
+    - common_python_pkgs != None
+  tags:
+    - python-packages

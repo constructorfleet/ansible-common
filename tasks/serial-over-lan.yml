@@ -20,6 +20,14 @@
       changed_when:
         - grub_rebuild is success
 
+    - name: Copy serial-getty systemd file
+      ansible.builtin.copy:
+        src: "{{ common_systemd_serial_getty_src }}"
+        dest: "{{ common_systemd_serial_getty_dest }}"
+        remote_src: true
+        group: root
+        owner: root
+        mode: "0755"
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
@@ -30,11 +38,3 @@
   when: grub_require_rebuild | default(false)
   changed_when:
     - grub_rebuild is defined
-
-GRUB_TIMEOUT=10
-GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
-GRUB_CMDLINE_LINUX_DEFAULT="quiet"
-GRUB_CMDLINE_LINUX="console=ttyS0,115200 console=tty1 net.ifnames=0 biosdevname=0"
-GRUB_TERMINAL="console serial"
-
-cp /lib/systemd/system/serial-getty@.service /etc/systemd/system/serial-getty@ttyS0.service

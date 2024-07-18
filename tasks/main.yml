@@ -15,12 +15,17 @@
     - ansible_os_family == "RedHat"
   failed_when: false
 
-- name: Configure SSHd and root user
+- name: Configure SSHD
   ansible.builtin.include_tasks:
     file: ssh.yml
-
   tags:
-    - common-sshd
+    - sshd
+
+- name: Configure authorized_keys for root user
+  ansible.builtin.include_tasks:
+    file: root-authorized-keys.yml
+  tags:
+    - root-authorized-keys
 
 - name: Configure Local Users and Groups
   ansible.builtin.include_tasks:
@@ -56,10 +61,15 @@
 
 - name: Install common system packages and python dependencies
   ansible.builtin.include_tasks:
-    file: packages.yml
-
+    file: packages-{{ ansible_os_family | lower }}.yml
   tags:
     - common-packages
+
+- name: Install common Python packages
+  ansible.builtin.include_tasks:
+    file: python-packages.yml
+  tags:
+    - common-python-packages
 
 - name: Install qemu-guest-agent on KVM hosts
   ansible.builtin.include_tasks:
