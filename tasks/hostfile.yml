@@ -1,13 +1,4 @@
 ---
-- name: Gather facts from server groups
-  ansible.builtin.setup:
-  delegate_to: "{{ ansible_host }}"
-  delegate_facts: true
-  loop: "{{ (groups[common_hostfile_groups] | default([])) }}"
-  run_once: true
-  tags:
-    - always
-
 - name: Generate /etc/hosts template
   ansible.builtin.template:
     src: hostfile.j2

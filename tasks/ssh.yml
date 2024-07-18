@@ -115,7 +115,3 @@
   ansible.builtin.fail:
     msg: "{{ ssh_journal.stdout_lines }}"
   when: ssh_start_attempt.failed | default(false)
-
-- name: Configure authorized_keys for root user
-  ansible.builtin.include_tasks:
-    file: root-authkeys.yml

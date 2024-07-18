@@ -1,0 +1,53 @@
+---
+- name: DEB Repository and Package Tasks
+  when: ansible_os_family == 'Debian'
+  tags:
+    - packages
+  block:
+    - name: packages | Set up Deb822 Apt Repository Source Files and GPG Keys
+      ansible.builtin.deb822_repository:
+      loop: "{{ apt_repos }}"
+      args: "{{ item }}"
+      register: deb_repo_added
+      when:
+        - apt_repos is defined
+        - apt_repos | length > 0
+
+    - name: packages | Update APT Repos # noqa no-handler
+      ansible.builtin.apt:
+        update_cache: true
+        update_cache_retries: 10
+        update_cache_retry_max_delay: 300
+        lock_timeout: 300
+      register: cache_updated
+      until:
+        - cache_updated is not failed
+      when:
+        - deb_repo_added is changed
+
+    - name: packages | Install APT Packages
+      ansible.builtin.apt:
+        name: "{{ apt_pkgs }}"
+        state: "{{ apt_pkgs.state | default('present') }}"
+        update_cache: true
+      register: apt_install_result
+      until: apt_install_result is not failed
+      retries: 10
+      timeout: 300
+      delay: 60
+      when:
+        - apt_pkgs is defined
+        - apt_pkgs | length > 0
+
+- name: Install python requirements via Pip (All Distributions)
+  ansible.builtin.pip:
+    name: "{{ common_python_pkgs }}"
+    state: present
+  register: common_py_pkgs
+  until: common_py_pkgs is not failed
+  retries: 5
+  timeout: 1200
+  delay: 60
+  when:
+    - common_python_pkgs is defined
+    - common_python_pkgs != None
