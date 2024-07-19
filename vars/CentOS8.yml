@@ -25,10 +25,10 @@ common_pkgs:
   - python3-distutils-extra
   - python3-distro
 common_python_pkgs:
-grub_config: /boot/grub2/grub.cfg
-grub_update_cmd: /usr/sbin/grub2-mkconfig
+common_grub_config: /boot/grub2/grub.cfg
+common_grub_update_cmd: /usr/sbin/grub2-mkconfig
 
-ssh_service: sshd
+common_sshd_service: sshd
 
 common_cockpit_pkgs:
   - cockpit

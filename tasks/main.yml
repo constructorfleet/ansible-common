@@ -15,6 +15,12 @@
     - ansible_os_family == "RedHat"
   failed_when: false
 
+- name: Configure /etc/hosts
+  ansible.builtin.include_tasks:
+    file: hostfile.yml
+  tags:
+    - hostfile
+
 - name: Configure SSHD
   ansible.builtin.include_tasks:
     file: ssh.yml
@@ -40,12 +46,6 @@
   tags:
     - sudoers
 
-- name: Configure /etc/hosts
-  ansible.builtin.include_tasks:
-    file: hostfile.yml
-  tags:
-    - hostfile
-
 - name: Configure Timezone Info
   community.general.timezone:
     name: "{{ timezone }}"
@@ -55,7 +55,6 @@
 - name: Configure system autoupdate parameters
   ansible.builtin.include_tasks:
     file: autoupdate.yml
-
   tags:
     - autoupdate
 
@@ -82,15 +81,17 @@
 
 - name: Configure Serial-over-LAN
   ansible.builtin.include_tasks:
-    file: serial-over-lan.yml
+    file: grub-config.yml
   when:
     - ansible_virtualization_role != "guest"
+  tags:
+    - grub-config
 
 - name: Configure MDNS reflection / Avahi
   ansible.builtin.include_tasks:
     file: mdns_reflection.yml
   when:
-    - enable_mdns_reflection | default(False)
+    - common_enable_mdns_reflection | default(False)
   tags:
     - mdns
 
@@ -98,4 +99,4 @@
   ansible.builtin.reboot:
   when: grub_require_rebuild | default(false)
   tags:
-    - serial-over-lan
+    - grub-config

@@ -1,5 +1,15 @@
 ---
-- name: Generate /etc/hosts template
+# - name: hostfile | Run setup on hosts in common groups
+#   ansible.builtin.setup:
+#   delegate_facts: true
+#   delegate_to: "{{ item }}"
+#   run_once: true
+#   loop: "{{ q('ansible.builtin.inventory_hostnames', common_hostfile_groups | join(':')) }}"
+#   register: ansible_host_list_facts
+
+# - ansible.builtin.debug:
+#     var: ansible_host_list_facts
+- name: hostfile | Generate /etc/hosts template
   ansible.builtin.template:
     src: hostfile.j2
     dest: /etc/hosts

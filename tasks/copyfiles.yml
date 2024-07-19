@@ -1,0 +1,11 @@
+---
+- name: copyfiles | Create directory paths from file dest
+  ansible.builtin.file:
+    state: directory
+  args: "{{ item }}"
+  loop: "{{ common_directories }}"
+
+- name: copyfiles | Create files with provided content
+  ansible.builtin.copy:
+  args: "{{ item }}"
+  loop: "{{ common_config_files }}"
