@@ -1,0 +1,14 @@
+---
+- name: kernel-modules | Enable Kernel modules
+  community.general.modprobe:
+  args: "{{ item }}"
+  loop: "{{ common_kernel_modules }}"
+  notify:
+    - Update Initramfs
+
+- name: kernel-modules | Blacklist Kernel Modules
+  community.general.kernel_blacklist:
+  args: "{{ item }}"
+  loop: "{{ common_blacklist_kernel_modules }}"
+  notify:
+    - Update Initramfs

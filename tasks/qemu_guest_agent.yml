@@ -1,12 +1,12 @@
 ---
-- name: Install qemu-guest-agent if host is a kvm/qemu virtual machine
+- name: qemu_guest_agent | Install qemu-guest-agent if host is a kvm/qemu virtual machine
   block:
-    - name: Install qemu-guest-agent
+    - name: qemu_guest_agent | Install qemu-guest-agent
       ansible.builtin.package:
         name: qemu-guest-agent
         state: present
 
-    - name: Start qemu-guest-agent service
+    - name: qemu_guest_agent | Start qemu-guest-agent service
       ansible.builtin.systemd:
         name: qemu-guest-agent
         state: started
@@ -15,7 +15,7 @@
       register: qemu_guest_agent_startup
       ignore_errors: true
 
-    - name: Assert that qemu-guest-agent is running
+    - name: qemu_guest_agent | Assert that qemu-guest-agent is running
       ansible.builtin.assert:
         that: not qemu_guest_agent_startup.failed
         fail_msg: |

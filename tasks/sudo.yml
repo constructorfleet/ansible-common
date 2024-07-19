@@ -1,5 +1,5 @@
 ---
-- name: Allow passwordless sudo for 'admin' group
+- name: sudo | Allow passwordless sudo for 'admin' group
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     regexp: ^%admin.*$

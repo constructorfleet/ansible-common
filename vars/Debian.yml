@@ -33,10 +33,10 @@ autoupdate_services:
   - apt-daily.timer
   - unattended-upgrades.service
 
-grub_config: /boot/grub/grub.cfg
-grub_update_cmd: /usr/sbin/update-grub2
+common_grub_config: /boot/grub/grub.cfg
+common_grub_update_cmd: /usr/sbin/update-grub2
 
-ssh_service: ssh
+common_sshd_service: ssh
 
 common_cockpit_pkgs:
   - cockpit

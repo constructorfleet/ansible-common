@@ -1,10 +1,9 @@
 ---
-- name: RPM Repository and Package Tasks
-  when: ansible_os_family == 'RedHat'
+- name: packages-redhat | RPM Repository and Package Tasks
   tags:
     - packages
   block:
-    - name: dnf-repo-pkgs | Install EPEL Repo from upstream URL # noqa package-latest
+    - name: packages-redhat | Install EPEL Repo from upstream URL # noqa package-latest
       ansible.builtin.dnf:
         name: epel-release
         update_cache: true
@@ -16,7 +15,7 @@
       register: epel_setup
       until: epel_setup is not failed
 
-    - name: Add YUM Repositories
+    - name: packages-redhat | Add YUM Repositories
       ansible.builtin.yum_repository:
       loop: "{{ yum_repos }}"
       args: "{{ item }}"
@@ -25,7 +24,7 @@
         - yum_repos is defined
         - yum_repos | length > 0
 
-    - name: packages | Update Yum Repos # noqa no-handler
+    - name: packages-redhat | Update Yum Repos # noqa no-handler
       ansible.builtin.dnf:
         update_cache: true
         update_cache_retries: 10
@@ -37,7 +36,7 @@
       when:
         - yum_repo_added is changed
 
-    - name: packages | Install DNF Packages
+    - name: packages-redhat | Install DNF Packages
       ansible.builtin.dnf:
         name: "{{ rpm_pkgs }}"
         state: "{{ rpm_pkgs_state | default('present') }}"

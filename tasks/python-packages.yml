@@ -1,5 +1,5 @@
 ---
-- name: Install python requirements via Pip (All Distributions)
+- name: python-packages | Install python requirements via Pip (All Distributions)
   ansible.builtin.pip:
     name: "{{ common_python_pkgs }}"
     state: present

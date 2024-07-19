@@ -1,5 +1,5 @@
 ---
-- name: Create /var/run/sshd
+- name: ssh | Create /var/run/sshd
   ansible.builtin.file:
     state: directory
     path: /var/run/sshd
@@ -7,7 +7,7 @@
   when:
     - ansible_os_family == "Debian"
 
-- name: Update sshd config options
+- name: ssh | Update sshd config options
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     state: present
@@ -19,21 +19,21 @@
     - option: UsePAM
       value: "{{ 'no' if ansible_os_family == 'OpenBSD' else 'yes' }}"
     - option: Port
-      value: "{{ sshd_listen_port | default('22') }}"
+      value: "{{ common_sshd_listen_port | default('22') }}"
     - option: ListenAddress
-      value: "{{ sshd_listen_address | default('0.0.0.0') }}"
+      value: "{{ common_sshd_listen_address | default('0.0.0.0') }}"
     - option: SyslogFacility
-      value: "{{ ssh_syslog_facility | default('AUTH') }}"
+      value: "{{ common_sshd_syslog_facility | default('AUTH') }}"
     - option: LogLevel
-      value: "{{ ssh_log_level | default('INFO') }}"
+      value: "{{ common_sshd_log_level | default('INFO') }}"
     - option: PermitRootLogin
-      value: "{{ sshd_permit_root_login | default('prohibit-password') }}"
+      value: "{{ common_sshd_permit_root_login | default('prohibit-password') }}"
     - option: PubkeyAuthentication
       value: "yes"
     - option: PasswordAuthentication
-      value: "{{ sshd_password_authentication | default('yes') }}"
+      value: "{{ common_sshd_password_authentication | default('yes') }}"
     - option: AuthorizedKeysFile
-      value: "{{ authorized_keys_file | default('.ssh/authorized_keys') }}"
+      value: "{{ common_sshd_authorized_keys_file | default('.ssh/authorized_keys') }}"
     - option: AllowAgentForwarding
       value: "yes"
     - option: X11Forwarding
@@ -44,7 +44,7 @@
       value: LANG LC_*
   notify: Restart SSHD
 
-- name: Add block configs to sshd_config
+- name: ssh | Add block configs to sshd_config
   ansible.builtin.blockinfile:
     path: /etc/ssh/sshd_config
     block: |
@@ -77,7 +77,7 @@
       {% endif %}
   notify: Restart SSHD
 
-# - name: Copy sshd_config Template
+# - name: ssh | Copy sshd_config Template
 #   template:
 #     src: sshd_config.j2
 #     dest: /etc/ssh/sshd_config
@@ -86,32 +86,13 @@
 #     mode: 0644
 #   notify: "Restart SSHD"
 
-- name: Flush handlers
+- name: ssh | Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Restart ssh server
-  ansible.builtin.service:
-    name: "{{ ssh_service }}"
-    state: restarted
-    enabled: true
-  register: ssh_started
-  when: sshd_require_restart | default(false)
-
-- name: Verify the sshd service is listening # noqa no-handler
+- name: ssh | Verify the sshd service is listening # noqa no-handler
   ansible.builtin.wait_for:
     host: localhost
     port: 22
     delay: 5
-  when: ssh_started is changed
   ignore_errors: true
   register: ssh_start_attempt
-
-- name: Get ssh journald logs if service does not appear to be up # noqa no-changed-when
-  ansible.builtin.shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value {{ ssh_service }}.service`
-  register: ssh_journal
-  when: ssh_start_attempt.failed | default(false)
-
-- name: Fail if ssh does not start
-  ansible.builtin.fail:
-    msg: "{{ ssh_journal.stdout_lines }}"
-  when: ssh_start_attempt.failed | default(false)
