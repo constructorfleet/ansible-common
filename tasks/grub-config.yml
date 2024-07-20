@@ -1,4 +1,8 @@
 ---
+- name: grub-config | Include tasks to determine serial console
+  ansible.builtin.include_tasks:
+    file: serial-console.yml
+
 - name: grub-config | Update /etc/default/grub lines
   tags:
     - grub-config
