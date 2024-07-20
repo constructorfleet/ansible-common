@@ -1,0 +1,11 @@
+- name: serial-console | Determine serial TTY device
+  ansible.builtin.shell:
+    cmd: 'grep -E -v "(serinfo|unknown)" /proc/tty/driver/serial | cut -d ":" -f1'
+    executable: /bin/bash
+  register: serial_tty
+  changed_when: false
+
+- name: serial-console | Set TTY Facts
+  ansible.builtin.set_fact:
+    serial_tty_device: ttyS{{ serial_tty.stdout }}
+    console_tty_device: tty{{ '1' if serial_tty.stdout == '0' else '0' }}

@@ -22,7 +22,7 @@ common_hostfile_groups:
 
 common_grub_configs:
   - regexp: '^GRUB_CMDLINE_LINUX=".*"$'
-    line: 'GRUB_CMDLINE_LINUX="console=ttyS0,115200 console=tty1 net.ifnames=0 biosdevname=0"'
+    line: GRUB_CMDLINE_LINUX="console={{ serial_tty_device | default('ttyS0') }},115200 console={{ console_tty_device | default('tty1') }} net.ifnames=0 biosdevname=0"
   - regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="(quiet.*)"$'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1"'
     backrefs: true
@@ -35,6 +35,6 @@ common_grub_configs:
 common_blacklist_kernel_modules:
 common_kernel_modules:
 common_systemd_serial_getty_src: /lib/systemd/system/serial-getty@.service
-common_systemd_serial_getty_dest: /etc/systemd/system/serial-getty@ttyS0.service
+common_systemd_serial_getty_dest: /etc/systemd/system/serial-getty@{{ serial_tty_device | default('ttyS0') }}.service
 
 common_enable_mdns_reflection: false

@@ -1,13 +1,13 @@
 ---
-- name: users | autoupdate | Populate service facts
+- name: autoupdate | Populate service facts
   ansible.builtin.service_facts: {}
   register: services_discovered
 
-- name: users | autoupdate | List services
+- name: autoupdate | List services
   ansible.builtin.debug:
     var: services_discovered
 
-- name: users | autoupdate | Enable/Disable autoupdate services
+- name: autoupdate | Enable/Disable autoupdate services
   ansible.builtin.service:
     name: "{{ item }}"
     state: "{{ 'started' if common_enable_autoupdate else 'stopped' }}"
