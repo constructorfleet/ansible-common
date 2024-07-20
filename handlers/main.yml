@@ -1,14 +1,14 @@
 ---
 - name: Restart SSHD
   ansible.builtin.service:
-    name: "{{ common_sshd_service }}"
+    name: "{{ sshd_service }}"
     state: restarted
     enabled: true
   register: ssh_started
 
 - name: Update Grub
   ansible.builtin.command:
-    cmd: "{{ common_grub_update_cmd }} -o {{ common_grub_config }}"
+    cmd: "{{ grub_update_cmd }} -o {{ grub_config }}"
   register: grub_update_result
   changed_when:
     - grub_update_result is success
