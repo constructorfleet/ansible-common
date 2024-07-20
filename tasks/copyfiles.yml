@@ -3,7 +3,7 @@
   ansible.builtin.file:
     state: absent
     path: "{{ item }}"
-  loop: "{{ common_rm_files }}"
+  loop: "{{ common_rm_files | default([]) }}"
   tags:
     - rmfiles
 
@@ -11,13 +11,13 @@
   ansible.builtin.file:
     state: directory
   args: "{{ item }}"
-  loop: "{{ common_directories }}"
+  loop: "{{ common_directories | default([]) }}"
   tags:
     - mkdirs
 
 - name: copyfiles | Create files with provided content
   ansible.builtin.copy:
   args: "{{ item }}"
-  loop: "{{ common_config_files }}"
+  loop: "{{ common_config_files | default([]) }}"
   tags:
     - mkfiles
