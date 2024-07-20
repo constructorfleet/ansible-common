@@ -1,11 +1,23 @@
 ---
+- name: copyfiles | Remove files
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  loop: "{{ common_rm_files }}"
+  tags:
+    - rmfiles
+
 - name: copyfiles | Create directory paths from file dest
   ansible.builtin.file:
     state: directory
   args: "{{ item }}"
   loop: "{{ common_directories }}"
+  tags:
+    - mkdirs
 
 - name: copyfiles | Create files with provided content
   ansible.builtin.copy:
   args: "{{ item }}"
   loop: "{{ common_config_files }}"
+  tags:
+    - mkfiles
