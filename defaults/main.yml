@@ -10,8 +10,8 @@ common_apt_repos: []
 common_apt_pkgs: []
 common_yum_repos: []
 common_rpm_pkgs: []
-common_root_password: changeme
-common_root_password_salt: md5salt
+root_password: changeme
+root_password_salt: md5salt
 
 common_enable_autoupdate: true
 
@@ -22,7 +22,7 @@ common_hostfile_groups:
 
 common_grub_configs:
   - regexp: '^GRUB_CMDLINE_LINUX=".*"$'
-    line: GRUB_CMDLINE_LINUX="console={{ serial_tty_device | default('ttyS0') }},115200 console={{ console_tty_device | default('tty1') }} net.ifnames=0 biosdevname=0"
+    line: GRUB_CMDLINE_LINUX="console=ttyS{{ serial_tty_device | default('0') }},115200 console=tty{{ console_tty_device | default('1') }} net.ifnames=0 biosdevname=0"
   - regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="(quiet.*)"$'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1"'
     backrefs: true
@@ -31,10 +31,10 @@ common_grub_configs:
   - regexp: '^GRUB_TIMEOUT=[0-9]+$'
     line: 'GRUB_TIMEOUT=10'
   - regexp: '^GRUB_SERIAL_COMMAND=".*"$'
-    line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
+    line: GRUB_SERIAL_COMMAND="serial --speed=115200 --unit={{ serial_tty_device | default('0') }} --word=8 --parity=no --stop=1"
 common_blacklist_kernel_modules:
 common_kernel_modules:
 common_systemd_serial_getty_src: /lib/systemd/system/serial-getty@.service
-common_systemd_serial_getty_dest: /etc/systemd/system/serial-getty@{{ serial_tty_device | default('ttyS0') }}.service
+common_systemd_serial_getty_dest: /etc/systemd/system/serial-getty@ttyS{{ serial_tty_device | default('0') }}.service
 
 common_enable_mdns_reflection: false
