@@ -36,8 +36,8 @@
 - name: root-authorized-keys | Change root password
   ansible.builtin.user:
     name: root
-    password: "{{ common_root_password | password_hash(salt=common_root_password_salt) }}"
+    password: "{{ root_password | password_hash(salt=root_password_salt) }}"
     update_password: always
   when:
-    - common_root_password is defined and (common_root_password|length) >= 8
-    - common_root_password_salt is defined and (common_root_password_salt|length) > 0
+    - root_password is defined and (root_password|length) >= 8
+    - root_password_salt is defined and (root_password_salt|length) > 0
