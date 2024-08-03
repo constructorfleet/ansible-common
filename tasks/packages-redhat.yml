@@ -1,4 +1,8 @@
 ---
+- name: Wait for locks
+  ansible.builtin.include_tasks:
+    file: wait_for_locks.yml
+
 - name: packages-redhat | RPM Repository and Package Tasks
   tags:
     - packages

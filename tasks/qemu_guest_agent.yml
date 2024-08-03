@@ -1,4 +1,8 @@
 ---
+- name: Wait for locks
+  ansible.builtin.include_tasks:
+    file: wait_for_locks.yml
+
 - name: qemu_guest_agent | Install qemu-guest-agent if host is a kvm/qemu virtual machine
   block:
     - name: qemu_guest_agent | Install qemu-guest-agent
