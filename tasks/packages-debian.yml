@@ -16,6 +16,8 @@
       when:
         - common_apt_repos is defined
         - common_apt_repos | length > 0
+      until:
+        - deb_repo_added is not failed
 
     - name: packages-debian | Update APT Repos # noqa no-handler
       ansible.builtin.apt:
@@ -24,12 +26,30 @@
       until:
         - cache_updated is not failed
 
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
     - name: packages-debian | Install APT Packages
       ansible.builtin.apt:
-        name: "{{ apt_pkgs }}"
-        state: "{{ apt_pkgs.state | default('present') }}"
+        name: "{{ common_apt_pkgs }}"
+        state: present
       register: apt_install_result
       until: apt_install_result is not failed
       when:
         - common_apt_pkgs is defined
         - common_apt_pkgs | length > 0
+
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: packages-debian | Install common Packages
+      ansible.builtin.apt:
+        name: "{{ common_packages }}"
+        state: present
+      register: common_install_result
+      until: common_install_result is not failed
+      when:
+        - common_packages is defined
+        - common_packages | length > 0
