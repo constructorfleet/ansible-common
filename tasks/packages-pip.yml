@@ -1,0 +1,10 @@
+---
+- name: packages-pip | Install python requirements via Pip (All Distributions)
+  ansible.builtin.pip:
+    name: "{{ common_pip_pkgs }}"
+    state: present
+  register: pip_package_install
+  until: pip_package_install is not failed
+  when:
+    - common_pip_pkgs is defined
+    - common_pip_pkgs != None

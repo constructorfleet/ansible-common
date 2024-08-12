@@ -10,6 +10,21 @@ common_apt_repos: []
 common_apt_pkgs: []
 common_yum_repos: []
 common_rpm_pkgs: []
+
+common_packages:
+  - gcc
+  - ipmitool
+  - net-tools
+  - python3-jinja2
+  - python3-json5
+  - python3-pip
+  - python3-pkginfo
+  - screen
+  - sudo
+  - tzdata
+
+common_pip_pkgs:
+
 root_password: changeme
 root_password_salt: md5salt
 
@@ -32,6 +47,7 @@ common_grub_configs:
     line: 'GRUB_TIMEOUT=10'
   - regexp: '^GRUB_SERIAL_COMMAND=".*"$'
     line: GRUB_SERIAL_COMMAND="serial --speed=115200 --unit={{ serial_tty_device | default('0') }} --word=8 --parity=no --stop=1"
+
 common_blacklist_kernel_modules:
 common_kernel_modules:
 common_systemd_serial_getty_src: /lib/systemd/system/serial-getty@.service
