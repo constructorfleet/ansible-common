@@ -50,7 +50,7 @@ common_pkgs:
 common_uninstall_pkgs:
   - python-setuptools
 
-common_python_pkgs:
+common_pip_pkgs:
   - setuptools
 
 autoupdate_services:
