@@ -52,23 +52,17 @@
   tags:
     - timezone
 
-- name: Configure system autoupdate parameters
-  ansible.builtin.include_tasks:
-    file: autoupdate.yml
-  tags:
-    - autoupdate
-
-- name: Install common system packages and python dependencies
+- name: Install common system packages and python dependencies for specific OS
   ansible.builtin.include_tasks:
     file: packages-{{ ansible_os_family | lower }}.yml
   tags:
     - common-packages
 
-- name: Install common Python packages
+- name: Install global common pip packages
   ansible.builtin.include_tasks:
-    file: python-packages.yml
+    file: packages-pip.yml
   tags:
-    - common-python-packages
+    - common-packages
 
 - name: Install qemu-guest-agent on KVM hosts
   ansible.builtin.include_tasks:
@@ -94,6 +88,12 @@
     - common_enable_mdns_reflection | default(False)
   tags:
     - mdns
+
+- name: Configure system autoupdate parameters
+  ansible.builtin.include_tasks:
+    file: autoupdate.yml
+  tags:
+    - autoupdate
 
 - name: Reboot host if grub config was updated
   ansible.builtin.reboot:
