@@ -1,32 +1,17 @@
 ---
-common_pkgs:
-  - screen
-  - vim
-  - ipmitool
-  - net-tools
-  - freeipmi-tools
-  - software-properties-common
-  - zsh
-  - gcc
-  - sudo
-  - htop
-  - tzdata
+common_apt_pkgs:
   - apt-utils
-  - python3-pip
-  - python3-software-properties
-  - python3-json5
-  - python3-debian
-  - python3-jinja2
-  - python3-pkginfo
-  - python3-webcolors
-  - python3-distutils-extra
-  - python3-distro
+  - freeipmi-tools
   - python3-apt
+  - python3-debian
+  - python3-software-properties
+  - software-properties-common
+
 common_uninstall_pkgs:
 #  - python-setuptools
 #  - python3-setuptools
 
-common_python_pkgs:
+common_pip_pkgs:
 autoupdate_services:
   - apt-daily-upgrade.timer
   - apt-daily.timer

@@ -1,27 +1,12 @@
 ---
-common_pkgs:
-  - ipmitool
-  - freeipmi
-  - zsh
-  - net-tools
-  - gcc
-  - openssl-devel
+common_rpm_pkgs:
   - bzip2-devel
+  - freeipmi
   - libffi-devel
-  - screen
-  - vim-enhanced
-  - sudo
-  - tzdata
-  - python3-jinja2
-  - python3-pip
-  - python3-json5
-  - python3-iniparse
-  - python3-pkginfo
-  - python3-webcolors
+  - openssl-devel
   - python3-rpm
-  - python3-distutils-extra
-  - python3-distro
-common_python_pkgs:
+  - vim-enhanced
+
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
 
