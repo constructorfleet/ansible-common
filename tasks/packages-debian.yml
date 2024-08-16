@@ -1,13 +1,13 @@
 ---
-- name: Wait for locks
-  ansible.builtin.include_tasks:
-    file: wait_for_locks.yml
+
 
 - name: packages-debian | DEB Repository and Package Tasks
   tags:
-    - packages
+    - os-packages
   block:
-
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
     - name: packages-debian | Set up Deb822 Apt Repository Source Files and GPG Keys
       ansible.builtin.deb822_repository:
       loop: "{{ common_apt_repos }}"
@@ -40,6 +40,10 @@
         - common_apt_pkgs is defined
         - common_apt_pkgs | length > 0
 
+- name: packages-debian | Install {{ common_packages }}
+  tags:
+    - common-packages
+  block:
     - name: Wait for locks
       ansible.builtin.include_tasks:
         file: wait_for_locks.yml
