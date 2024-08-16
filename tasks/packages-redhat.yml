@@ -1,10 +1,11 @@
 ---
-- name: Wait for locks
-  ansible.builtin.include_tasks:
-    file: wait_for_locks.yml
-
 - name: packages-redhat | RPM Repository and Package Tasks
+  tags:
+    - os-packages
   block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
     - name: packages-redhat | Install EPEL Repo from upstream URL # noqa package-latest
       ansible.builtin.dnf:
         name: epel-release
@@ -49,6 +50,10 @@
         - common_rpm_pkgs is defined
         - common_rpm_pkgs | length > 0
 
+- name: packages-redhat | RPM Repository and Package Tasks
+  tags:
+    - common-packages
+  block:
     - name: Wait for locks
       ansible.builtin.include_tasks:
         file: wait_for_locks.yml
