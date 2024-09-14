@@ -4,6 +4,8 @@
     state: absent
     path: "{{ item }}"
   loop: "{{ common_rm_files | default([]) }}"
+  loop_control:
+    label: "{{ item.path }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - rmfiles
 
@@ -12,6 +14,8 @@
     state: directory
   args: "{{ item }}"
   loop: "{{ common_directories | default([]) }}"
+  loop_control:
+    label: "{{ item.path }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - mkdirs
 
@@ -19,5 +23,7 @@
   ansible.builtin.copy:
   args: "{{ item }}"
   loop: "{{ common_config_files | default([]) }}"
+  loop_control:
+    label: "{{ item.dest }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - mkfiles

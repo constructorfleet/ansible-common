@@ -1,10 +1,20 @@
 ---
-- name: packages-pip | Install python requirements via Pip (All Distributions)
-  ansible.builtin.pip:
-    name: "{{ common_pip_pkgs }}"
+- name: packages-pip | Install pipx
+  ansible.builtin.package:
+    name: python3-pipx
     state: present
+  when:
+    - (common_pip_pkgs | length > 0) | default(false)
+
+
+- name: packages-pip | Install python requirements via Pip (All Distributions)
+  community.general.pipx:
+    name: "{{ item }}"
+    state: install
+    system_site_packages: true
+    install_deps: true
+  loop: "{{ query('list', common_pip_pkgs) | default([]) }}"
+  when:
+    - (common_pip_pkgs | default([]) | length > 0) | default(false)
   register: pip_package_install
   until: pip_package_install is not failed
-  when:
-    - common_pip_pkgs is defined
-    - common_pip_pkgs != None
