@@ -37,3 +37,4 @@ openldap_ldap_pubkey_user: nobody
 
 common_mdns_pkgs:
   - avahi-daemon
+common_pip_pkgs: []
