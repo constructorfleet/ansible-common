@@ -12,6 +12,7 @@
 - name: copyfiles | Create directory paths from file dest
   ansible.builtin.file:
     state: directory
+    mode: "{{ item.mode | default('0774') }}"
   args: "{{ item }}"
   loop: "{{ common_directories | default([]) }}"
   loop_control:
@@ -21,6 +22,7 @@
 
 - name: copyfiles | Create files with provided content
   ansible.builtin.copy:
+    mode: "{{ item.mode | default('0755') }}"
   args: "{{ item }}"
   loop: "{{ common_config_files | default([]) }}"
   loop_control:
