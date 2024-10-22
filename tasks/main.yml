@@ -20,7 +20,7 @@
 
 - name: Configure /etc/hosts
   tags:
-    - common
+    - hostfile
   ansible.builtin.include_tasks:
     file: hostfile.yml
     apply:
@@ -30,7 +30,7 @@
 
 - name: Configure SSHD
   tags:
-    - common
+    - sshd
   ansible.builtin.include_tasks:
     file: ssh.yml
     apply:
@@ -39,7 +39,7 @@
 
 - name: Configure authorized_keys for root user
   tags:
-    - common
+    - root-authorized-keys
   ansible.builtin.include_tasks:
     file: root-authorized-keys.yml
     apply:
@@ -49,7 +49,7 @@
 - name: Configure Local Users and Groups
   when: not openldap_client_enable | default(false)
   tags:
-    - common
+    - users
   ansible.builtin.include_tasks:
     file: users.yml
     apply:
@@ -58,7 +58,7 @@
 
 - name: Configure Sudoers
   tags:
-    - common
+    - sudoers
   ansible.builtin.include_tasks:
     file: sudo.yml
     apply:
@@ -73,7 +73,7 @@
 
 - name: Install common system packages and python dependencies for specific OS
   tags:
-    - common
+    - packages
   ansible.builtin.include_tasks:
     file: packages-{{ ansible_os_family | lower }}.yml
     apply:
@@ -83,7 +83,7 @@
 
 - name: Install global common pip packages
   tags:
-    - common
+    - pip
   ansible.builtin.include_tasks:
     file: packages-pip.yml
     apply:
@@ -96,7 +96,7 @@
     - ansible_virtualization_role == "guest"
     - '"kvm" in ansible_virtualization_tech_guest'
   tags:
-    - common
+    - qemu-guest-agent
   ansible.builtin.include_tasks:
     file: qemu_guest_agent.yml
     apply:
@@ -108,7 +108,7 @@
   when:
     - ansible_virtualization_role != "guest"
   tags:
-    - common
+    - grub
   ansible.builtin.include_tasks:
     file: grub-config.yml
     apply:
@@ -119,7 +119,7 @@
   when:
     - common_enable_mdns_reflection | default(False)
   tags:
-    - common
+    - mdns
   ansible.builtin.include_tasks:
     file: mdns_reflection.yml
     apply:
@@ -128,7 +128,7 @@
 
 - name: Configure system autoupdate parameters
   tags:
-    - common
+    - autoupdate
   ansible.builtin.include_tasks:
     file: autoupdate.yml
     apply:
