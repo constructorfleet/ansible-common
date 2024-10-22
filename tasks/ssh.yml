@@ -15,7 +15,7 @@
     line: "{{ item.option }} {{ item.value }}"
   loop:
     - option: Include
-      value: ""
+      value: "no"
     - option: Subsystem
       value: "{{ 'sftp /usr/libexec/openssh/sftp-server' if ansible_os_family == 'RedHat' else 'sftp /usr/lib/openssh/sftp-server' }}"
     - option: UsePAM
