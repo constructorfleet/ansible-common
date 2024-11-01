@@ -1,27 +1,20 @@
 ---
-- name: mdns_reflection | Install Avahi-Daemon package
-  ansible.builtin.package:
-    name: "{{ common_mdns_pkgs }}"
-    state: present
-  when:
-    - common_enable_mdns_reflection | default(False)
+- name: mdns_reflection | Install and configure Avahi
+  block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
 
-- name: mdns_reflection | Template Avahi-Daemon configuration
-  ansible.builtin.template:
-    dest: /etc/avahi/avahi-daemon.conf
-    src: avahi-daemon.conf.j2
-    owner: root
-    group: root
-    mode: "0644"
-  register: avahi_config
-  when:
-    - common_enable_mdns_reflection | default(False)
+    - name: mdns_reflection | Install Avahi-Daemon package
+      ansible.builtin.package:
+        name: "{{ common_mdns_pkgs }}"
+        state: present
 
-- name: mdns_reflection | Reload Avahi-Daemon configuration on change
-  ansible.builtin.systemd:
-    name: avahi-daemon.service
-    state: restarted
-  when:
-    - common_enable_mdns_reflection | default(False)
-    - common_avahi_config is defined
-    - common_avahi_config is changed
+    - name: mdns_reflection | Template Avahi-Daemon configuration
+      ansible.builtin.template:
+        dest: /etc/avahi/avahi-daemon.conf
+        src: avahi-daemon.conf.j2
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart Avahi

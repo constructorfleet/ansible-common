@@ -6,6 +6,15 @@
     enabled: true
   register: ssh_started
 
+- name: Restart Avahi
+  ansible.builtin.service:
+    name: avahi-daemon
+    state: restarted
+    enabled: true
+  register: avahi_restart_result
+  changed_when:
+    - avahi_restart_result is success
+
 - name: Update Grub
   ansible.builtin.command:
     cmd: "{{ grub_update_cmd }} -o {{ grub_config }}"

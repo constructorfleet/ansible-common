@@ -24,6 +24,8 @@ common_packages:
   - tzdata
 
 common_pip_pkgs:
+  - ssh-ldap-pubkey
+  - glances[all]
 
 root_password: changeme
 root_password_salt: md5salt

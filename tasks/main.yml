@@ -13,130 +13,128 @@
     - ansible_os_family == "RedHat"
   failed_when: false
   tags:
-    - selinux
+    - common-selinux
   ansible.posix.selinux:
     state: "{{ common_selinux_state }}"
 
 
 - name: Configure /etc/hosts
   tags:
-    - hostfile
+    - common-hostfile
   ansible.builtin.include_tasks:
     file: hostfile.yml
     apply:
       tags:
-        - hostfile
+        - common-hostfile
 
 
 - name: Configure SSHD
   tags:
-    - sshd
+    - common-sshd
   ansible.builtin.include_tasks:
     file: ssh.yml
     apply:
       tags:
-        - sshd
+        - common-sshd
 
 - name: Configure authorized_keys for root user
   tags:
-    - root-authorized-keys
+    - common-root-authorized-keys
   ansible.builtin.include_tasks:
     file: root-authorized-keys.yml
     apply:
       tags:
-        - root-authorized-keys
+        - common-root-authorized-keys
 
 - name: Configure Local Users and Groups
   when: not openldap_client_enable | default(false)
   tags:
-    - users
+    - common-users
   ansible.builtin.include_tasks:
     file: users.yml
     apply:
       tags:
-        - users
+        - common-users
 
 - name: Configure Sudoers
   tags:
-    - sudoers
+    - common-sudoers
   ansible.builtin.include_tasks:
     file: sudo.yml
     apply:
       tags:
-        - sudoers
+        - common-sudoers
 
 - name: Configure Timezone Info
   tags:
-    - timezone
+    - common-timezone
   community.general.timezone:
     name: "{{ timezone }}"
 
 - name: Install common system packages and python dependencies for specific OS
   tags:
-    - packages
+    - common-packages
   ansible.builtin.include_tasks:
     file: packages-{{ ansible_os_family | lower }}.yml
     apply:
       tags:
-        - packages
-
+        - common-packages
 
 - name: Install global common pip packages
   tags:
-    - pip
+    - common-pip
   ansible.builtin.include_tasks:
     file: packages-pip.yml
     apply:
       tags:
-        - pip
-
+        - common-pip
 
 - name: Install qemu-guest-agent on KVM hosts
   when:
     - ansible_virtualization_role == "guest"
     - '"kvm" in ansible_virtualization_tech_guest'
   tags:
-    - qemu-guest-agent
+    - common-qemu-guest-agent
   ansible.builtin.include_tasks:
     file: qemu_guest_agent.yml
     apply:
       tags:
-        - qemu-guest-agent
+        - common-qemu-guest-agent
 
 
 - name: Configure Serial-over-LAN
   when:
     - ansible_virtualization_role != "guest"
   tags:
-    - grub
+    - common-grub
   ansible.builtin.include_tasks:
     file: grub-config.yml
     apply:
       tags:
-        - grub
+        - common-grub
 
 - name: Configure MDNS reflection / Avahi
   when:
     - common_enable_mdns_reflection | default(False)
   tags:
-    - mdns
+    - common-mdns
   ansible.builtin.include_tasks:
     file: mdns_reflection.yml
     apply:
       tags:
-        - mdns
+        - common-mdns
 
 - name: Configure system autoupdate parameters
   tags:
-    - autoupdate
+    - common-autoupdate
   ansible.builtin.include_tasks:
     file: autoupdate.yml
     apply:
       tags:
-        - autoupdate
+        - common-autoupdate
 
 - name: Reboot host if grub config was updated
   when: grub_require_rebuild | default(false)
   tags:
-    - grub
+    - common-grub
   ansible.builtin.reboot:
