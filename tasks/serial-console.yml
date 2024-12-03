@@ -1,14 +1,13 @@
 ---
+- name: serial-console | Get contents of /proc/consoles
+  ansible.builtin.slurp:
+    src: /proc/consoles
+  register: console_data
 - name: serial-console | Configure system serial-over-lan
   block:
-    - name: serial-console | Get contents of /proc/consoles
-      ansible.builtin.slurp:
-        src: /proc/consoles
-      register: console_data
-
     - name: serial-console | Set serial Facts`
       ansible.builtin.set_fact:
-        serial_tty_device: "{{ (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) | first }}"
+        serial_tty_device: "{{ (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) | default([]) | first }}"
 
     - name: serial-console | Set console Facts`
       ansible.builtin.set_fact:
@@ -36,3 +35,6 @@
         daemon_reload: true
         state: started
         enabled: true
+  when:
+    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) is not none
+    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) | length > 0
