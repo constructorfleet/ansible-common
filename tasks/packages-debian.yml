@@ -54,4 +54,5 @@
       register: common_install_result
       until: common_install_result is success
       when:
-        - item > 0
+        - common_packages is defined
+        - common_packages | length > 0
