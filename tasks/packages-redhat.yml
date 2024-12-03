@@ -1,0 +1,70 @@
+---
+- name: packages-redhat | RPM Repository and Package Tasks
+  tags:
+    - os-packages
+  block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+    - name: packages-redhat | Install EPEL Repo from upstream URL # noqa package-latest
+      ansible.builtin.dnf:
+        name: epel-release
+        update_cache: true
+        state: latest
+      register: epel_setup
+      until:
+        - epel_setup is not failed
+
+    - name: packages-redhat | Add YUM Repositories
+      ansible.builtin.yum_repository:
+      loop: "{{ common_yum_repos }}"
+      args: "{{ item }}"
+      register: yum_repo_added
+      until:
+        - yum_repo_added is not failed
+      when:
+        - common_yum_repos is defined
+        - common_yum_repos | length > 0
+
+    - name: packages-redhat | Update Yum Repos # noqa no-handler
+      ansible.builtin.dnf:
+        update_cache: true
+      register: rpm_cache_updated
+      until:
+        - rpm_cache_updated is not failed
+      when:
+        - yum_repo_added is changed
+
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: packages-redhat | Install DNF Packages
+      ansible.builtin.dnf:
+        name: "{{ common_rpm_pkgs }}"
+        state: "present"
+      register: rpm_install_result
+      until:
+        - rpm_install_result is not failed
+      when:
+        - common_rpm_pkgs is defined
+        - common_rpm_pkgs | length > 0
+
+- name: packages-redhat | RPM Repository and Package Tasks
+  tags:
+    - common-packages
+  block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: packages-redhat | Install DNF Packages
+      ansible.builtin.dnf:
+        name: "{{ common_packages }}"
+        state: "present"
+      register: common_install_result
+      until:
+        - common_install_result is not failed
+      when:
+        - common_packages is defined
+        - common_packages | length > 0

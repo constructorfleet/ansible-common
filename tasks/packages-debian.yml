@@ -1,0 +1,58 @@
+---
+
+- name: DEB Repository and Package Tasks
+  tags:
+    - os-packages
+  block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: Set up Deb822 Apt Repository Source Files and GPG Keys
+      ansible.builtin.deb822_repository:
+      loop: "{{ common_apt_repos | default([]) }}"
+      args: "{{ item }}"
+      register: deb_repo_added
+      when:
+        - item | length > 0
+      until:
+        - deb_repo_added is success
+
+    - name: Update APT Repos # noqa no-handler
+      ansible.builtin.apt:
+        update_cache: true
+      register: cache_updated
+      until:
+        - cache_updated is success
+
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: Install APT Packages
+      ansible.builtin.apt:
+        name: "{{ common_apt_pkgs | default([]) }}"
+        state: present
+      register: apt_install_result
+      until: apt_install_result is success
+      when:
+        - common_apt_pkgs | length > 0
+
+
+- name: packages-debian | Install {{ common_packages }}
+  tags:
+    - common-packages
+  block:
+    - name: Wait for locks
+      ansible.builtin.include_tasks:
+        file: wait_for_locks.yml
+
+    - name: packages-debian | Install common Packages
+      ansible.builtin.apt:
+        name: "{{ common_packages | default([]) }}"
+        state: present
+      register: common_install_result
+      until: common_install_result is success
+      when:
+        - common_packages is defined
+        - common_packages | length > 0

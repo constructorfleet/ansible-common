@@ -1,74 +1,80 @@
 ---
-- name: create /var/run/sshd
-  file:
+- name: ssh | Create /var/run/sshd
+  ansible.builtin.file:
     state: directory
     path: /var/run/sshd
-    mode: 0755
+    mode: "0755"
   when:
     - ansible_os_family == "Debian"
 
-- name: Copy sshd_config Template
-  template:
-    src: sshd_config.j2
+- name: ssh | Update sshd config options
+  ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
-    owner: root
-    group: root
-    mode: 0644
-  notify: "restart_sshd"
+    state: present
+    regexp: ^(?:#)?{{ item.option }}\s.*$
+    line: "{{ item.option }} {{ item.value }}"
+  loop:
+    - option: Include
+      value: "no"
+    - option: Subsystem
+      value: "{{ 'sftp /usr/libexec/openssh/sftp-server' if ansible_os_family == 'RedHat' else 'sftp /usr/lib/openssh/sftp-server' }}"
+    - option: UsePAM
+      value: "{{ 'no' if ansible_os_family == 'OpenBSD' else 'yes' }}"
+    - option: Port
+      value: "{{ common_sshd_listen_port | default('22') }}"
+    - option: ListenAddress
+      value: "{{ common_sshd_listen_address | default('0.0.0.0') }}"
+    - option: SyslogFacility
+      value: "{{ common_sshd_syslog_facility | default('AUTH') }}"
+    - option: LogLevel
+      value: "{{ common_sshd_log_level | default('INFO') }}"
+    - option: PermitRootLogin
+      value: "{{ common_sshd_permit_root_login | default('prohibit-password') }}"
+    - option: PubkeyAuthentication
+      value: "yes"
+    - option: PasswordAuthentication
+      value: "{{ common_sshd_password_authentication | default('yes') }}"
+    - option: AuthorizedKeysFile
+      value: "{{ common_sshd_authorized_keys_file | default('.ssh/authorized_keys') }}"
+    - option: AllowAgentForwarding
+      value: "yes"
+    - option: X11Forwarding
+      value: "yes"
+    - option: PrintMotd
+      value: "yes"
+    - option: AcceptEnv
+      value: LANG LC_*
+  notify: Restart SSHD
 
-- meta: flush_handlers
+- name: ssh | Add block configs to sshd_config
+  ansible.builtin.blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      {% if groups['kvm'] is defined and inventory_hostname in groups['kvm'] %}
+      Match user virsh
+          X11Forwarding no
+          AllowTcpForwarding no
+          PermitTTY no
+          ForceCommand nc -q 0 -U /var/run/libvirt/libvirt-sock
+      {% endif %}
+  notify: Restart SSHD
 
-- name: Restart ssh server
-  service:
-    name: "{{ ssh_service }}"
-    state: restarted
-    enabled: yes
-  register: ssh_started
-  when: sshd_require_restart | default(false)
+# - name: ssh | Copy sshd_config Template
+#   template:
+#     src: sshd_config.j2
+#     dest: /etc/ssh/sshd_config
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify: "Restart SSHD"
 
-- name: Verify the sshd service is listening
-  wait_for:
+- name: ssh | Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: ssh | Verify the sshd service is listening # noqa no-handler
+  ansible.builtin.wait_for:
     host: localhost
     port: 22
     delay: 5
-  when: ssh_started is changed
-  ignore_errors: yes
+  ignore_errors: true
   register: ssh_start_attempt
-
-- name: Get ssh journald logs if service does not appear to be up
-  shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value {{ ssh_service }}.service`
-  register: ssh_journal
-  when: ssh_start_attempt.failed | default(false)
-
-- fail:
-    msg: "{{ ssh_journal.stdout_lines }}"
-  when: ssh_start_attempt.failed | default(false)
-
-- name: Ensure root .ssh directory exists
-  file:
-    path: /root/.ssh
-    state: directory
-    owner: root
-    group: root
-    mode: 0700
-
-- name: Generate root authorized_keys file
-  template:
-    src: root_authorized_keys.j2
-    dest: /root/.ssh/authorized_keys
-    owner: root
-    group: root
-    mode: 0600
-    backup: yes
-  when:
-    - ssh_users is defined
-    - ssh_users|length > 0
-
-- name: Change root password
-  user:
-    name: root
-    password: "{{ root_password | password_hash(salt=root_password_salt) }}"
-    update_password: always
-  when:
-    - root_password is defined and (root_password|length) >= 8
-    - root_password_salt is defined and (root_password_salt|length) > 0
