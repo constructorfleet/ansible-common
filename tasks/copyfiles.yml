@@ -4,8 +4,6 @@
     state: absent
     path: "{{ item }}"
   loop: "{{ common_rm_files | default([]) }}"
-  loop_control:
-    label: "{{ item.path }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - rmfiles
 
@@ -17,8 +15,6 @@
     mode: "{{ item.mode | default('0777') }}"
   args: "{{ item }}"
   loop: "{{ common_directories | default([]) }}"
-  loop_control:
-    label: "{{ item.path }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - mkdirs
 
@@ -29,7 +25,5 @@
     mode: "{{ item.mode | default('0755') }}"
   args: "{{ item }}"
   loop: "{{ common_config_files | default([]) }}"
-  loop_control:
-    label: "{{ item.dest }} {{ item.owner }} {{ item.group }} {{ item.mode }}"
   tags:
     - mkfiles
