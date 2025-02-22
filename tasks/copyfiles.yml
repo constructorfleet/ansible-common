@@ -1,0 +1,29 @@
+---
+- name: copyfiles | Remove files
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  loop: "{{ common_rm_files | default([]) }}"
+  tags:
+    - rmfiles
+
+- name: copyfiles | Create directory paths from file dest
+  ansible.builtin.file:
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0777') }}"
+  args: "{{ item }}"
+  loop: "{{ common_directories | default([]) }}"
+  tags:
+    - mkdirs
+
+- name: copyfiles | Create files with provided content
+  ansible.builtin.copy:
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  args: "{{ item }}"
+  loop: "{{ common_config_files | default([]) }}"
+  tags:
+    - mkfiles

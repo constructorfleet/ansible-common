@@ -1,34 +1,18 @@
-- name: "Gather facts for all ceph nodes"
-  setup:
-    gather_subset:
-      - network
-  delegate_to: "{{ item }}"
-  delegate_facts: True
-  loop: "{{ groups['ceph'] }}"
-  run_once: true
-  when:
-    - ansible_lsb.id != "Raspbian"
-    - shared_storage is defined and shared_storage
-    - storage_backend is defined and storage_backend == "cephfs"
-    - hostvars[item]['ansible_default_ipv4'] is not defined
+---
+# - name: hostfile | Run setup on hosts in common groups
+#   ansible.builtin.setup:
+#   delegate_facts: true
+#   delegate_to: "{{ item }}"
+#   run_once: true
+#   loop: "{{ q('ansible.builtin.inventory_hostnames', common_hostfile_groups | join(':')) }}"
+#   register: ansible_host_list_facts
 
-- name: "Gather facts for all NFS Servers"
-  setup:
-    gather_subset:
-      - network
-  delegate_to: "{{ item }}"
-  delegate_facts: True
-  run_once: true
-  loop: "{{ groups['nfsservers'] }}"
-  when:
-    - shared_storage is defined and shared_storage
-    - storage_backend is defined and storage_backend == "nfs"
-    - hostvars[item]['ansible_default_ipv4'] is not defined
-
-- name: Generate /etc/hosts template
-  template:
+# - ansible.builtin.debug:
+#     var: ansible_host_list_facts
+- name: hostfile | Generate /etc/hosts template
+  ansible.builtin.template:
     src: hostfile.j2
     dest: /etc/hosts
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root

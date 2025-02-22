@@ -1,0 +1,4 @@
+.yamllint
+**/test/**
+.idea
+**/molecule/**

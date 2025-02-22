@@ -1,0 +1,15 @@
+---
+- name: grub-config | Include tasks to determine serial console
+  ansible.builtin.include_tasks:
+    file: serial-console.yml
+
+- name: grub-config | Update Grub lines
+  ansible.builtin.lineinfile:
+    state: present
+    path: /etc/default/grub
+  args: "{{ item }}"
+  loop: "{{ common_grub_configs }}"
+  notify: Update Grub
+
+- name: grub-config | Flush handlers
+  ansible.builtin.meta: flush_handlers

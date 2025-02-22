@@ -1,24 +1,15 @@
 ---
 common_pkgs:
-  - screen
-  - vim
-  - ipmitool
+  - apt-utils
   - freeipmi-tools
-  - software-properties-common
-  - python-pip
-  - python3-pip
+  - python3-apt
+  - python3-debian
   - python3-software-properties
-  - zsh
-  - htop
-  - sudo
-  - tzdata
+  - software-properties-common
 
 common_uninstall_pkgs:
 #  - python-setuptools
 #  - python3-setuptools
-
-common_python_pkgs:
-  - setuptools
 
 autoupdate_services:
   - apt-daily-upgrade.timer
@@ -28,7 +19,7 @@ autoupdate_services:
 grub_config: /boot/grub/grub.cfg
 grub_update_cmd: /usr/sbin/update-grub2
 
-ssh_service: ssh
+sshd_service: ssh
 
 common_cockpit_pkgs:
   - cockpit
@@ -47,7 +38,7 @@ common_cockpit_allowed_ports:
   - cockpit
 
 openldap_ldap_pubkey_wrapper: /usr/local/bin/ssh-ldap-pubkey-wrapper
-openldap_ldap_pubkey_user: root
+openldap_ldap_pubkey_user: nobody
 
 common_mdns_pkgs:
   - avahi-daemon

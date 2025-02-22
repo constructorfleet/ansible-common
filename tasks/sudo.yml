@@ -1,9 +1,9 @@
 ---
-- name: "Allow passwordless sudo for 'admin' group"
-  lineinfile:
+- name: sudo | Allow passwordless sudo for 'admin' group
+  ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^%admin.*$'
-    line: '%admin ALL=(ALL) NOPASSWD:ALL'
+    regexp: ^%admin.*$
+    line: "%admin ALL=(ALL) NOPASSWD:ALL"
     state: present
-    backup: yes
-    validate: 'visudo -cf %s'
+    backup: true
+    validate: visudo -cf %s

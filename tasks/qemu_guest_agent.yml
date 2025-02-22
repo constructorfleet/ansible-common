@@ -1,0 +1,31 @@
+---
+- name: Wait for locks
+  ansible.builtin.include_tasks:
+    file: wait_for_locks.yml
+
+- name: qemu_guest_agent | Install qemu-guest-agent if host is a kvm/qemu virtual machine
+  block:
+    - name: qemu_guest_agent | Install qemu-guest-agent
+      ansible.builtin.package:
+        name: qemu-guest-agent
+        state: present
+
+    - name: qemu_guest_agent | Start qemu-guest-agent service
+      ansible.builtin.systemd:
+        name: qemu-guest-agent
+        state: started
+        enabled: true
+        daemon_reload: true
+      register: qemu_guest_agent_startup
+      ignore_errors: true
+
+    - name: qemu_guest_agent | Assert that qemu-guest-agent is running
+      ansible.builtin.assert:
+        that: not qemu_guest_agent_startup.failed
+        fail_msg: |
+          Fail: qemu-guest-agent failed to start
+          {{ qemu_guest_agent_startup }}
+        success_msg: |
+          Success: qemu-guest-agent started successfully
+          {{ qemu_guest_agent_startup }}
+      failed_when: qemu_guest_agent_startup.failed
