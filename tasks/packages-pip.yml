@@ -16,12 +16,11 @@
       register: pipx_install
       until: pipx_install is not failed
 
-
     - name: packages-pip | Install python requirements via Pip (All Distributions)
       community.general.pipx:
         name: "{{ item }}"
         state: present
-      loop: "{{ common_pip_pkgs | default([]) }}"
+      loop: "{{ common_pip_pkgs | default(omit) }}"
       when:
         - (common_pip_pkgs | length) > 0 | default([])
       register: pip_package_install

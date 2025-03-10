@@ -17,7 +17,6 @@
   ansible.posix.selinux:
     state: "{{ common_selinux_state }}"
 
-
 - name: Configure /etc/hosts
   tags:
     - common-hostfile
@@ -26,7 +25,6 @@
     apply:
       tags:
         - common-hostfile
-
 
 - name: Configure SSHD
   tags:
@@ -80,15 +78,6 @@
       tags:
         - common-packages
 
-- name: Install global common pip packages
-  tags:
-    - common-pip
-  ansible.builtin.include_tasks:
-    file: packages-pip.yml
-    apply:
-      tags:
-        - common-pip
-
 - name: Install qemu-guest-agent on KVM hosts
   when:
     - ansible_virtualization_role == "guest"
@@ -100,7 +89,6 @@
     apply:
       tags:
         - common-qemu-guest-agent
-
 
 - name: Configure Serial-over-LAN
   when:
