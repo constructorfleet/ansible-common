@@ -1,5 +1,6 @@
-- name: include os specific vars
-  include_vars: "{{ item }}"
+---
+- name: Include os specific vars
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution }}.yml"
@@ -7,83 +8,121 @@
   tags:
     - always
 
-- name: "Install common system packages and python dependencies"
-  import_tasks: packages.yml
-  tags:
-    - common-packages
-
-- name: "Configure SSHd and root user"
-  import_tasks: ssh.yml
-  tags:
-    - common-sshd
-
-- name: "Configure /etc/hosts"
-  import_tasks: hostfile.yml
-  tags:
-    - common-hostfile
-
-- name: "Configure system autoupdate parameters"
-  import_tasks: autoupdate.yml
-  tags:
-    - common-autoupdate
-
-- name: "Remove cloud-init packages and config files"
-  import_tasks: cloud_init.yml
-  tags:
-    - common-cloudinit
-
-- name: "Configure Local Users and Groups"
-  import_tasks: users.yml
-  when:  not openldap_client_enable|default(false)
-  tags:
-    - common-users
-
-- name: "Configure Sudoers"
-  import_tasks: sudo.yml
-  tags:
-    - common-sudoers
-
-- name: "Configure MDNS reflection / Avahi"
-  import_tasks: mdns_reflection.yml
-  when:
-    - enable_mdns_reflection | default(False)
-  tags:
-    - common-mdns
-
-- name: "Configure Serial-over-LAN [Ubuntu]"
-  import_tasks: ubuntu-sol.yml
-  when:
-    - ansible_os_family == "Debian"
-    - ansible_virtualization_role != "guest"
-    - serialtty != None
-    - consoletty != None
-  tags:
-    - common-sol
-
-- name: "Configure Serial-over-LAN [RHEL/CentOS]"
-  import_tasks: redhat-sol.yml
+- name: Set SELinux State (RHEL)
   when:
     - ansible_os_family == "RedHat"
-    - ansible_virtualization_role != "guest"
-    - serialtty != None
-    - consoletty != None
+  failed_when: false
   tags:
-    - common-sol
+    - common-selinux
+  ansible.posix.selinux:
+    state: "{{ common_selinux_state }}"
 
-- name: "Configure Timezone Info"
-  timezone:
-    name: "{{ timezone }}"
+- name: Configure /etc/hosts
+  tags:
+    - common-hostfile
+  ansible.builtin.include_tasks:
+    file: hostfile.yml
+    apply:
+      tags:
+        - common-hostfile
+
+- name: Configure SSHD
+  tags:
+    - common-sshd
+  ansible.builtin.include_tasks:
+    file: ssh.yml
+    apply:
+      tags:
+        - common-sshd
+
+- name: Configure authorized_keys for root user
+  tags:
+    - common-root-authorized-keys
+  ansible.builtin.include_tasks:
+    file: root-authorized-keys.yml
+    apply:
+      tags:
+        - common-root-authorized-keys
+
+- name: Configure Local Users and Groups
+  when: not openldap_client_enable | default(false)
+  tags:
+    - common-users
+  ansible.builtin.include_tasks:
+    file: users.yml
+    apply:
+      tags:
+        - common-users
+
+- name: Configure Sudoers
+  tags:
+    - common-sudoers
+  ansible.builtin.include_tasks:
+    file: sudo.yml
+    apply:
+      tags:
+        - common-sudoers
+
+- name: Configure Timezone Info
   tags:
     - common-timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
 
-- name: "Install Cockpit"
-  import_tasks: cockpit.yml
+- name: Install common system packages and python dependencies for specific OS
   tags:
-    - common-cockpit
-  when: common_enable_cockpit|default(False)
+    - common-packages
+  ansible.builtin.include_tasks:
+    file: packages-{{ ansible_os_family | lower }}.yml
+    apply:
+      tags:
+        - common-packages
 
-- name: "Reboot host if grub config was updated"
-  reboot:
+- name: Install qemu-guest-agent on KVM hosts
+  when:
+    - ansible_virtualization_role == "guest"
+    - '"kvm" in ansible_virtualization_tech_guest'
+  tags:
+    - common-qemu-guest-agent
+  ansible.builtin.include_tasks:
+    file: qemu_guest_agent.yml
+    apply:
+      tags:
+        - common-qemu-guest-agent
+
+- name: Configure Serial-over-LAN
+  when:
+    - ansible_virtualization_role != "guest"
+  tags:
+    - common-grub
+  ansible.builtin.include_tasks:
+    file: grub-config.yml
+    apply:
+      tags:
+        - common-grub
+
+- name: Configure MDNS reflection / Avahi
+  when:
+    - common_enable_mdns_reflection | default(False)
+  tags:
+    - common-mdns
+  ansible.builtin.include_tasks:
+    file: mdns_reflection.yml
+    apply:
+      tags:
+        - common-mdns
+
+- name: Configure system autoupdate parameters
+  tags:
+    - common-autoupdate
+  ansible.builtin.include_tasks:
+    file: autoupdate.yml
+    apply:
+      tags:
+        - common-autoupdate
+
+- name: Reboot host if grub config was updated
   when: grub_require_rebuild | default(false)
   tags:
-    - common-sol
+    - common-grub
+  ansible.builtin.reboot:

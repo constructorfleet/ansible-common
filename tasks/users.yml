@@ -1,16 +1,17 @@
-- name: Create local user groups
-  group:
+---
+- name: users | Create local user groups
+  ansible.builtin.group:
     name: "{{ item.key }}"
     gid: "{{ item.value.gid | default(omit) }}"
     state: present
-  loop: "{{ ssh_groups | dict2items }}"
+  loop: "{{ common_ssh_groups | dict2items }}"
   loop_control:
     label: "group: {{ item.key }}"
   when:
-    - ssh_groups is defined
-    - ssh_groups != None
-- name: Create local user accounts
-  user:
+    - common_ssh_groups is defined
+    - common_ssh_groups != None
+- name: users | Create local user accounts
+  ansible.builtin.user:
     name: "{{ item.key }}"
     shell: "{{ item.value.shell | default(omit) }}"
     group: "{{ item.value.gid | default(omit) }}"
@@ -21,25 +22,25 @@
       {{ grouplist.append(group.key) }}
       {% endif %}
       {% endfor %}
-      {{ grouplist|join(',') }}
+      {{ grouplist | join(',') }}
     uid: "{{ item.value.uid | default(omit) }}"
     password: "{{ item.value.password | password_hash('sha512', vault_root_password_salt) | default(omit) }}"
-  loop: "{{ ssh_users | dict2items }}"
+  loop: "{{ common_ssh_users | dict2items }}"
   loop_control:
     label: "user: {{ item.key }}"
   when:
-    - ssh_users is defined
-    - ssh_users != None
+    - common_ssh_users is defined
+    - common_ssh_users != None
 
-- name: Add user authorized keys
-  authorized_key:
+- name: users | Add user authorized keys
+  ansible.posix.authorized_key:
     user: "{{ item.key }}"
     state: present
     key: "{{ item.value.pubkey }}"
-  loop: "{{ ssh_users | dict2items }}"
+  loop: "{{ common_ssh_users | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when:
-    - ssh_users is defined
-    - ssh_users != None
+    - common_ssh_users is defined
+    - common_ssh_users != None
     - item.value.pubkey is defined

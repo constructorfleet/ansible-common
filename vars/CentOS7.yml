@@ -1,23 +1,16 @@
 ---
-common_pkgs:
-  - ipmitool
+common_rpm_pkgs:
+  - bzip2-devel
   - freeipmi
-  - zsh
-  - screen
+  - libffi-devel
+  - openssl-devel
+  - python3-rpm
   - vim-enhanced
-  - python2-pip
-  - python3-pip
-  - sudo
-  - tzdata
-
-common_python_pkgs:
 
 grub_config: /boot/grub2/grub.cfg
 grub_update_cmd: /usr/sbin/grub2-mkconfig
 
-ssh_service: sshd
-
-
+sshd_service: sshd
 common_cockpit_pkgs:
   - cockpit
   - cockpit-composer

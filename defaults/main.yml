@@ -1,15 +1,56 @@
 ---
 consoletty:
 serialtty:
-
 timezone: UTC
 
-ssh_users: {}
-ssh_groups: {}
+common_ssh_users: "{{ ssh_users }}"
+common_ssh_groups: "{{ ssh_groups }}"
 
-common_enable_cockpit: False
+common_apt_repos: []
+common_apt_pkgs: []
+common_yum_repos: []
+common_rpm_pkgs: []
 
-common_pkgs: []
+common_packages:
+  - gcc
+  - ipmitool
+  - net-tools
+  - python3-jinja2
+  - python3-json5
+  - python3-pip
+  - python3-pkginfo
+  - screen
+  - sudo
+  - tzdata
+
+common_pip_pkgs:
 
 root_password: changeme
 root_password_salt: md5salt
+
+common_enable_autoupdate: true
+
+common_hostfile_groups:
+  - proxmox
+  - ceph_reef
+  - ldapservers
+
+common_grub_configs:
+  - regexp: '^GRUB_CMDLINE_LINUX=".*"$'
+    line: GRUB_CMDLINE_LINUX="console=ttyS{{ serial_tty_device | default('0') }},115200 console=tty{{ console_tty_device | default('1') }} net.ifnames=0 biosdevname=0"
+  - regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="(quiet.*)"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="\1"'
+    backrefs: true
+  - regexp: '^GRUB_TERMINAL=".*"$'
+    line: 'GRUB_TERMINAL="console serial"'
+  - regexp: '^GRUB_TIMEOUT=[0-9]+$'
+    line: 'GRUB_TIMEOUT=10'
+  - regexp: '^GRUB_SERIAL_COMMAND=".*"$'
+    line: GRUB_SERIAL_COMMAND="serial --speed=115200 --unit={{ serial_tty_device | default('0') }} --word=8 --parity=no --stop=1"
+
+common_blacklist_kernel_modules:
+common_kernel_modules:
+common_systemd_serial_getty_src: /lib/systemd/system/serial-getty@.service
+common_systemd_serial_getty_dest: /etc/systemd/system/serial-getty@ttyS{{ serial_tty_device | default('0') }}.service
+
+common_enable_mdns_reflection: false
