@@ -4,6 +4,10 @@
     src: /proc/consoles
   register: console_data
 - name: serial-console | Configure system serial-over-lan
+  when:
+    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) is not none
+    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) | length > 0
+
   block:
     - name: serial-console | Set serial Facts`
       ansible.builtin.set_fact:
@@ -35,6 +39,3 @@
         daemon_reload: true
         state: started
         enabled: true
-  when:
-    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) is not none
-    - (console_data['content'] | b64decode) | regex_search('^ttyS(\\d+)', '\\1', multiline=True) | length > 0
